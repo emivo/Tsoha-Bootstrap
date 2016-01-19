@@ -2,8 +2,8 @@
 
 Yleisiä linkkejä:
 
-* [Linkki sovellukseeni](https://www.cs.helsinki.fi)
-* [Linkki dokumentaatiooni](https://www.github.com)
+* [Linkki sovellukseeni](http://airta.users.cs.helsinki.fi/tsoha/)
+* [Linkki dokumentaatiooni](https://github.com/emivo/Tsoha-Bootstrap)
 
 ## Työn aihe
 
