@@ -8,4 +8,5 @@ Yleisiä linkkejä:
 ## Työn aihe
 
 Ruokareseptiarkisto
+
 Sivustolle rekisteröityneet käyttäjät voivat lisätä omia reseptejään, joita kaikki voivat katsella. Rekistöröityneet käyttäjät voivat myös kommentoida muiden reseptejä. Ilman rekistöröitymistä on mahdollista selata reseptejä sekä hakea reseptejä.
