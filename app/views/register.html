@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Rekisteröidy sivustolle</h1>
+
+<form>
+    <!-- Tekstikenttä käyttäjätunnukselle -->
+    <div class="form-group">
+        <label>Käyttäjätunnus</label>
+        <input class="form-control" type="text">
+    </div>
+
+    <!-- Email-kenttä -->
+    <div class="form-group">
+        <label>Sähköpostiosoite</label>
+        <input class="form-control" type="email">
+    </div>
+    
+    <!-- Salasanakenttä salasanalle -->
+    <div class="form-group">
+        <label>Salasana</label>
+        <input class="form-control" type="password">
+    </div>
+
+    <button type="submit" class="btn btn-primary">Rekisteröidy</button>
+</form>
+{% endblock %}  
