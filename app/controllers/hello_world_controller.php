@@ -18,5 +18,13 @@ class HelloWorldController extends BaseController {
     public static function register() {
         View::make('register.html');
     }
+    
+    public static function recipe_show() {
+        View::make('recipe_show.html');
+    }
+    
+    public static function new_recipe() {
+        View::make('new_recipe.html');
+    }
 
 }
