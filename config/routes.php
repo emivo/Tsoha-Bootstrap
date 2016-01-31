@@ -1,25 +1,33 @@
 <?php
 
 $routes->get('/', function() {
-    HelloWorldController::index();
+    RecipeLibraryController::index();
 });
 
 $routes->get('/hiekkalaatikko', function() {
-    HelloWorldController::sandbox();
+    RecipeLibraryController::sandbox();
 });
 
 $routes->get('/login', function() {
-    HelloWorldController::login();
+    RecipeLibraryController::login();
 });
 
 $routes->get('/register', function() {
-    HelloWorldController::register();
+    RecipeLibraryController::register();
 });
 
 $routes->get('/recipe_show', function() {
-    HelloWorldController::recipe_show();
+    RecipeLibraryController::recipe_show();
 });
 
 $routes->get('/new_recipe', function() {
-    HelloWorldController::new_recipe();
+    RecipeLibraryController::new_recipe();
+});
+
+$routes->get('/recipe_modify', function() {
+    RecipeLibraryController::recipe_modify();
+});
+
+$routes->get('/myprofile', function() {
+    RecipeLibraryController::myprofile();
 });

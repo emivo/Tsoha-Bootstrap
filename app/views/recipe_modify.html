@@ -1,17 +1,20 @@
 {% extends "base.html" %}
 {% block content %}
-<h1>Lisää uusi resepti</h1>
+<h1>Muokkaa reseptiä</h1>
 <form>
     <div class="form-group">
         <label>Nimi</label>
-        <input class="form-control" type="text">
+        <input class="form-control" value="Köyhät ritarit" type="text">
     </div>
     <div class="form-group">
         <label>Ainesosat</label>
-        <input class="form-control" type="text">
+        <input class="form-control" value="10 pullaviipaletta" type="text">
+        <input class="form-control" value="1 muna" type="text">
+        <input class="form-control" value="2dl maitoa" type="text">
+        <input class="form-control" value="1tl vanilijasokeria" type="text">
     </div>
     <script>
-        var optionCount = 2;
+        var optionCount = 5;
         function newInput() {
 
             var element = document.createElement("input");
@@ -22,23 +25,24 @@
             element.setAttribute("class", 'form-control');
 
 
-            var ingredientElement = document.getElementById("newIngredient");
+            var ingredientElement = document.getElementById("fooBar");
             ingredientElement.appendChild(label);
             ingredientElement.appendChild(element);
         }</script>
 
-    <span id="newIngredient"></span>
+    <span id="fooBar"></span>
     <div class="form-group">
         <button type="button" onclick="newInput()" class="btn btn-success">Lisää ainesosa</button>
     </div>
 
     <div class="form-group">
         <label>Valmistusohje</label>
-        <textarea class="form-control">
+        <textarea class="form-control"> Vatkaa munan rakenne rikki. Lisää maito ja sokeri. Kasta pullat munamaitoon. Ruskista pannulla rasvassa. Tarjoile hillon ja kermavaahdon kera.
         </textarea>
     </div>
     <div class="form-group">
         <button type="submit" class="btn btn-primary">Tallenna</button>
     </div>
 </form>
+<button type="submit" class="btn btn-danger">Poista resepti</button>
 {% endblock %}

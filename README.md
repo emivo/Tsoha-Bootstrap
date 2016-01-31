@@ -3,8 +3,14 @@
 Yleisiä linkkejä:
 
 * [Linkki sovellukseeni](http://airta.users.cs.helsinki.fi/tsoha/)
+* [Linkki reseptin esittelysivulle](http://airta.users.cs.helsinki.fi/tsoha/recipe_show)
+* [Linkki reseptin lisäyssivulle](http://airta.users.cs.helsinki.fi/tsoha/new_recipe)
+* [Linkki reseptin muokkaussivulle](http://airta.users.cs.helsinki.fi/tsoha/recipe_modify)
+* [Linkki kirjautumissivulle](http://airta.users.cs.helsinki.fi/tsoha/login)
+* [Linkki rekisteröintisivulle](http://airta.users.cs.helsinki.fi/tsoha/register)
+* [Linkki käyttäjäntietojen muokkaussivulle](http://airta.users.cs.helsinki.fi/tsoha/myprofile)
 * [Linkki dokumentaatiooni](doc/dokumentaatio.pdf)
-
+---
 * [typography](http://getbootstrap.com/css/#type) - tekstin asettelu ja tyylittely
 * [tables](http://getbootstrap.com/css/#tables) - taulukot
 * [forms](http://getbootstrap.com/css/#forms) - lomakkeet
@@ -19,8 +25,8 @@ Sivustolle rekisteröityneet käyttäjät voivat lisätä omia reseptejään. Re
 
 Toimintoja:
 * rekisteröityminen
-* käyttäjän poisto
 * kirjautuminen
+* käyttäjän tietojen muokkaaminen (myös poisto)
 * reseptin syöttö ja muuttaminen (myös poisto)
 * reseptien haku
 * reseptien katselu

@@ -1,6 +1,6 @@
 <?php
 
-class HelloWorldController extends BaseController {
+class RecipeLibraryController extends BaseController {
 
     public static function index() {
         // make-metodi renderöi app/views-kansiossa sijaitsevia tiedostoja
@@ -25,6 +25,14 @@ class HelloWorldController extends BaseController {
     
     public static function new_recipe() {
         View::make('new_recipe.html');
+    }
+    
+    public static function recipe_modify() {
+        View::make('recipe_modify.html');
+    }
+    
+    public static function myprofile() {
+        View::make('myprofile.html');
     }
 
 }

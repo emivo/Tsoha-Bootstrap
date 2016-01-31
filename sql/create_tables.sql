@@ -10,20 +10,15 @@ id SERIAL PRIMARY KEY,
 chef_id INTEGER REFERENCES Chef(id),
 name TEXT NOT NULL,
 cooking_time TEXT,
-diections TEXT,
+directions TEXT,
 published DATE
 );
 
 CREATE TABLE Comment ( 
 chef_id INTEGER REFERENCES Chef(id),
 recipe_id INTEGER REFERENCES Recipe(id),
+rating INTEGER NOT NULL,
 comment TEXT NOT NULL
-);
-
-CREATE TABLE Rating (
-chef_id INTEGER REFERENCES Chef(id),
-recipe_id INTEGER REFERENCES Recipe(id),
-rating INTEGER NOT NULL
 );
 
 CREATE TABLE Ingredient (
