@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
-<h1>Köyhät ritarit</h1>
+<h1>{{recipe.name}}</h1>
 <p>Arvosana 4/5, 1 arvostelu</p>
 <h2> Ainesosat </h2>
 <ul>
@@ -10,9 +10,10 @@
     <li>1 tl vanilijasokeria</li>
 </ul>
 <h2> Valmistusohjeet </h2>
-<p>Vatkaa munan rakenne rikki. Lisää maito ja sokeri. Kasta pullat munamaitoon. Ruskista pannulla rasvassa. Tarjoile hillon ja kermavaahdon kera.</p>
+<p>{{recipe.directions}}</p>
 <p><button class="btn btn-default"> Lisää Kommentti </button> </p>
 <ul>
     <li>4/5 ei maistu salami <button class="btn btn-primary">Muokkaa</button> <button class="btn btn-danger">Poista</button></li> 
 </ul>
+
 {% endblock %}

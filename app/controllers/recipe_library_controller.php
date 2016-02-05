@@ -3,7 +3,6 @@
 class RecipeLibraryController extends BaseController {
 
     public static function index() {
-        // make-metodi renderöi app/views-kansiossa sijaitsevia tiedostoja
         View::make('home.html');
     }
 
@@ -23,9 +22,6 @@ class RecipeLibraryController extends BaseController {
         View::make('recipe_show.html');
     }
     
-    public static function new_recipe() {
-        View::make('new_recipe.html');
-    }
     
     public static function recipe_modify() {
         View::make('recipe_modify.html');

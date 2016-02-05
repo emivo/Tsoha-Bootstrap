@@ -5,7 +5,7 @@ $routes->get('/', function() {
 });
 
 $routes->get('/hiekkalaatikko', function() {
-    RecipeLibraryController::sandbox();
+    SandboxController::sandbox();
 });
 
 $routes->get('/login', function() {
@@ -20,8 +20,8 @@ $routes->get('/recipe_show', function() {
     RecipeLibraryController::recipe_show();
 });
 
-$routes->get('/new_recipe', function() {
-    RecipeLibraryController::new_recipe();
+$routes->get('/recipe/new', function() {
+    RecipeController::new();
 });
 
 $routes->get('/recipe_modify', function() {
@@ -30,4 +30,12 @@ $routes->get('/recipe_modify', function() {
 
 $routes->get('/myprofile', function() {
     RecipeLibraryController::myprofile();
+});
+
+$routes->get('/recipe', function() {
+    RecipeController::index();
+});
+
+$routes->get('/recipe/:id', function($id) {
+    RecipeController::show($id);
 });
