@@ -22,11 +22,13 @@
     </thead>
 
     <tbody>
+        {% for recipe in recipes%}
         <tr>
-            <td><a href="{{base_path}}/recipe_show">Köyhät Ritarit</a></td>
-            <td>admin</td>
-            <td>1.1.2016</td>
+            <td><a href="{{base_path}}/recipe/{{recipe.id}}">{{recipe.name}}</a></td>
+            <td>{{recipe.chef_id}}</td>
+            <td>{{recipe.published}}</td>
         </tr>
+        {% endfor %}
     </tbody>
 </table>
 

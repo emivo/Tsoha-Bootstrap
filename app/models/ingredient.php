@@ -35,19 +35,24 @@ class Ingredient extends BaseModel {
     }
 
     public function save() {
-        // tarkista onko ainesosa jo jossain toisessa reseptissä
         $query = DB::connection()
-                ->prepare("SELECT * FROM Ingredient WHERE name = :name LIMIT 1"); // limit 1 turha
+                ->prepare("SELECT * FROM Ingredient WHERE name = :name LIMIT 1");
         $query->execute(array('name' => $this->name));
         $ingredient = $query->fetch();
         $insert_query = DB::connection()
                 ->prepare("INSERT INTO RecipeIngredient (recipe_id, ingredient_id, quantity) VALUES (:recipe_id, :ingredient_id, :quantity)");
 
-        if ($ingredient) {
-            $insert_query->execute(array('recipe_id' => $this->recipe_id, 'ingredien_id' => $ingredient->id, 'quantity' => $this->quantity));
-        } else {
-            
+        if (!$ingredient) {
+            $new_ingredient = DB::connection()
+                    ->prepare("INSERT INTO Ingredient (name) VALUES (:name) RETURNING id");
+            $new_ingredient
+                    ->execute(array('name' => $this->name));
+            $ingredient = $new_ingredient->fetch();
         }
+
+        $this->ingredient_id = $ingredient['id'];
+
+        $insert_query->execute(array('recipe_id' => $this->recipe_id, 'ingredient_id' => $this->ingredient_id, 'quantity' => $this->quantity));
     }
 
 }

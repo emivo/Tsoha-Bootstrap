@@ -1,10 +1,24 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="alert alert-success">
+<!--<div class="alert alert-success">
     {{message}}
-</div>
+</div>-->
 <h1>{{recipe.name}}</h1>
-<p>Arvosana 4/5, {{comment|lenght}} arvostelua</p>
+{% set sum_rating = 0%}
+{% for comment in comments%}
+{% set sum_rating = sum_rating + comment.rating%}
+{% endfor %}
+<!--arvostelua sanantaivutus muista TODO-->
+<p>Arvosana {% if comments|length > 0%}
+    {{sum_rating / comments|length}}/5
+    {% else %} 
+    ei ole arvosteltu
+    {% endif %}, {{comments|length}} 
+    {% if comments|length == 1%}
+    arvostelu
+    {% else %}
+    arvostelua
+    {% endif %}</p>
 <h2> Ainesosat </h2>
 {%for ingredient in ingredients%}
 <ul>
@@ -12,12 +26,44 @@
 </ul>
 {% endfor %}
 <h2> Valmistusohjeet </h2>
+
 <p>{{recipe.directions}}</p>
-<p><button class="btn btn-default"> Lisää Kommentti </button> </p>
+<script>
+    function newComment() {
+        var commentFieldElement = document.getElementById("commentField");
+//        KOMMENTIN LISÄYS VIELÄ KESKEN
+//        if commentFieldElement.childElementCount() == 0 {
+            var inputElement = document.createElement("textarea");
+
+            inputElement.setAttribute("type", 'text');
+            inputElement.setAttribute("name", 'commentfield');
+
+            commentFieldElement.appendChild(inputElement);
+//        } else {
+//            var inputElement = commentFieldElement.firstChild();
+//            var comment = inputElement.getAttribute("value");
+//            if comment.length > 1;
+//        }
+    }
+</script>
+<span id="commentField"></span>
+<p>
+    <button class="btn btn-default" onclick="newComment()"> Lisää Kommentti </button> 
+</p>
+{% set sum_rating = 0%}
 {% for comment in comments%}
+{% set sum_rating = sum_rating + comment.rating%}
 <ul>
-    <li>{{comment.rating}}/5 {{comment.comment}}<button class="btn btn-primary">Muokkaa</button> <button class="btn btn-danger">Poista</button></li> 
+    <li>{{comment.rating}}/5 {{comment.comment}} <button class="btn btn-primary">Muokkaa</button> <button class="btn btn-danger">Poista</button></li> 
 </ul>
 {% endfor %}
+<h3>Hakusanat</h3>
+{% for keyword in keywords%}
+<ul  id="keywords">
+    <!--Teemasanan mukainen index näkymä täytyy muistaa tehdä-->
+    <li><a href="{{base_path}}/">{{keyword.keyword}}</a></li>
+</ul>
+{% endfor %}
+
 
 {% endblock %}

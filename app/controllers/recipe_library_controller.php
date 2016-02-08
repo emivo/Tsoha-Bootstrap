@@ -3,7 +3,9 @@
 class RecipeLibraryController extends BaseController {
 
     public static function index() {
-        View::make('home.html');
+        $recipes = Recipe::ten_recent();
+
+        View::make('home.html', array('recipes' => $recipes));
     }
 
     public static function sandbox() {
@@ -17,16 +19,7 @@ class RecipeLibraryController extends BaseController {
     public static function register() {
         View::make('register.html');
     }
-    
-    public static function recipe_show() {
-        View::make('recipe_show.html');
-    }
-    
-    
-    public static function recipe_modify() {
-        View::make('recipe_modify.html');
-    }
-    
+
     public static function myprofile() {
         View::make('myprofile.html');
     }

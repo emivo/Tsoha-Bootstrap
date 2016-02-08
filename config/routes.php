@@ -16,16 +16,8 @@ $routes->get('/register', function() {
     RecipeLibraryController::register();
 });
 
-$routes->get('/recipe_show', function() {
-    RecipeLibraryController::recipe_show();
-});
-
 $routes->get('/recipe/new', function() {
     RecipeController::create();
-});
-
-$routes->get('/recipe_modify', function() {
-    RecipeLibraryController::recipe_modify();
 });
 
 $routes->get('/myprofile', function() {
@@ -42,4 +34,8 @@ $routes->post('/recipe', function() {
 
 $routes->get('/recipe/:id', function($id) {
     RecipeController::show($id);
+});
+
+$routes->get('/recipe/:id/edit', function($id) {
+    RecipeController::edit($id);
 });

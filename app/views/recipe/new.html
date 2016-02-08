@@ -7,26 +7,57 @@
         <input name="name" class="form-control" type="text">
     </div>
     <div class="form-group">
-        <label>Ainesosat</label>
-        <input name="ingredient1" class="form-control" type="text">
+        <table>
+            <tr>
+                <td>
+                    <label>Määrä</label>
+                </td>
+                <td>
+                    <label>Ainesosa</label>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input name="quantity[0]" class="form-control" type="text">
+                </td>
+                <td>
+                    <input name="ingredient[0]" class="form-control" type="text">
+                </td>
+            </tr>
+        </table>
     </div>
     <script>
-        var optionCount = 2;
+        var indexCount = 1;
         function newInput() {
-
             var element = document.createElement("input");
-            var label = document.createElement("label");
-            label.innerHTML = "Ainesosa " + optionCount;
+            var quantityElement = document.createElement("input");
+            var e = document.createElement("table");
+            var tr = document.createElement("tr");
+            var td1 = document.createElement("td");
+            var td2 = document.createElement("td");
+
+            quantityElement.setAttribute("type", 'text');
             element.setAttribute("type", 'text');
-            var fieldname = "ingredient" + optionCount++;
-            element.setAttribute("name", fieldname);
-//            element.setAttribute("value", '');
+
+            var ingredientField = "ingredient[" + indexCount + "]";
+            var quantityField = "quantity[" + indexCount++ + "]";
+
+            quantityElement.setAttribute("name", quantityField);
+            quantityElement.setAttribute("class", 'form-control');
+
+            element.setAttribute("name", ingredientField);
             element.setAttribute("class", 'form-control');
+            td1.appendChild(element);
+            td2.appendChild(quantityElement);
+
+            tr.appendChild(td1);
+            tr.appendChild(td2);
+            e.appendChild(tr);
 
 
             var ingredientElement = document.getElementById("newIngredient");
-            ingredientElement.appendChild(label);
-            ingredientElement.appendChild(element);
+
+            ingredientElement.appendChild(e);
         }</script>
 
     <span id="newIngredient"></span>
@@ -36,14 +67,38 @@
 
     <div class="form-group">
         <label>Valmistusohje</label>
-        <textarea name="directions" class="form-control">
-        </textarea>
+        <textarea name="directions" class="form-control"></textarea>
     </div>
     <div class="form-group">
         <label>Valmistusaika</label>
-        <textarea name="cooking_time" class="form-control">
-        </textarea>
+        <input name="cooking_time" class="form-control" type="text">
     </div>
+    <div class="form-group">
+        <label>Hakusana</label>
+        <input name="keyword[0]" class="form-control" type="text">
+    </div>
+    <script>
+        var indexCount = 1;
+        function newKeywordInput() {
+            var element = document.createElement("input");
+
+            element.setAttribute("type", 'text');
+
+            var ingredientField = "keyword[" + indexCount + "]";
+
+            element.setAttribute("name", ingredientField);
+            element.setAttribute("class", 'form-control');
+
+            var ingredientElement = document.getElementById("newKeyword");
+
+            ingredientElement.appendChild(element);
+        }
+    </script>
+    <span id="newKeyword"></span>
+    <div class="form-group">
+        <button type="button" onclick="newKeywordInput()" class="btn btn-success">Lisää hakusana</button>
+    </div>
+    
     <div class="form-group">
         <button type="submit" class="btn btn-primary">Tallenna</button>
     </div>

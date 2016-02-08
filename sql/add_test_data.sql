@@ -5,14 +5,17 @@ VALUES ('Köyhät Ritarit', (SELECT id FROM Chef WHERE name LIKE 'admin'),'15 mi
 
 
 INSERT INTO Ingredient (name) VALUES ('pullaviipale');
-INSERT INTO Ingredient (name) VALUES ('vanlijasokeri');
+INSERT INTO Ingredient (name) VALUES ('vanilijasokeri');
 INSERT INTO Ingredient (name) VALUES ('muna');
 INSERT INTO Ingredient (name) VALUES ('maitoa');
 
 INSERT INTO RecipeIngredient (recipe_id, ingredient_id, quantity) VALUES ((SELECT id FROM Recipe WHERE name LIKE 'Köyhät Ritarit'), (SELECT id FROM Ingredient WHERE name LIKE 'pullaviipale'), '10');
+
 INSERT INTO RecipeIngredient (recipe_id, ingredient_id, quantity) VALUES ((SELECT id FROM Recipe WHERE name LIKE 'Köyhät Ritarit'), (SELECT id FROM Ingredient WHERE name LIKE 'vanilijasokeri'), '1 tl');
+
 INSERT INTO RecipeIngredient (recipe_id, ingredient_id, quantity) VALUES ((SELECT id FROM Recipe WHERE name LIKE 'Köyhät Ritarit'), (SELECT id FROM Ingredient WHERE name LIKE 'muna'), '1');
-INSERT INTO RecipeIngredient (recipe_id, ingredient_id, quantity) VALUES ((SELECT id FROM Recipe WHERE name LIKE 'Köyhät Ritarit'), (SELECT id FROM Ingredient WHERE name LIKE 'maito'), '2 dl');
+
+INSERT INTO RecipeIngredient (recipe_id, ingredient_id, quantity) VALUES ((SELECT id FROM Recipe WHERE name LIKE 'Köyhät Ritarit'), (SELECT id FROM Ingredient WHERE name LIKE 'maitoa'), '2 dl');
 
 INSERT INTO Keyword (keyword) VALUES ('jälkiruoka');
 
