@@ -29,35 +29,35 @@
     <script>
         var indexCount = 1;
         function newInput() {
-            var element = document.createElement("input");
             var quantityElement = document.createElement("input");
-            var e = document.createElement("table");
+            var ingredientElement = document.createElement("input");
+            var tableElement = document.createElement("table");
             var tr = document.createElement("tr");
             var td1 = document.createElement("td");
             var td2 = document.createElement("td");
 
+            ingredientElement.setAttribute("type", 'text');
             quantityElement.setAttribute("type", 'text');
-            element.setAttribute("type", 'text');
 
-            var ingredientField = "ingredient[" + indexCount + "]";
-            var quantityField = "quantity[" + indexCount++ + "]";
+            var quantityField = "quantity[" + indexCount + "]";
+            var ingredientField = "ingredient[" + indexCount++ + "]";
+
+            ingredientElement.setAttribute("name", ingredientField);
+            ingredientElement.setAttribute("class", 'form-control');
 
             quantityElement.setAttribute("name", quantityField);
             quantityElement.setAttribute("class", 'form-control');
-
-            element.setAttribute("name", ingredientField);
-            element.setAttribute("class", 'form-control');
-            td1.appendChild(element);
-            td2.appendChild(quantityElement);
+            td1.appendChild(quantityElement);
+            td2.appendChild(ingredientElement);
 
             tr.appendChild(td1);
             tr.appendChild(td2);
-            e.appendChild(tr);
+            tableElement.appendChild(tr);
 
 
             var ingredientElement = document.getElementById("newIngredient");
 
-            ingredientElement.appendChild(e);
+            ingredientElement.appendChild(tableElement);
         }</script>
 
     <span id="newIngredient"></span>
@@ -84,7 +84,7 @@
 
             element.setAttribute("type", 'text');
 
-            var ingredientField = "keyword[" + indexCount + "]";
+            var ingredientField = "keyword[" + indexCount++ + "]";
 
             element.setAttribute("name", ingredientField);
             element.setAttribute("class", 'form-control');

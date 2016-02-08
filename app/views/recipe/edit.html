@@ -4,17 +4,36 @@
 <form>
     <div class="form-group">
         <label>Nimi</label>
-        <input class="form-control" value="Köyhät ritarit" type="text">
+        <input class="form-control" value="{{recipe.name}}" type="text">
     </div>
     <div class="form-group">
-        <label>Ainesosat</label>
-        <input class="form-control" value="10 pullaviipaletta" type="text">
-        <input class="form-control" value="1 muna" type="text">
-        <input class="form-control" value="2dl maitoa" type="text">
-        <input class="form-control" value="1tl vanilijasokeria" type="text">
+
+        <table>
+            <tr>
+                <td>
+                    <label>Määrä</label>
+                </td>
+                <td>
+                    <label>Ainesosa</label>
+                </td>
+            </tr>
+            {% set ingredientCount = 0 %}
+            {% for ingredient in ingredients %}
+            <tr>
+                <td>
+                    <input class="form-control" name="quantity[{{ingredientCount}}]" value="{{ingredient.quantity}}" type="text">
+                </td>
+                <td>
+                    <input class="form-control" name="ingredient[{{ingredientCount}}]" value="{{ingredient.name}}" type="text">
+                </td>
+            </tr>
+            {% set ingredientCount = ingredientCount + 1 %}
+            {% endfor %}
+        </table>
     </div>
-    <script>
-        var optionCount = 5;
+    <!--tämä osa pidetään vielä hetken pois käytöstä-->
+<!--    <script>
+        var optionCount = 0;
         function newInput() {
 
             var element = document.createElement("input");
@@ -33,11 +52,11 @@
     <span id="fooBar"></span>
     <div class="form-group">
         <button type="button" onclick="newInput()" class="btn btn-success">Lisää ainesosa</button>
-    </div>
+    </div>-->
 
     <div class="form-group">
         <label>Valmistusohje</label>
-        <textarea class="form-control"> Vatkaa munan rakenne rikki. Lisää maito ja sokeri. Kasta pullat munamaitoon. Ruskista pannulla rasvassa. Tarjoile hillon ja kermavaahdon kera.
+        <textarea class="form-control">{{recipe.directions}}
         </textarea>
     </div>
     <div class="form-group">
