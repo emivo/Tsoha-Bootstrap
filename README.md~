@@ -3,9 +3,9 @@
 Yleisiä linkkejä:
 
 * [Linkki sovellukseeni](http://airta.users.cs.helsinki.fi/tsoha/)
-* [Linkki reseptin esittelysivulle](http://airta.users.cs.helsinki.fi/tsoha/recipe/1)
-* [Linkki reseptin lisäyssivulle](http://airta.users.cs.helsinki.fi/tsoha/recipe/new)
-* [Linkki reseptin muokkaussivulle](http://airta.users.cs.helsinki.fi/tsoha/recipe/1/edit)
+* [Linkki reseptin esittelysivulle](http://airta.users.cs.helsinki.fi/tsoha/recipe_show)
+* [Linkki reseptin lisäyssivulle](http://airta.users.cs.helsinki.fi/tsoha/new_recipe)
+* [Linkki reseptin muokkaussivulle](http://airta.users.cs.helsinki.fi/tsoha/recipe_modify)
 * [Linkki kirjautumissivulle](http://airta.users.cs.helsinki.fi/tsoha/login)
 * [Linkki rekisteröintisivulle](http://airta.users.cs.helsinki.fi/tsoha/register)
 * [Linkki käyttäjäntietojen muokkaussivulle](http://airta.users.cs.helsinki.fi/tsoha/myprofile)
