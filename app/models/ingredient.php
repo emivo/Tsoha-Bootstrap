@@ -2,7 +2,7 @@
 
 class Ingredient extends BaseModel {
 
-    public $id, $recipe_id, $name, $quantity;
+    public $ingredient_id, $recipe_id, $name, $quantity;
 
     public function __construct($attributes) {
         parent::__construct($attributes);
@@ -22,11 +22,11 @@ class Ingredient extends BaseModel {
                     ->prepare("SELECT * FROM Ingredient WHERE id = :id LIMIT 1");
             $ingredient_query->execute(array('id' => $row['ingredient_id']));
 
-            $ing = $ingredient_query->fetch();
+            $ingredient = $ingredient_query->fetch();
             $ingredients[] = new Ingredient(array(
-                'id' => $row['ingredient_id'],
+                'ingredient_id' => $row['ingredient_id'],
                 'recipe_id' => $id,
-                'name' => $ing['name'],
+                'name' => $ingredient['name'],
                 'quantity' => $row['quantity']
             ));
         }
@@ -42,9 +42,9 @@ class Ingredient extends BaseModel {
         $ingredient = $query->fetch();
         $insert_query = DB::connection()
                 ->prepare("INSERT INTO RecipeIngredient (recipe_id, ingredient_id, quantity) VALUES (:recipe_id, :ingredient_id, :quantity)");
-        
+
         if ($ingredient) {
-        $insert_query->execute(array('recipe_id' => $this->recipe_id, 'ingredien_id' => $ingredient->id, 'quantity' => $this->quantity));
+            $insert_query->execute(array('recipe_id' => $this->recipe_id, 'ingredien_id' => $ingredient->id, 'quantity' => $this->quantity));
         } else {
             
         }

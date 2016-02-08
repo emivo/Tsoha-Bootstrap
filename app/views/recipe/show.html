@@ -1,22 +1,23 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="alert alert-success">
-  {{message}}
+    {{message}}
 </div>
 <h1>{{recipe.name}}</h1>
-<p>Arvosana 4/5, 1 arvostelu</p>
+<p>Arvosana 4/5, {{comment|lenght}} arvostelua</p>
 <h2> Ainesosat </h2>
+{%for ingredient in ingredients%}
 <ul>
-    <li>10 pullaviipaletta</li>
-    <li>1 muna</li>
-    <li>2dl maitoa</li>
-    <li>1 tl vanilijasokeria</li>
+    <li>{{ingredient.quantity}}  {{ingredient.name}}</li>
 </ul>
+{% endfor %}
 <h2> Valmistusohjeet </h2>
 <p>{{recipe.directions}}</p>
 <p><button class="btn btn-default"> Lisää Kommentti </button> </p>
+{% for comment in comments%}
 <ul>
-    <li>4/5 ei maistu salami <button class="btn btn-primary">Muokkaa</button> <button class="btn btn-danger">Poista</button></li> 
+    <li>{{comment.rating}}/5 {{comment.comment}}<button class="btn btn-primary">Muokkaa</button> <button class="btn btn-danger">Poista</button></li> 
 </ul>
+{% endfor %}
 
 {% endblock %}
