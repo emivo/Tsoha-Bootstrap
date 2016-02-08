@@ -51,5 +51,15 @@ class Recipe extends BaseModel {
         
         return null;
     }
+    
+    public function save() {
+        $query = DB::connection()->prepare("INSERT INTO Recipe (name, cooking_time, directions, published) VALUES (:name, :cooking_time, :directions, :published) RETURNING id");
+        
+        $query->execute(array('name' => $this->name, 'cooking_time' => $this->cooking_time, 'directions' => $this->directions, 'published' => $this->published));
+        
+        $row = $query->fetch();
+        
+        $this->id = $row['id'];
+    }
 
 }

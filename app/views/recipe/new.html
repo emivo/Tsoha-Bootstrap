@@ -1,14 +1,14 @@
 {% extends "base.html" %}
 {% block content %}
 <h1>Lisää uusi resepti</h1>
-<form>
+<form method="post" action="{{base_path}}/recipe">
     <div class="form-group">
         <label>Nimi</label>
-        <input class="form-control" type="text">
+        <input name="name" class="form-control" type="text">
     </div>
     <div class="form-group">
         <label>Ainesosat</label>
-        <input class="form-control" type="text">
+        <input name="ingredient1" class="form-control" type="text">
     </div>
     <script>
         var optionCount = 2;
@@ -16,9 +16,11 @@
 
             var element = document.createElement("input");
             var label = document.createElement("label");
-            label.innerHTML = "Ainesosa " + optionCount++;
+            label.innerHTML = "Ainesosa " + optionCount;
             element.setAttribute("type", 'text');
-            element.setAttribute("value", '');
+            var fieldname = "ingredient" + optionCount++;
+            element.setAttribute("name", fieldname);
+//            element.setAttribute("value", '');
             element.setAttribute("class", 'form-control');
 
 
@@ -34,7 +36,12 @@
 
     <div class="form-group">
         <label>Valmistusohje</label>
-        <textarea class="form-control">
+        <textarea name="directions" class="form-control">
+        </textarea>
+    </div>
+    <div class="form-group">
+        <label>Valmistusaika</label>
+        <textarea name="cooking_time" class="form-control">
         </textarea>
     </div>
     <div class="form-group">

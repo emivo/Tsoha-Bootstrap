@@ -21,7 +21,7 @@ $routes->get('/recipe_show', function() {
 });
 
 $routes->get('/recipe/new', function() {
-    RecipeController::new();
+    RecipeController::create();
 });
 
 $routes->get('/recipe_modify', function() {
@@ -34,6 +34,10 @@ $routes->get('/myprofile', function() {
 
 $routes->get('/recipe', function() {
     RecipeController::index();
+});
+
+$routes->post('/recipe', function() {
+    RecipeController::store();
 });
 
 $routes->get('/recipe/:id', function($id) {
