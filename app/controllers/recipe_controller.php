@@ -23,34 +23,26 @@ class RecipeController extends BaseController {
 
     public static function store() {
         $params = $_POST;
-// kokki otetaan sessioista
-//        $chef_id = $_SESSION[array()];
-//        Käydään myös ainesosat täytyy tallentaa siispä  tehdään niin että käydään parametrejä nii kauan läpi ette niitä ole enää
 
         $recipe = new Recipe(array(
             'name' => $params['name'],
             'cooking_time' => $params['cooking_time'],
-            'directions' => $params['directions'],
-        ));
-
+            'directions' => $params['directions']));
 
         $recipe_id = $recipe->save();
-
 
         foreach ($params['ingredient'] as $index => $row) {
             $ingredient = new Ingredient(array(
                 'recipe_id' => $recipe_id,
                 'name' => $row,
-                'quantity' => $params['quantity'][$index]
-            ));
+                'quantity' => $params['quantity'][$index]));
 
             $ingredient->save();
         }
 
         foreach ($params['keyword'] as $word) {
             $keyword = new Keyword(array(
-                'keyword' => $word
-            ));
+                'keyword' => $word));
 
             $keyword->save($recipe_id);
         }

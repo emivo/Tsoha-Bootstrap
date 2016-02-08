@@ -36,6 +36,8 @@
             var td1 = document.createElement("td");
             var td2 = document.createElement("td");
 
+            tableElement.setAttribute("class", 'form-group');
+
             ingredientElement.setAttribute("type", 'text');
             quantityElement.setAttribute("type", 'text');
 
@@ -80,6 +82,8 @@
     <script>
         var indexCount = 1;
         function newKeywordInput() {
+            var parentElement = document.createElement("div");
+            parentElement.setAttribute("class", 'form-group');
             var element = document.createElement("input");
 
             element.setAttribute("type", 'text');
@@ -90,8 +94,8 @@
             element.setAttribute("class", 'form-control');
 
             var ingredientElement = document.getElementById("newKeyword");
-
-            ingredientElement.appendChild(element);
+            parentElement.appendChild(element);
+            ingredientElement.appendChild(parentElement);
         }
     </script>
     <span id="newKeyword"></span>
