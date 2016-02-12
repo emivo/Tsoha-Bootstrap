@@ -28,4 +28,10 @@ class Comment extends BaseModel {
         return $comments;
     }
 
+    public function save() {
+        $query = DB::connection()
+            ->prepare("INSERT INTO Comment (recipe_id, chef_id, rating, comment) VALUES (:recipe, :chef, :rating, :comment)");
+        $query->execute(array('recipe' => $this->recipe_id, 'chef' => $this->chef_id, 'rating' => $this->rating, 'comment' => $this->comment));
+    }
+
 }

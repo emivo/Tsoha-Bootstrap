@@ -1,4 +1,4 @@
-INSERT INTO Chef (name, password) VALUES ('admin', 'strongpswrd');
+INSERT INTO Chef (name, password) VALUES ('admin', '$1$sillysal$o4GxnKF.bxq43x2XVMSge0 ');
 
 INSERT INTO Recipe (name, chef_id, cooking_time, directions, published) 
 VALUES ('Köyhät Ritarit', (SELECT id FROM Chef WHERE name LIKE 'admin'),'15 min', 'Vatkaa munan rakenne rikki. Lisää maito ja sokeri. Kasta pullat munamaitoon. Ruskista pannulla rasvassa. Tarjoile hillon ja kermavaahdon kera.', NOW());

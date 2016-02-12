@@ -85,8 +85,20 @@ class Recipe extends BaseModel {
         $row = $query->fetch();
 
         $this->id = $row['id'];
-        
+
         return $this->id;
+    }
+//TODO
+    public function destroy() {
+        $query = DB::connection()
+                ->prepare("DELETE FROM Recipe WHERE id = :id");
+        $query->execute(array('id' => $this->id));
+    }
+//TODO
+    public function update() {
+        $query = DB::connection()
+                ->prepare("UPDATE Recipe SET name = :name, cooking_time = :ctime, directions = :directions WHERE id = :id");
+        $query->execute(array('name' => $this->name, 'ctime' => $this->cooking_time, 'directions' => $this->directions));
     }
 
 }

@@ -2,7 +2,7 @@
 CREATE TABLE Chef (
 id SERIAL PRIMARY KEY,
 name TEXT UNIQUE NOT NULL,
-password varchar(50) NOT NULL
+password TEXT NOT NULL
 );
 
 CREATE TABLE Recipe (

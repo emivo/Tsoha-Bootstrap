@@ -1,19 +1,22 @@
 <?php
 
+// juuripolku
 $routes->get('/', function() {
-    RecipeLibraryController::index();
+    RecipeController::index();
 });
 
-$routes->get('/hiekkalaatikko', function() {
-    SandboxController::sandbox();
-});
-
-$routes->get('/login', function() {
-    RecipeLibraryController::login();
-});
-
+/**
+ * Hiekkalaatikko
+  $routes->get('/hiekkalaatikko', function() {
+  SandboxController::sandbox();
+  });
+ */
 $routes->get('/register', function() {
-    RecipeLibraryController::register();
+    ChefController::register();
+});
+
+$routes->post('/register', function() {
+    ChefController::store();
 });
 
 $routes->get('/recipe/new', function() {
@@ -21,7 +24,7 @@ $routes->get('/recipe/new', function() {
 });
 
 $routes->get('/myprofile', function() {
-    RecipeLibraryController::myprofile();
+    ChefController::myprofile();
 });
 
 $routes->get('/recipe', function() {
@@ -38,4 +41,29 @@ $routes->get('/recipe/:id', function($id) {
 
 $routes->get('/recipe/:id/edit', function($id) {
     RecipeController::edit($id);
+});
+
+$routes->post('/recipe/:id/edit', function($id) {
+    RecipeController::update($id);
+});
+
+$routes->post('/recipe/:id/destroy', function($id) {
+    RecipeController::destroy($id);
+});
+
+$routes->post('/recipe/:id/newcomment', function($id) {
+    RecipeController::newcomment($id);
+});
+
+$routes->get('/login', function() {
+    SessionController::login();
+});
+
+$routes->post('/login', function() {
+    SessionController::handle_login();
+});
+
+// uloskirjautuminen gettinä, sillä en vielä tiedä kuinka saisin sen linkin näköisenä postiksi
+$routes->get('/logout', function() {
+    SessionController::handle_logout();
 });

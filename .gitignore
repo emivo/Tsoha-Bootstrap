@@ -1,2 +1,5 @@
 .DS_Store
 /nbproject/private/
+/.idea/
+/lib/passwordLib.php
+/lib/passwordLibClass.php

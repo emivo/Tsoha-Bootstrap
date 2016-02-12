@@ -1,8 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
-<!--<div class="alert alert-success">
-    {{message}}
-</div>-->
+{% import "macros/_forms.html" as forms %}
 <h1>{{recipe.name}}</h1>
 {% set sum_rating = 0%}
 {% for comment in comments%}
@@ -28,38 +26,51 @@
 <h2> Valmistusohjeet </h2>
 
 <p>{{recipe.directions}}</p>
-<script>
-    function newComment() {
-        var commentFieldElement = document.getElementById("commentField");
-//        KOMMENTIN LISÄYS VIELÄ KESKEN
-//        if commentFieldElement.childElementCount() == 0 {
-            var inputElement = document.createElement("textarea");
 
-            inputElement.setAttribute("type", 'text');
-            inputElement.setAttribute("name", 'commentfield');
-
-            commentFieldElement.appendChild(inputElement);
-//        } else {
-//            var inputElement = commentFieldElement.firstChild();
-//            var comment = inputElement.getAttribute("value");
-//            if comment.length > 1;
-//        }
-    }
-</script>
-<span id="commentField"></span>
+{% if user_logged_in %}
+{% if user_logged_in.id == recipe.chef_id %}
+<!--jos käyttäjän resepti, niin polut muokkaukseen ja poistoon-->
 <p>
-    <button class="btn btn-default" onclick="newComment()"> Lisää Kommentti </button> 
+    {{forms.edit_button(recipe.id)}}
+    {{forms.destroy_button(recipe.id)}}
 </p>
-{% set sum_rating = 0%}
-{% for comment in comments%}
-{% set sum_rating = sum_rating + comment.rating%}
+
+{% endif %}
+<!-- kommentin lisäyskenttä jos ei ole vielä kommentoinut -->
+<form method="post" action="{{base_path}}/recipe/{{recipe.id}}/newcomment">
+    <div class="form-group">
+        <div class="row">
+            <div class="col-xs-2">
+                <label>Arvosana</label>
+                <select name="rating" class="form-control">
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                </select></div>
+            <div class="col-xs-3">
+                <label>Kommentti</label>
+                <input class="form-control" name="comment" type="text">
+            </div>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-default"> Lisää Kommentti </button> 
+</form>
+{% endif %}
+<!--kommentit-->
+{% for comment in comments %}
 <ul>
-    <li>{{comment.rating}}/5 {{comment.comment}} <button class="btn btn-primary">Muokkaa</button> <button class="btn btn-danger">Poista</button></li> 
+    <li>{{comment.rating}}/5 {{comment.comment}} 
+        {% if user_logged_in.id == comment.chef_id %}
+        <button class="btn btn-primary">Muokkaa</button> <button class="btn btn-danger">Poista</button>
+        {% endif %}
+    </li> 
 </ul>
 {% endfor %}
 <h3>Hakusanat</h3>
-{% for keyword in keywords%}
-<ul  id="keywords">
+{% for keyword in keywords %}
+<ul class="inline">
     <!--Teemasanan mukainen index näkymä täytyy muistaa tehdä-->
     <li><a href="{{base_path}}/">{{keyword.keyword}}</a></li>
 </ul>
