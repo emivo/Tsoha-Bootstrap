@@ -140,7 +140,7 @@ class Ingredient extends BaseModel
         foreach ($rows as $row) {
             $ingredient = new Ingredient(array(
                 'ingredient_id' => $row['id'],
-                'name' => $row['keyword']
+                'name' => $row['name']
             ));
 
             if (is_null($ingredient->find_recipes_for_ingredient())) $ingredient->delete();

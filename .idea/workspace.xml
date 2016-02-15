@@ -2,27 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="019b86ff-ad98-4d0f-bdef-75a57a3c3624" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/Tsoha-Bootstrap.iml" afterPath="$PROJECT_DIR$/.idea/Tsoha-Bootstrap.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/controllers/chef_controller.php" afterPath="$PROJECT_DIR$/app/controllers/chef_controller.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/controllers/recipe_controller.php" afterPath="$PROJECT_DIR$/app/controllers/recipe_controller.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/controllers/session_controller.php" afterPath="$PROJECT_DIR$/app/controllers/session_controller.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/models/comment.php" afterPath="$PROJECT_DIR$/app/models/comment.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/models/ingredient.php" afterPath="$PROJECT_DIR$/app/models/ingredient.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/models/keyword.php" afterPath="$PROJECT_DIR$/app/models/keyword.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/models/recipe.php" afterPath="$PROJECT_DIR$/app/models/recipe.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/views/base.html" afterPath="$PROJECT_DIR$/app/views/base.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/views/macros/_forms.html" afterPath="$PROJECT_DIR$/app/views/macros/_forms.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/views/recipe/edit.html" afterPath="$PROJECT_DIR$/app/views/recipe/edit.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/views/recipe/index.html" afterPath="$PROJECT_DIR$/app/views/recipe/index.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/views/recipe/show.html" afterPath="$PROJECT_DIR$/app/views/recipe/show.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/composer.json" afterPath="$PROJECT_DIR$/composer.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/composer.lock" afterPath="$PROJECT_DIR$/composer.lock" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config/routes.php" afterPath="$PROJECT_DIR$/config/routes.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/base_controller.php" afterPath="$PROJECT_DIR$/lib/base_controller.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/redirect.php" afterPath="$PROJECT_DIR$/lib/redirect.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sql/add_test_data.sql" afterPath="$PROJECT_DIR$/sql/add_test_data.sql" />
     </list>
     <ignored path="Tsoha-Bootstrap.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -86,7 +66,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="README.md" pinned="false" current-in-tab="true">
+      <file leaf-file-name="README.md" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/README.md">
           <provider selected="true" editor-type-id="MultiMarkdownFxPreviewEditor">
             <state />
@@ -122,26 +102,26 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ingredient.php" pinned="false" current-in-tab="false">
+      <file leaf-file-name="ingredient.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/models/ingredient.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-16.074074">
-              <caret line="170" column="57" selection-start-line="170" selection-start-column="57" selection-end-line="170" selection-end-column="57" />
+            <state vertical-scroll-proportion="0.33251834">
+              <caret line="142" column="36" selection-start-line="142" selection-start-column="36" selection-end-line="142" selection-end-column="36" />
               <folding>
-                <marker date="1455544010770" expanded="true" signature="325:377" placeholder="SELECT * FRO... RecipeIngredient" />
-                <marker date="1455544010770" expanded="true" signature="1139:1244" placeholder="SELECT * FRO... RecipeIngredient" />
-                <marker date="1455544010770" expanded="true" signature="1918:1965" placeholder="SELECT * FRO... Ingredient" />
-                <marker date="1455544010770" expanded="true" signature="2256:2368" placeholder="INSERT INTO RecipeIngredient... " />
-                <marker date="1455544010770" expanded="true" signature="3061:3112" placeholder="SELECT * FRO... Ingredient" />
-                <marker date="1455544010770" expanded="true" signature="3403:3423" placeholder="SELECT * FRO... " />
-                <marker date="1455544010770" expanded="true" signature="3403:3467" placeholder="SELECT COUNT... RecipeIngredient" />
-                <marker date="1455544010770" expanded="true" signature="3649:3698" placeholder="UPDATE Ingre... " />
-                <marker date="1455544010770" expanded="true" signature="3964:4060" placeholder="UPDATE Recip... " />
-                <marker date="1455544010770" expanded="true" signature="4291:4315" placeholder="SELECT * FRO... Ingredient" />
-                <marker date="1455544010770" expanded="true" signature="4790:4846" placeholder="SELECT * FRO... RecipeIngredient" />
-                <marker date="1455544010770" expanded="true" signature="5388:5438" placeholder="DELETE FROM " />
-                <marker date="1455544010770" expanded="true" signature="5618:5655" placeholder="DELETE FROM " />
-                <marker date="1455544010770" expanded="true" signature="5901:5958" placeholder="INSERT INTO Ingredient... " />
+                <marker date="1455544300874" expanded="true" signature="325:377" placeholder="SELECT * FRO... RecipeIngredient" />
+                <marker date="1455544300874" expanded="true" signature="1139:1244" placeholder="SELECT * FRO... RecipeIngredient" />
+                <marker date="1455544300874" expanded="true" signature="1918:1965" placeholder="SELECT * FRO... Ingredient" />
+                <marker date="1455544300874" expanded="true" signature="2256:2368" placeholder="INSERT INTO RecipeIngredient... " />
+                <marker date="1455544300874" expanded="true" signature="3061:3112" placeholder="SELECT * FRO... Ingredient" />
+                <marker date="1455544300874" expanded="true" signature="3403:3423" placeholder="SELECT * FRO... " />
+                <marker date="1455544300874" expanded="true" signature="3403:3467" placeholder="SELECT COUNT... RecipeIngredient" />
+                <marker date="1455544300874" expanded="true" signature="3649:3698" placeholder="UPDATE Ingre... " />
+                <marker date="1455544300874" expanded="true" signature="3964:4060" placeholder="UPDATE Recip... " />
+                <marker date="1455544300874" expanded="true" signature="4291:4315" placeholder="SELECT * FRO... Ingredient" />
+                <marker date="1455544300874" expanded="true" signature="4787:4843" placeholder="SELECT * FRO... RecipeIngredient" />
+                <marker date="1455544300874" expanded="true" signature="5385:5435" placeholder="DELETE FROM " />
+                <marker date="1455544300874" expanded="true" signature="5615:5652" placeholder="DELETE FROM " />
+                <marker date="1455544300874" expanded="true" signature="5898:5955" placeholder="INSERT INTO Ingredient... " />
               </folding>
             </state>
           </provider>
@@ -170,11 +150,11 @@
         <option value="$PROJECT_DIR$/app/views/recipe/show.html" />
         <option value="$PROJECT_DIR$/app/views/recipe/edit.html" />
         <option value="$PROJECT_DIR$/app/controllers/recipe_controller.php" />
-        <option value="$PROJECT_DIR$/app/models/ingredient.php" />
         <option value="$PROJECT_DIR$/app/models/keyword.php" />
         <option value="$PROJECT_DIR$/app/models/recipe.php" />
         <option value="$PROJECT_DIR$/app/models/comment.php" />
         <option value="$PROJECT_DIR$/README.md" />
+        <option value="$PROJECT_DIR$/app/models/ingredient.php" />
       </list>
     </option>
   </component>
@@ -761,29 +741,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/models/ingredient.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-16.074074">
-          <caret line="170" column="57" selection-start-line="170" selection-start-column="57" selection-end-line="170" selection-end-column="57" />
-          <folding>
-            <marker date="1455544010770" expanded="true" signature="325:377" placeholder="SELECT * FRO... RecipeIngredient" />
-            <marker date="1455544010770" expanded="true" signature="1139:1244" placeholder="SELECT * FRO... RecipeIngredient" />
-            <marker date="1455544010770" expanded="true" signature="1918:1965" placeholder="SELECT * FRO... Ingredient" />
-            <marker date="1455544010770" expanded="true" signature="2256:2368" placeholder="INSERT INTO RecipeIngredient... " />
-            <marker date="1455544010770" expanded="true" signature="3061:3112" placeholder="SELECT * FRO... Ingredient" />
-            <marker date="1455544010770" expanded="true" signature="3403:3423" placeholder="SELECT * FRO... " />
-            <marker date="1455544010770" expanded="true" signature="3403:3467" placeholder="SELECT COUNT... RecipeIngredient" />
-            <marker date="1455544010770" expanded="true" signature="3649:3698" placeholder="UPDATE Ingre... " />
-            <marker date="1455544010770" expanded="true" signature="3964:4060" placeholder="UPDATE Recip... " />
-            <marker date="1455544010770" expanded="true" signature="4291:4315" placeholder="SELECT * FRO... Ingredient" />
-            <marker date="1455544010770" expanded="true" signature="4790:4846" placeholder="SELECT * FRO... RecipeIngredient" />
-            <marker date="1455544010770" expanded="true" signature="5388:5438" placeholder="DELETE FROM " />
-            <marker date="1455544010770" expanded="true" signature="5618:5655" placeholder="DELETE FROM " />
-            <marker date="1455544010770" expanded="true" signature="5901:5958" placeholder="INSERT INTO Ingredient... " />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/models/keyword.php">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-24.74074">
@@ -855,6 +812,29 @@
             <folding />
           </first_editor>
           <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/models/ingredient.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.33251834">
+          <caret line="142" column="36" selection-start-line="142" selection-start-column="36" selection-end-line="142" selection-end-column="36" />
+          <folding>
+            <marker date="1455544300874" expanded="true" signature="325:377" placeholder="SELECT * FRO... RecipeIngredient" />
+            <marker date="1455544300874" expanded="true" signature="1139:1244" placeholder="SELECT * FRO... RecipeIngredient" />
+            <marker date="1455544300874" expanded="true" signature="1918:1965" placeholder="SELECT * FRO... Ingredient" />
+            <marker date="1455544300874" expanded="true" signature="2256:2368" placeholder="INSERT INTO RecipeIngredient... " />
+            <marker date="1455544300874" expanded="true" signature="3061:3112" placeholder="SELECT * FRO... Ingredient" />
+            <marker date="1455544300874" expanded="true" signature="3403:3423" placeholder="SELECT * FRO... " />
+            <marker date="1455544300874" expanded="true" signature="3403:3467" placeholder="SELECT COUNT... RecipeIngredient" />
+            <marker date="1455544300874" expanded="true" signature="3649:3698" placeholder="UPDATE Ingre... " />
+            <marker date="1455544300874" expanded="true" signature="3964:4060" placeholder="UPDATE Recip... " />
+            <marker date="1455544300874" expanded="true" signature="4291:4315" placeholder="SELECT * FRO... Ingredient" />
+            <marker date="1455544300874" expanded="true" signature="4787:4843" placeholder="SELECT * FRO... RecipeIngredient" />
+            <marker date="1455544300874" expanded="true" signature="5385:5435" placeholder="DELETE FROM " />
+            <marker date="1455544300874" expanded="true" signature="5615:5652" placeholder="DELETE FROM " />
+            <marker date="1455544300874" expanded="true" signature="5898:5955" placeholder="INSERT INTO Ingredient... " />
+          </folding>
         </state>
       </provider>
     </entry>
