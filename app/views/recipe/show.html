@@ -36,7 +36,22 @@
 </p>
 
 {% endif %}
+{% endif %}
+<!--kommentit-->
+{% set chef_commented_yet = 0 %}
+{% for comment in comments %}
+<ul>
+    <li>{{comment.rating}}/5 {{comment.comment}} 
+        {% if user_logged_in.id == comment.chef_id %}
+        {% set chef_commented_yet = 1 %}
+        <button onclick="editComment()" class="btn btn-primary">Muokkaa</button>
+        <button formmethod="post" formaction="{{base_path}}/recipe/{{recipe.id}}/comment/delete" class="btn btn-danger">Poista</button>
+        {% endif %}
+    </li> 
+</ul>
+{% if user_logged_in and chef_commented_yet == 0 %}
 <!-- kommentin lisäyskenttä jos ei ole vielä kommentoinut -->
+<!--nyt vielä sama käyttäjä voi lisätä monta kommenttia yhteen reseptiin mutta tähän tulee muutos-->
 <form method="post" action="{{base_path}}/recipe/{{recipe.id}}/newcomment">
     <div class="form-group">
         <div class="row">
@@ -55,18 +70,11 @@
             </div>
         </div>
     </div>
-    <button type="submit" class="btn btn-default"> Lisää Kommentti </button> 
+    <button type="submit" class="btn btn-default"> Lisää Kommentti </button>
 </form>
+{% else %}
+<span id="editField"></span>
 {% endif %}
-<!--kommentit-->
-{% for comment in comments %}
-<ul>
-    <li>{{comment.rating}}/5 {{comment.comment}} 
-        {% if user_logged_in.id == comment.chef_id %}
-        <button class="btn btn-primary">Muokkaa</button> <button class="btn btn-danger">Poista</button>
-        {% endif %}
-    </li> 
-</ul>
 {% endfor %}
 <h3>Hakusanat</h3>
 {% for keyword in keywords %}

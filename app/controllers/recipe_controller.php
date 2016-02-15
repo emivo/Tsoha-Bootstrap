@@ -66,11 +66,16 @@ class RecipeController extends BaseController
 
     public static function edit($id)
     {
+
         $recipe = Recipe::find($id);
-        $comments = Comment::find_by_recipe_id($id);
-        $ingredients = Ingredient::find_by_recipe_id($id);
-        $keywords = Keyword::find_by_recipe_id($id);
-        View::make('recipe/edit.html', array('recipe' => $recipe, 'comments' => $comments, 'ingredients' => $ingredients, 'keywords' => $keywords));
+        if (self::get_user_logged_in() == $recipe->chef_id) {
+            $comments = Comment::find_by_recipe_id($id);
+            $ingredients = Ingredient::find_by_recipe_id($id);
+            $keywords = Keyword::find_by_recipe_id($id);
+            View::make('recipe/edit.html', array('recipe' => $recipe, 'comments' => $comments, 'ingredients' => $ingredients, 'keywords' => $keywords));
+        } else {
+            Redirect::to('/login', array('error' => self::check_logged_in()));
+        }
     }
 
     public static function update($id)
@@ -101,7 +106,7 @@ class RecipeController extends BaseController
                     $error = $error . ".\n" . $err;
                 }
             }
-            Redirect::to('/recipe/' . $id. '/edit', array('error' => $error, 'params' => $params));
+            Redirect::to('/recipe/' . $id . '/edit', array('error' => $error, 'params' => $params));
         }
     }
 
@@ -142,6 +147,16 @@ class RecipeController extends BaseController
                 }
             }
             Redirect::to('/recipe/' . $id, array('error' => $error));
+        }
+    }
+
+    public static function deletecomment($id, $chef_id)
+    {
+        if (self::get_user_logged_in() == $chef_id) {
+            $comment = Comment::delete_chefs_from_recipe($id, $chef_id);
+            Redirect::to('/recipe/' . $id, array('message' => 'Kommentti poistettu!'));
+        } else {
+            Redirect::to('/recipe/' . $id, array('error' => 'Voit poistaa vain omia kommentteja!'));
         }
     }
 

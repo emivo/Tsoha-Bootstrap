@@ -55,6 +55,10 @@ $routes->post('/recipe/:id/newcomment', function($id) {
     RecipeController::newcomment($id);
 });
 
+$routes->post('/recipe/:id/comment/:chef_id/delete', function($id, $chef_id) {
+    RecipeController::deletecomment($id, $chef_id);
+});
+
 $routes->get('/login', function() {
     SessionController::login();
 });

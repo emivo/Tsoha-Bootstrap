@@ -31,7 +31,15 @@ class Comment extends BaseModel
 
     }
 
-    public static function delete_from_recipe($recipe_id) {
+    public static function delete_chefs_from_recipe($id, $chef_id) {
+        $comment = new Comment(array(
+           'recipe_id' => $id,
+            'chef_id' => $chef_id
+        ));
+        $comment->delete();
+    }
+
+    public static function delete_all_from_recipe($recipe_id) {
         $query_delete_comments = DB::connection()
             ->prepare("DELETE FROM Comment WHERE recipe_id = :id");
         $query_delete_comments->execute(array('id' => $recipe_id));

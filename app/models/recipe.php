@@ -98,7 +98,7 @@ class Recipe extends BaseModel
     public function destroy()
     {
         // poista kommentit
-        Comment::delete_from_recipe($this->id);
+        Comment::delete_all_from_recipe($this->id);
         //poista ainesosat
         Ingredient::delete_from_recipe($this->id);
         Ingredient::delete_unused();
