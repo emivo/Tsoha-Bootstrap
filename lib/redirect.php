@@ -3,6 +3,7 @@
   class Redirect{
 
     public static function to($path, $message = null){
+
       // Katsotaan onko $message parametri asetettu
       if(!is_null($message)){
         // Jos on, lisätään se sessioksi JSON-muodossa

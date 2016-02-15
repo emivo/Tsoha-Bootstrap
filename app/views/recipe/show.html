@@ -28,11 +28,11 @@
 <p>{{recipe.directions}}</p>
 
 {% if user_logged_in %}
-{% if user_logged_in.id == recipe.chef_id %}
+{% if get_user_logged_in.id == recipe.chef_id %}
 <!--jos käyttäjän resepti, niin polut muokkaukseen ja poistoon-->
 <p>
-    {{forms.edit_button(recipe.id)}}
-    {{forms.destroy_button(recipe.id)}}
+    {{forms.edit_button(base_path, recipe.id)}}
+    {{forms.destroy_button(base_path, recipe.id)}}
 </p>
 
 {% endif %}

@@ -1,10 +1,11 @@
 {% extends "base.html" %}
 {% block content %}
+{% import "macros/_forms.html" as forms %}
 <h1>Muokkaa reseptiä</h1>
-<form>
+<form method="post", action="{{base_path}}/recipe/{{recipe.id}}/edit">
     <div class="form-group">
         <label>Nimi</label>
-        <input class="form-control" value="{{recipe.name}}" type="text">
+        <input class="form-control" name="name" value="{{recipe.name}}" type="text">
     </div>
     <div class="form-group">
 
@@ -31,7 +32,7 @@
             {% endfor %}
         </table>
     </div>
-    <!--tämä osa pidetään vielä hetken pois käytöstä-->
+    <!--tämä osa pidetään vielä hetken pois käytöstä eli ainesosia ei voi enää lisätä reseptiin-->
 <!--    <script>
         var optionCount = 0;
         function newInput() {
@@ -56,12 +57,18 @@
 
     <div class="form-group">
         <label>Valmistusohje</label>
-        <textarea class="form-control">{{recipe.directions}}
+        <textarea name="directions" class="form-control">{{recipe.directions}}
         </textarea>
     </div>
+
+    <div class="form-group">
+        <label>Valmistusaika</label>
+        <input class="form-control" name="cooking_time" value="{{recipe.cooking_time}}" type="text">
+    </div>
+
     <div class="form-group">
         <button type="submit" class="btn btn-primary">Tallenna</button>
     </div>
 </form>
-<button type="submit" class="btn btn-danger">Poista resepti</button>
+{{ forms.destroy_button(base_path,recipe.id)}}
 {% endblock %}

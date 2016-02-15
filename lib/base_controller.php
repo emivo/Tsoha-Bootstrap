@@ -8,15 +8,18 @@
             
             $user = Chef::find($user_id);
             
-            return $user;
+            return $user[0];
         }
         return null;
     }
 
     public static function check_logged_in(){
       if (!isset($_SESSION['user'])) {
-          Redirect::to('/login', array('message' => 'Sinun tulee kirjautua ensin siään'));
+
+          $error = 'Sinun tulee kirjautua ensin sisään';
+          return $error;
       }
+        return null;
     }
 
   }

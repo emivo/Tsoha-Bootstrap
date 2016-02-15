@@ -1,16 +1,19 @@
 <?php
 
-class Ingredient extends BaseModel {
+class Ingredient extends BaseModel
+{
 
     public $ingredient_id, $recipe_id, $name, $quantity;
 
-    public function __construct($attributes) {
+    public function __construct($attributes)
+    {
         parent::__construct($attributes);
     }
 
-    public static function find_by_recipe_id($id) {
+    public static function find_by_recipe_id($id)
+    {
         $quantity_query = DB::connection()
-                ->prepare("SELECT * FROM RecipeIngredient WHERE recipe_id = :id");
+            ->prepare("SELECT * FROM RecipeIngredient WHERE recipe_id = :id");
         $quantity_query->execute(array('id' => $id));
 
         $rows = $quantity_query->fetchAll();
@@ -18,11 +21,8 @@ class Ingredient extends BaseModel {
         $ingredients = array();
 
         foreach ($rows as $row) {
-            $ingredient_query = DB::connection()
-                    ->prepare("SELECT * FROM Ingredient WHERE id = :id LIMIT 1");
-            $ingredient_query->execute(array('id' => $row['ingredient_id']));
+            $ingredient = self::find_ingredient_by_id($row['ingredient_id']);
 
-            $ingredient = $ingredient_query->fetch();
             $ingredients[] = new Ingredient(array(
                 'ingredient_id' => $row['ingredient_id'],
                 'recipe_id' => $id,
@@ -34,10 +34,14 @@ class Ingredient extends BaseModel {
         return $ingredients;
     }
 
-    public static function find_by_recipe_id_and_ingredient_id($recipe_id, $ingredient_id) {
+    public static function find_by_recipe_id_and_ingredient_name($recipe_id, $name)
+    {
+        $ingredient = self::find_ingredient_by_name($name);
+
+
         $query = DB::connection()
-                ->prepare("SELECT * FROM RecipeIngredient INNER JOIN Ingredient WHERE recipe_id = :recipe_id AND ingredient_id = :ingredient_id");
-        $query->execute(array('recipe_id' => $recipe_id, 'ingredient_id' => $ingredient_id));
+            ->prepare("SELECT * FROM RecipeIngredient INNER JOIN Ingredient WHERE recipe_id = :recipe_id AND ingredient_id = :id");
+        $query->execute(array('recipe_id' => $recipe_id, 'id' => $ingredient['id']));
 
         $row = $query->fetch();
 
@@ -55,35 +59,135 @@ class Ingredient extends BaseModel {
         return null;
     }
 
-    public function save() {
-        $query = DB::connection()
-                ->prepare("SELECT * FROM Ingredient WHERE name = :name LIMIT 1");
-        $query->execute(array('name' => $this->name));
-        $ingredient = $query->fetch();
+    /**
+     * @return mixed Palauttaa SQL kyselyn tuloksen
+     */
+    protected static function find_ingredient_by_id($id)
+    {
+        $ingredient_query = DB::connection()
+            ->prepare("SELECT * FROM Ingredient WHERE id = :id LIMIT 1");
+        $ingredient_query->execute(array('id' => $id));
+
+        $ingredient = $ingredient_query->fetch();
+        return $ingredient;
+    }
+
+    public function save()
+    {
+        $ingredient = $this->find_ingredient();
         $insert_query = DB::connection()
-                ->prepare("INSERT INTO RecipeIngredient (recipe_id, ingredient_id, quantity) VALUES (:recipe_id, :ingredient_id, :quantity)");
+            ->prepare("INSERT INTO RecipeIngredient (recipe_id, ingredient_id, quantity) VALUES (:recipe_id, :ingredient_id, :quantity)");
 
         if (!$ingredient) {
-            $new_ingredient = DB::connection()
-                    ->prepare("INSERT INTO Ingredient (name) VALUES (:name) RETURNING id");
-            $new_ingredient
-                    ->execute(array('name' => $this->name));
-            $ingredient = $new_ingredient->fetch();
+            $ingredient = $this->new_ingredient_store();
         }
 
         $this->ingredient_id = $ingredient['id'];
 
         $insert_query->execute(array('recipe_id' => $this->recipe_id, 'ingredient_id' => $this->ingredient_id, 'quantity' => $this->quantity));
     }
-//Kohta valmis
-//    public function update() {
-//        DB::connection()
-//                ->prepare("UPDATE Ingredient SET name = :name WHERE id = :id")
-//                ->execute(array('name' => $this->name, 'id' => $this->id));
-//
-//        DB::connection()
-//                ->prepare("UPDATE RecipeIngredient SET quantity = :quantity WHERE ingredient_id = :iid AND recipe_id = :rid")
-//                ->execute(array('quantity' => $this->quantity, 'iid' => $this->ingredient_id, 'rid' => $this->recipe_id));
-//    }
+
+    /**
+     * @return mixed palauttaa SQL kyselyn tuloksen
+     */
+    protected function find_ingredient()
+    {
+        return self::find_ingredient_by_name($this->name);
+    }
+
+    /**
+     * @param $name
+     * @return mixed palauttaa sql kyselyn tuloksen
+     */
+    public static function find_ingredient_by_name($name)
+    {
+        $query = DB::connection()
+            ->prepare("SELECT * FROM Ingredient WHERE name = :name LIMIT 1");
+        $query->execute(array('name' => $name));
+        $ingredient = $query->fetch();
+        return $ingredient;
+    }
+
+    public function update()
+    {
+        // jos ainesosa vain yhdessä, niin vaihda nimi, muuten luo uusi
+        $query = DB::connection()
+            ->prepare("SELECT COUNT(*) FROM RecipeIngredient WHERE ingredient_id  = :id");
+        $query->execute(array('id' => $this->id));
+        $count = $query->fetch();
+
+        if ($count['count'] == 1) {
+            DB::connection()
+                ->prepare("UPDATE Ingredient SET name = :name WHERE id = :id")
+                ->execute(array('name' => $this->name, 'id' => $this->id));
+        } else {
+            $ingredient = $this->new_ingredient_store();
+            $this->ingredient_id = $ingredient['id'];
+        }
+
+        DB::connection()
+            ->prepare("UPDATE RecipeIngredient SET quantity = :quantity WHERE ingredient_id = :iid AND recipe_id = :rid")
+            ->execute(array('quantity' => $this->quantity, 'iid' => $this->ingredient_id, 'rid' => $this->recipe_id));
+    }
+
+    public static function delete_unused() {
+        $query = DB::connection()
+            ->prepare("SELECT * FROM Ingredient");
+        $query->execute();
+
+        $rows = $query->fetchAll();
+
+        foreach ($rows as $row) {
+            $ingredient = new Ingredient(array(
+                'ingredient_id' => $row['id'],
+                'name' => $row['keyword']
+            ));
+
+            if (is_null($ingredient->find_recipes_for_ingredient())) $ingredient->delete();
+        }
+    }
+
+    public function find_recipes_for_ingredient() {
+        $query = DB::connection()
+            ->prepare("SELECT * FROM RecipeIngredient WHERE ingredient_id = :id");
+        $query->execute(array('id' => $this->ingredient_id));
+        $rows = $query->fetchAll();
+
+        $array_of_recipes = array();
+        foreach ($rows as $row) {
+            // muuta tähän jotta lisää reseptit listaan
+            $array_of_recipes[] = $row['recipe_id'];
+        }
+
+        if (count($array_of_recipes) > 0) {
+            return $array_of_recipes;
+        }
+        return null;
+    }
+
+    public static function delete_from_recipe($id) {
+        $query_delete_quantities = DB::connection()
+            ->prepare("DELETE FROM RecipeIngredient WHERE recipe_id = :id");
+        $query_delete_quantities->execute(array('id' => $id));
+    }
+
+    public function delete() {
+        $query_delete_quantities = DB::connection()
+            ->prepare("DELETE FROM Ingredient WHERE id = :id");
+        $query_delete_quantities->execute(array('id' => $this->ingredient_id));
+    }
+
+    /**
+     * @return mixed
+     */
+    protected function new_ingredient_store()
+    {
+        $new_ingredient = DB::connection()
+            ->prepare("INSERT INTO Ingredient (name) VALUES (:name) RETURNING id");
+        $new_ingredient
+            ->execute(array('name' => $this->name));
+        $ingredient = $new_ingredient->fetch();
+        return $ingredient;
+    }
 
 }

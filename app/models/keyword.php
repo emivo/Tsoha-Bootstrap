@@ -1,16 +1,19 @@
 <?php
 
-class Keyword extends BaseModel {
+class Keyword extends BaseModel
+{
 
     public $id, $keyword;
 
-    public function __construct($attributes) {
+    public function __construct($attributes)
+    {
         parent::__construct($attributes);
     }
 
-    public static function find_by_recipe_id($id) {
+    public static function find_by_recipe_id($id)
+    {
         $junction_table_query = DB::connection()
-                ->prepare("SELECT * FROM RecipeKeyword WHERE recipe_id = :id");
+            ->prepare("SELECT * FROM RecipeKeyword WHERE recipe_id = :id");
         $junction_table_query->execute(array('id' => $id));
 
         $rows = $junction_table_query->fetchAll();
@@ -19,7 +22,7 @@ class Keyword extends BaseModel {
 
         foreach ($rows as $row) {
             $keyword_query = DB::connection()
-                    ->prepare("SELECT * FROM Keyword WHERE id = :keyword_id");
+                ->prepare("SELECT * FROM Keyword WHERE id = :keyword_id");
             $keyword_query->execute(array('keyword_id' => $row['keyword_id']));
 
             $keyword = $keyword_query->fetch();
@@ -31,29 +34,82 @@ class Keyword extends BaseModel {
 
         return $keywords;
     }
-    
-    public function save($recipe_id) {
+
+    /**
+     * return reseptien id:t listana
+     */
+    public function find_recipes()
+    {
         $query = DB::connection()
-                ->prepare("SELECT * FROM Keyword WHERE keyword = :keyword LIMIT 1");
-        $query->execute(array('keyword' => $this->keyword));
-        $keyword = $query->fetch();
-        
-        $insert_query = DB::connection()
-                ->prepare("INSERT INTO RecipeKeyword (recipe_id, keyword_id) VALUES (:recipe_id, :keyword_id)");
-        if (!$keyword) {
-            $new_keyword = DB::connection()
-                    ->prepare("INSERT INTO Keyword (keyword) VALUES (:keyword) RETURNING id");
-            $new_keyword
-                    ->execute(array('keyword' => $this->keyword));
-            $keyword = $new_keyword->fetch();
-            }
-            
-            $this->id = $keyword['id'];
-            $insert_query->execute(array('recipe_id' => $recipe_id, 'keyword_id' => $this->id));
+            ->prepare("SELECT * FROM RecipeKeyword WHERE keyword_id = :id");
+        $query->execute(array('id' => $this->id));
+        $rows = $query->fetchAll();
+        $array_of_recipes = array();
+        foreach ($rows as $row) {
+            // muuta tähän jotta lisää reseptit listaan
+            $array_of_recipes[] = $row['recipe_id'];
+        }
+        if (count($array_of_recipes) > 0) {
+            return $array_of_recipes;
+        }
+        return null;
     }
 
-    public static function find_by_name($string) {
+    public function save($recipe_id)
+    {
+        $query = DB::connection()
+            ->prepare("SELECT * FROM Keyword WHERE keyword = :keyword LIMIT 1");
+        $query->execute(array('keyword' => $this->keyword));
+        $keyword = $query->fetch();
+
+        $insert_query = DB::connection()
+            ->prepare("INSERT INTO RecipeKeyword (recipe_id, keyword_id) VALUES (:recipe_id, :keyword_id)");
+        if (!$keyword) {
+            $new_keyword = DB::connection()
+                ->prepare("INSERT INTO Keyword (keyword) VALUES (:keyword) RETURNING id");
+            $new_keyword
+                ->execute(array('keyword' => $this->keyword));
+            $keyword = $new_keyword->fetch();
+        }
+
+        $this->id = $keyword['id'];
+        $insert_query->execute(array('recipe_id' => $recipe_id, 'keyword_id' => $this->id));
+    }
+
+    public static function find_by_name($string)
+    {
         throw Exception("Not supported yet");
     }
 
+    public static function delete_unused()
+    {
+        $query = DB::connection()
+            ->prepare("SELECT * FROM Keyword");
+        $query->execute();
+
+        $rows = $query->fetchAll();
+
+        foreach ($rows as $row) {
+            $keyword = new Keyword(array(
+                'id' => $row['id'],
+                'keyword' => $row['keyword']
+            ));
+
+            if (is_null($keyword->find_recipes())) $keyword->delete();
+        }
+    }
+
+    public static function delete_junctions($recipe_id)
+    {
+        $query_delete_keywords = DB::connection()
+            ->prepare("DELETE FROM RecipeKeyword WHERE recipe_id = :id");
+        $query_delete_keywords->execute(array('id' => $recipe_id));
+    }
+
+    public function delete()
+    {
+        $query = DB::connection()
+            ->prepare("DELETE FROM Keyword WHERE id = :id");
+        $query->execute(array('id' => $this->id));
+    }
 }

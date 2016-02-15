@@ -2,15 +2,18 @@
 
 //
 
-class Recipe extends BaseModel {
+class Recipe extends BaseModel
+{
 
     public $id, $chef_id, $name, $cooking_time, $directions, $published;
 
-    public function __construct($attributes) {
+    public function __construct($attributes)
+    {
         parent::__construct($attributes);
     }
 
-    public static function all() {
+    public static function all()
+    {
         $query = DB::connection()->prepare('SELECT * FROM Recipe');
 
         $query->execute();
@@ -33,7 +36,8 @@ class Recipe extends BaseModel {
         return $recipes;
     }
 
-    public static function ten_recent() {
+    public static function ten_recent()
+    {
         $query = DB::connection()->prepare('SELECT * FROM Recipe ORDER BY published DESC LIMIT 10');
 
         $query->execute();
@@ -56,7 +60,8 @@ class Recipe extends BaseModel {
         return $recipes;
     }
 
-    public static function find($id) {
+    public static function find($id)
+    {
         $query = DB::connection()->prepare('SELECT * FROM Recipe WHERE id = :id LIMIT 1');
         $query->execute(array('id' => $id));
         $row = $query->fetch();
@@ -77,7 +82,8 @@ class Recipe extends BaseModel {
         return null;
     }
 
-    public function save() {
+    public function save()
+    {
         $query = DB::connection()->prepare("INSERT INTO Recipe (name, cooking_time, directions, published) VALUES (:name, :cooking_time, :directions, NOW()) RETURNING id");
 
         $query->execute(array('name' => $this->name, 'cooking_time' => $this->cooking_time, 'directions' => $this->directions));
@@ -88,16 +94,27 @@ class Recipe extends BaseModel {
 
         return $this->id;
     }
-//TODO
-    public function destroy() {
+
+    public function destroy()
+    {
+        // poista kommentit
+        Comment::delete_from_recipe($this->id);
+        //poista ainesosat
+        Ingredient::delete_from_recipe($this->id);
+        Ingredient::delete_unused();
+        //poista avainsanat
+        Keyword::delete_junctions($this->id);
+        Keyword::delete_unused();
+
         $query = DB::connection()
-                ->prepare("DELETE FROM Recipe WHERE id = :id");
+            ->prepare("DELETE FROM Recipe WHERE id = :id");
         $query->execute(array('id' => $this->id));
     }
-//TODO
-    public function update() {
+
+    public function update()
+    {
         $query = DB::connection()
-                ->prepare("UPDATE Recipe SET name = :name, cooking_time = :ctime, directions = :directions WHERE id = :id");
+            ->prepare("UPDATE Recipe SET name = :name, cooking_time = :ctime, directions = :directions WHERE id = :id");
         $query->execute(array('name' => $this->name, 'ctime' => $this->cooking_time, 'directions' => $this->directions));
     }
 

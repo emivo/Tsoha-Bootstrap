@@ -2,19 +2,23 @@
 
 Yleisiä linkkejä:
 
-* [Linkki sovellukseeni](http://airta.users.cs.helsinki.fi/tsoha/)
+* [**Linkki sovellukseeni**](http://airta.users.cs.helsinki.fi/tsoha/)
+käyttäjätunnus: admin salasana: qwerty
+käyttäjätunnus: kallekoekokki salasana: qwerty
 * [Linkki reseptin esittelysivulle](http://airta.users.cs.helsinki.fi/tsoha/recipe/1)
 * [Linkki reseptin lisäyssivulle](http://airta.users.cs.helsinki.fi/tsoha/recipe/new)
 * [Linkki reseptin muokkaussivulle](http://airta.users.cs.helsinki.fi/tsoha/recipe/1/edit)
 * [Linkki kirjautumissivulle](http://airta.users.cs.helsinki.fi/tsoha/login)
 * [Linkki rekisteröintisivulle](http://airta.users.cs.helsinki.fi/tsoha/register)
 * [Linkki käyttäjäntietojen muokkaussivulle](http://airta.users.cs.helsinki.fi/tsoha/myprofile)
+
 * [Linkki dokumentaatiooni](doc/dokumentaatio.pdf)
 ---
 * [typography](http://getbootstrap.com/css/#type) - tekstin asettelu ja tyylittely
 * [tables](http://getbootstrap.com/css/#tables) - taulukot
 * [forms](http://getbootstrap.com/css/#forms) - lomakkeet
 * [buttons](http://getbootstrap.com/css/#buttons) - painikkeet
+* [validitor](https://github.com/vlucas/valitron) - mallien validointi
 
 
 ## Työn aihe

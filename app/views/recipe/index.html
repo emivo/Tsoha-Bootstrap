@@ -3,7 +3,10 @@
 {% block content %}
 {% import "macros/_forms.html" as forms %}
 <div class="page-header">
-    <h1>Tervetuloa Reseptikirjastoon!</h1>
+    <h1>Tervetuloa Reseptikirjastoon
+        {% if user_logged_in %}
+        {{user_logged_in.name}}
+        {% endif %}!</h1>
 </div>
 {% if user_logged_in %}
 <script>function reroute() {
@@ -31,8 +34,8 @@
             <td>{{recipe.published}}</td>
             {% if user_logged_in.id == recipe.chef_id %}
             <td>
-                {{ forms.edit_button(recipe.id)}}
-                {{ forms.destroy_button(recipe.id)}}
+                {{ forms.edit_button(base_path,recipe.id)}}
+                {{ forms.destroy_button(base_path,recipe.id)}}
             </td>
             {% else %}
             <td></td> 
