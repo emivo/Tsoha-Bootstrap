@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% import "macros/recipes.html" as macro %}
+<div class="page-header">
+    <h1>Haun tulokset</h1>
+</div>
+
+{{ macro.recipes_table(base_path, recipes, user_logged_in) }}
+
+{% endblock %}

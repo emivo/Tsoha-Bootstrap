@@ -10,3 +10,27 @@
   </form>
 {% endmacro %}
 
+{% macro comment_field(base_path, rating, comment, id) %}
+    <form method="post" action="{{base_path}}/recipe/{{id}}/newcomment">
+        <div class="form-group">
+            <div class="row">
+                <div class="col-xs-2">
+                    <label>Arvosana</label>
+                    <select name="rating" class="form-control">
+                        <option>1</option>
+                        <option>2</option>
+                        <option
+                            {% if rating == 3 %} selected="selected" {% endif %}
+                            >3</option>
+                        <option>4</option>
+                        <option>5</option>
+                    </select></div>
+                <div class="col-xs-3">
+                    <label>Kommentti</label>
+                    <input class="form-control" name="comment" type="text">
+                </div>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-default"> Lisää Kommentti </button>
+    </form>
+{% endmacro %}

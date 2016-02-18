@@ -68,7 +68,7 @@ class RecipeController extends BaseController
     {
 
         $recipe = Recipe::find($id);
-        if (self::get_user_logged_in() == $recipe->chef_id) {
+        if (self::get_user_logged_in()->id == $recipe->chef_id) {
             $comments = Comment::find_by_recipe_id($id);
             $ingredients = Ingredient::find_by_recipe_id($id);
             $keywords = Keyword::find_by_recipe_id($id);

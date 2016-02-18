@@ -81,6 +81,60 @@ class Recipe extends BaseModel
 
         return null;
     }
+    
+    public static function search_default($string) {
+        // TARKISTA STRING ENNEN TIETOKANTA HAKUA
+        $query = DB::connection()
+                ->prepare('SELECT Recipe.* FROM Recipe '
+                        . 'JOIN RecipeKeyword ON Recipe.id = RecipeKeyword.recipe_id '
+                        . 'JOIN Keyword ON Keyword.id = RecipeKeyword.keyword_id '
+                        . 'WHERE Recipe.name LIKE :string OR Keyword.keyword LIKE :string');
+        // VALIDATE STRING
+        $string = "\'%".$string."%\'";
+        $query->execute(array('string' => $string));
+        
+        $rows = $query->fetchAll();
+        
+        $results = array();
+        foreach ($rows as $row) {
+            $results[] = new Recipe(array(
+                'id' => $row['id'],
+                'chef_id' => $row['chef_id'],
+                'name' => $row['name'],
+                'cooking_time' => $row['cooking_time'],
+                'directions' => $row['directions'],
+                'published' => $row['published'],
+            ));
+        }
+        return $results;
+    }
+    
+    public static function search_by_keyword($keyword){
+        
+        $query = DB::connection()
+                ->prepare('SELECT Recipe.* FROM Recipe '
+                        . 'JOIN RecipeKeyword ON Recipe.id = RecipeKeyword.recipe_id '
+                        . 'JOIN Keyword ON Keyword.id = RecipeKeyword.keyword_id '
+                        . 'WHERE Keyword.keyword LIKE :keyword');
+        $keyword = "\'%".$keyword."%\'";
+        $query->execute(array('keyword' => $keyword));
+        
+        $rows = $query->fetchAll();
+        
+        $results = array();
+        foreach ($rows as $row) {
+            $results[] = new Recipe(array(
+                'id' => $row['id'],
+                'chef_id' => $row['chef_id'],
+                'name' => $row['name'],
+                'cooking_time' => $row['cooking_time'],
+                'directions' => $row['directions'],
+                'published' => $row['published'],
+            ));
+        }
+        
+        return $results;
+    }
 
     public function save()
     {

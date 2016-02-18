@@ -27,6 +27,18 @@ $routes->get('/myprofile', function() {
     ChefController::myprofile();
 });
 
+$routes->post('/search', function() {
+    SearchController::find();
+});
+
+//$routes->get('/results', function($string) {
+//    SearchController::find($string);
+//});
+
+$routes->get('/keyword/:key', function($keyword) {
+    SearchController::find_by_keyword($keyword);
+});
+
 $routes->get('/recipe', function() {
     RecipeController::index();
 });

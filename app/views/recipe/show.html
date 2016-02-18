@@ -38,6 +38,19 @@
 {% endif %}
 {% endif %}
 <!--kommentit-->
+<script>
+    function editComment() {
+        element = document.createElement("form"));
+        element.setAttribute("class", 'form-group');
+        element.setAttribute("method", 'post');
+        element.setAttribute("action", '{{base_path}}/recipe/{{recipe.id}}/newcomment');
+        elemdiv = document.createElement("div");
+        elemdiv.setAttribute("class", 'row');
+        elemtrat = document.createElement("div");
+        
+        document.getElementById("editField").appendChild(element);
+    }
+</script>
 {% set chef_commented_yet = 0 %}
 {% for comment in comments %}
 <ul>
@@ -45,42 +58,44 @@
         {% if user_logged_in.id == comment.chef_id %}
         {% set chef_commented_yet = 1 %}
         <button onclick="editComment()" class="btn btn-primary">Muokkaa</button>
-        <button formmethod="post" formaction="{{base_path}}/recipe/{{recipe.id}}/comment/delete" class="btn btn-danger">Poista</button>
+        <form method="post">
+        <button formmethod="post" formaction="{{base_path}}/recipe/{{recipe.id}}/comment/delete" class="btn btn-danger">Poista</button></form>
         {% endif %}
     </li> 
 </ul>
+{% endfor %}
 {% if user_logged_in and chef_commented_yet == 0 %}
 <!-- kommentin lisäyskenttä jos ei ole vielä kommentoinut -->
 <!--nyt vielä sama käyttäjä voi lisätä monta kommenttia yhteen reseptiin mutta tähän tulee muutos-->
-<form method="post" action="{{base_path}}/recipe/{{recipe.id}}/newcomment">
-    <div class="form-group">
-        <div class="row">
-            <div class="col-xs-2">
-                <label>Arvosana</label>
-                <select name="rating" class="form-control">
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
-                </select></div>
-            <div class="col-xs-3">
-                <label>Kommentti</label>
-                <input class="form-control" name="comment" type="text">
+    <form method="post" action="{{base_path}}/recipe/{{recipe.id}}/newcomment">
+        <div class="form-group">
+            <div class="row">
+                <div class="col-xs-2">
+                    <label>Arvosana</label>
+                    <select name="rating" class="form-control">
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                         <option>5</option>
+                    </select></div>
+                <div class="col-xs-3">
+                    <label>Kommentti</label>
+                    <input class="form-control" name="comment" type="text">
+                </div>
             </div>
         </div>
-    </div>
-    <button type="submit" class="btn btn-default"> Lisää Kommentti </button>
-</form>
+        <button type="submit" class="btn btn-default"> Lisää Kommentti </button>
+    </form>
 {% else %}
-<span id="editField"></span>
+    <span id="editField"></span>
 {% endif %}
-{% endfor %}
+
 <h3>Hakusanat</h3>
 {% for keyword in keywords %}
 <ul class="inline">
     <!--Teemasanan mukainen index näkymä täytyy muistaa tehdä-->
-    <li><a href="{{base_path}}/">{{keyword.keyword}}</a></li>
+    <li><a href="{{base_path}}/keyword/{{keyword.keyword}}">{{keyword.keyword}}</a></li>
 </ul>
 {% endfor %}
 
