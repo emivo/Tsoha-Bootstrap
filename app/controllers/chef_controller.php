@@ -17,7 +17,7 @@ class ChefController extends BaseController {
     public static function store() {
         $params = $_POST;
         $v = new Valitron\Validator($params);
-        $v->rule('required', array('username', 'password', 'password_confirm'));
+        $v->rule('required', array('username', 'password', 'password_confirm'))->message('');
         $v->rule('lengthMin','username', 4)->message('Käyttäjänimen tulee olla vähintää 4 merkkiä');
         $v->rule('lengthMin','password', 4)->message('Salasanan tulee myös olla vähintään 4 merkkiä');
         $v->rule('equals','password', 'password_confirm')->message('Salasana ei täsmää');

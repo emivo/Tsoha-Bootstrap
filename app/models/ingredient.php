@@ -40,7 +40,7 @@ class Ingredient extends BaseModel
 
 
         $query = DB::connection()
-            ->prepare("SELECT * FROM RecipeIngredient INNER JOIN Ingredient WHERE recipe_id = :recipe_id AND ingredient_id = :id");
+            ->prepare("SELECT * FROM RecipeIngredient WHERE recipe_id = :recipe_id AND ingredient_id = :id");
         $query->execute(array('recipe_id' => $recipe_id, 'id' => $ingredient['id']));
 
         $row = $query->fetch();
@@ -49,7 +49,7 @@ class Ingredient extends BaseModel
             $ingredient = new Ingredient(array(
                 'ingredient_id' => $row['ingredient_id'],
                 'recipe_id' => $row['recipe_id'],
-                'name' => $row['name'],
+                'name' => $name,
                 'quantity' => $row['quantity']
             ));
 
@@ -130,7 +130,8 @@ class Ingredient extends BaseModel
             ->execute(array('quantity' => $this->quantity, 'iid' => $this->ingredient_id, 'rid' => $this->recipe_id));
     }
 
-    public static function delete_unused() {
+    public static function delete_unused()
+    {
         $query = DB::connection()
             ->prepare("SELECT * FROM Ingredient");
         $query->execute();
@@ -147,7 +148,8 @@ class Ingredient extends BaseModel
         }
     }
 
-    public function find_recipes_for_ingredient() {
+    public function find_recipes_for_ingredient()
+    {
         $query = DB::connection()
             ->prepare("SELECT * FROM RecipeIngredient WHERE ingredient_id = :id");
         $query->execute(array('id' => $this->ingredient_id));
@@ -165,13 +167,15 @@ class Ingredient extends BaseModel
         return null;
     }
 
-    public static function delete_from_recipe($id) {
+    public static function delete_from_recipe($id)
+    {
         $query_delete_quantities = DB::connection()
             ->prepare("DELETE FROM RecipeIngredient WHERE recipe_id = :id");
         $query_delete_quantities->execute(array('id' => $id));
     }
 
-    public function delete() {
+    public function delete()
+    {
         $query_delete_quantities = DB::connection()
             ->prepare("DELETE FROM Ingredient WHERE id = :id");
         $query_delete_quantities->execute(array('id' => $this->ingredient_id));

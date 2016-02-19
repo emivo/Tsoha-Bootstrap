@@ -32,7 +32,7 @@ class RecipeController extends BaseController
     public static function store()
     {
         $params = $_POST;
-        $chef_id = $_SESSION['user'];
+        $chef_id = self::get_user_logged_in()->id;
 
         $logged = self::check_logged_in();
         $validator = new Valitron\Validator($params);
@@ -53,13 +53,7 @@ class RecipeController extends BaseController
 
             Redirect::to('/recipe/' . $recipe->id, array('message' => 'Resepti on julkaistu'));
         } else {
-            $validator->errors('user', $logged);
-            $error = "Virhe";
-            foreach ($validator->errors() as $errors_in_errors) {
-                foreach ($errors_in_errors as $err) {
-                    $error = $error . ".\n" . $err;
-                }
-            }
+            $error = self::combine_errors_to_single_string($validator, $logged);
             Redirect::to('/recipe/new', array('error' => $error, 'params' => $params));
         }
     }
@@ -99,13 +93,7 @@ class RecipeController extends BaseController
             $recipe->update();
             Redirect::to('/recipe/' . $id, array('message' => 'Resepti on päivitetty'));
         } else {
-            $validator->errors('user', $logged);
-            $error = "Virhe.";
-            foreach ($validator->errors() as $errors_in_errors) {
-                foreach ($errors_in_errors as $err) {
-                    $error = $error . ".\n" . $err;
-                }
-            }
+            $error = self::combine_errors_to_single_string($validator, $logged);
             Redirect::to('/recipe/' . $id . '/edit', array('error' => $error, 'params' => $params));
         }
     }
@@ -123,9 +111,7 @@ class RecipeController extends BaseController
         $chef_id = $_SESSION['user'];
         $logged = self::check_logged_in();
 
-        $validator = new Valitron\Validator($params);
-        $validator->rule('required', array('rating', 'comment'));
-        $validator->rule('lengthMin', 'comment', 2)->message('Kommentin tulee olla vähintään 2 merkkiä');
+        $validator = self::validate_comment($params);
 
         if ($validator->validate() && !$logged) {
             $comment = new Comment(array(
@@ -139,21 +125,15 @@ class RecipeController extends BaseController
 
             Redirect::to('/recipe/' . $id);
         } else {
-            $validator->errors('user', $logged);
-            $error = "Virhe";
-            foreach ($validator->errors() as $errors_in_errors) {
-                foreach ($errors_in_errors as $err) {
-                    $error = $error . ".\n" . $err;
-                }
-            }
+            $error = self::combine_errors_to_single_string($validator, $logged);
             Redirect::to('/recipe/' . $id, array('error' => $error));
         }
     }
 
-    public static function deletecomment($id, $chef_id)
+    public static function delete_comment($id, $chef_id)
     {
-        if (self::get_user_logged_in() == $chef_id) {
-            $comment = Comment::delete_chefs_from_recipe($id, $chef_id);
+        if (self::get_user_logged_in()->id == $chef_id) {
+            Comment::delete_chefs_from_recipe($id, $chef_id);
             Redirect::to('/recipe/' . $id, array('message' => 'Kommentti poistettu!'));
         } else {
             Redirect::to('/recipe/' . $id, array('error' => 'Voit poistaa vain omia kommentteja!'));
@@ -222,7 +202,7 @@ class RecipeController extends BaseController
             'directions',
             'ingredient',
             'quantity'
-        ));
+        ))->message('');
 
         $validator->rule('lengthMin', 'name', 2)->message('Nimen tulee olla vähintään 2 merkkiä');
         $validator->rule('lengthMin', 'cooking_time', 2)->message('Valmistusaika tulee olla vähintään 2 merkkiä');
@@ -237,10 +217,39 @@ class RecipeController extends BaseController
     protected static function validate_ingredient($ingredient)
     {
         $validator = new Valitron\Validator(array('name' => $ingredient->name, 'quantity' => $ingredient));
-        $validator->rule('required', array(0 => 'name', 1 => 'quantity'));
+        $validator->rule('required', array(0 => 'name', 1 => 'quantity'))->message('');
         $validator->rule('lengthMin', 'name', 3)->message('Ainesosan nimen pituus tulee olla vähintään 3 merkkiä');
         $validator->rule('lengthMin', 'quantity', 1)->message("Määrän tulee vähintään olla yksi merkki");
         return $validator;
+    }
+
+    /**
+     * @param $params
+     * @return \Valitron\Validator
+     */
+    protected static function validate_comment($params)
+    {
+        $validator = new Valitron\Validator($params);
+        $validator->rule('required', array('rating', 'comment'))->message('');
+        $validator->rule('lengthMin', 'comment', 2)->message('Kommentin tulee olla vähintään 2 merkkiä');
+        return $validator;
+    }
+
+    /**
+     * @param $validator
+     * @param $logged
+     * @return string
+     */
+    protected static function combine_errors_to_single_string($validator, $logged)
+    {
+        $validator->errors('user', $logged);
+        $error = "Virhe";
+        foreach ($validator->errors() as $errors_in_errors) {
+            foreach ($errors_in_errors as $err) {
+                $error = $error . ".\n" . $err;
+            }
+        }
+        return $error;
     }
 
 }

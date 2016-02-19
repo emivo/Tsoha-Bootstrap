@@ -2,19 +2,21 @@
 {% block content %}
 <h1>Kirjaudu sisään</h1>
 
-<form method="post" action="{{base_path}}/login">
-    <!-- Tekstikenttä käyttäjätunnukselle -->
-    <div class="form-group">
-        <label>Käyttäjätunnus</label>
-        <input class="form-control" name="username" type="text">
-    </div>
+<div class="panel panel-default">
+    <div class="panel-body">
+        <form method="post" action="{{base_path}}/login">
+            <div class="form-group">
+                <label>Käyttäjätunnus</label>
+                <input class="form-control" name="username" type="text">
+            </div>
 
-    <!-- Salasanakenttä salasanalle -->
-    <div class="form-group">
-        <label>Salasana</label>
-        <input class="form-control" name="password" type="password">
-    </div>
+            <div class="form-group">
+                <label>Salasana</label>
+                <input class="form-control" name="password" type="password">
+            </div>
 
-    <button type="submit" class="btn btn-primary">Kirjaudu sisään</button>
-</form>
+            <button type="submit" class="btn btn-primary">Kirjaudu sisään</button>
+        </form>
+    </div>
+</div>
 {% endblock %}   

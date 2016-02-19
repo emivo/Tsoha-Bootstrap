@@ -5,7 +5,6 @@ class SearchController extends BaseController {
         $params = $_POST;
         $string = $params['search'];
         $recipes = Recipe::search_default($string);
-        
         View::make('/results.html', array('recipes' => $recipes));
     }
     

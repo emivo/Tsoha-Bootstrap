@@ -10,27 +10,59 @@
   </form>
 {% endmacro %}
 
-{% macro comment_field(base_path, rating, comment, id) %}
-    <form method="post" action="{{base_path}}/recipe/{{id}}/newcomment">
-        <div class="form-group">
-            <div class="row">
-                <div class="col-xs-2">
-                    <label>Arvosana</label>
-                    <select name="rating" class="form-control">
-                        <option>1</option>
-                        <option>2</option>
-                        <option
-                            {% if rating == 3 %} selected="selected" {% endif %}
-                            >3</option>
-                        <option>4</option>
-                        <option>5</option>
-                    </select></div>
-                <div class="col-xs-3">
-                    <label>Kommentti</label>
-                    <input class="form-control" name="comment" type="text">
-                </div>
+{% macro edit_comment(base_path, recipe_id, chef_id, comment) %}
+<form method="post" action="{{base_path}}/recipe/{{recipe_id}}/comment/{{chef_id}}/edit">
+    <div class="form-group">
+        <div class="row">
+            <div class="col-xs-2">
+                <label>Arvosana</label>
+                <select name="rating" class="form-control">
+                    <option {% if comment.rating == 1%}
+                            selected
+                            {% endif %}>1</option>
+                    <option {% if comment.rating == 2%}
+                            selected
+                            {% endif %}>2</option>
+                    <option {% if comment.rating == 3%}
+                            selected
+                            {% endif %}>3</option>
+                    <option {% if comment.rating == 4%}
+                            selected
+                            {% endif %}>4</option>
+                    <option {% if comment.rating == 5%}
+                            selected
+                            {% endif %}>5</option>
+                </select>
+            </div>
+            <div class="col-xs-3">
+                <label>Kommentti</label>
+                <input class="form-control" name="comment" type="text" value="{{comment.comment}}">
             </div>
         </div>
-        <button type="submit" class="btn btn-default"> Lisää Kommentti </button>
-    </form>
+    </div>
+    <button type="submit" class="btn btn-default"> Lisää Kommentti </button>
+</form>
+{% endmacro %}
+
+{% macro new_comment(base_path, recipe_id)%}
+<form method="post" action="{{base_path}}/recipe/{{recipe_id}}/newcomment">
+    <div class="form-group">
+        <div class="row">
+            <div class="col-xs-2">
+                <label>Arvosana</label>
+                <select name="rating" class="form-control">
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                </select></div>
+            <div class="col-xs-3">
+                <label>Kommentti</label>
+                <input class="form-control" name="comment" type="text">
+            </div>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-default"> Lisää Kommentti</button>
+</form>
 {% endmacro %}

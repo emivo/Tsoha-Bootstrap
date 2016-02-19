@@ -14,6 +14,10 @@
     }
 
     public static function check_logged_in(){
+//        find usages ja muuta TODO
+//        if(!isset($_SESSION['user'])){
+//            Redirect::to('/login', array('message' => 'Kirjaudu ensin sisään!'));
+//        }
       if (!isset($_SESSION['user'])) {
 
           $error = 'Sinun tulee kirjautua ensin sisään';

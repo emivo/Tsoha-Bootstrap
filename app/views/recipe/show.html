@@ -9,9 +9,9 @@
 <!--arvostelua sanantaivutus muista TODO-->
 <p>Arvosana {% if comments|length > 0%}
     {{sum_rating / comments|length}}/5
-    {% else %} 
+    {% else %}
     ei ole arvosteltu
-    {% endif %}, {{comments|length}} 
+    {% endif %}, {{comments|length}}
     {% if comments|length == 1%}
     arvostelu
     {% else %}
@@ -20,7 +20,7 @@
 <h2> Ainesosat </h2>
 {%for ingredient in ingredients%}
 <ul>
-    <li>{{ingredient.quantity}}  {{ingredient.name}}</li>
+    <li>{{ingredient.quantity}} {{ingredient.name}}</li>
 </ul>
 {% endfor %}
 <h2> Valmistusohjeet </h2>
@@ -38,57 +38,85 @@
 {% endif %}
 {% endif %}
 <!--kommentit-->
+<!--ÄÄÄ MIKÄÄNN EI TOIMI-->
 <script>
     function editComment() {
-        element = document.createElement("form"));
+        var element = document.createElement("div");
         element.setAttribute("class", 'form-group');
-        element.setAttribute("method", 'post');
-        element.setAttribute("action", '{{base_path}}/recipe/{{recipe.id}}/newcomment');
-        elemdiv = document.createElement("div");
+        var elemdiv = document.createElement("div");
         elemdiv.setAttribute("class", 'row');
-        elemtrat = document.createElement("div");
-        
-        document.getElementById("editField").appendChild(element);
+        var elemtrat = document.createElement("div");
+        elemtrat.setAttribute("class", 'col-xs-2');
+        var select = document.createElement("select");
+        select.setAttribute("name", 'rating');
+        select.setAttribute("class", 'form-control');
+        for (i = 1; i <= 5; i++) {
+            var sele = document.createElement("option");
+            select.appendChild(sele);
+        }
+        elemtrat.appendChild(select);
+
+        var elemtrat2 = document.createElement("div");
+        elemtrat2.setAttribute("class", 'col-xs-3');
+        var commentInput = document.createElement("input");
+        commentInput.setAttribute("class", 'form-control');
+        commentInput.setAttribute("name", 'comment');
+        commentInput.setAttribute("type", 'text');
+//        commentInput.append("{{comment.comment}}");
+//        commentInput.setAttribute("value", '{{comment.comment}}');
+        elemtrat2.appendChild(commentInput);
+        elemdiv.appendChild(elemtrat);
+        elemdiv.appendChild(elemtrat2);
+        element.appendChild(elemdiv);
+        var editForm = document.getElementById("{{user_logged_in.id}}");
+        editForm.setAttribute("method", 'post');
+        editForm.setAttribute("action", '{{base_path}}/recipe/{{recipe.id}}/comment/{{user_logged_in.id}}/edit');
+        editForm.appendChild(element);
     }
 </script>
 {% set chef_commented_yet = 0 %}
 {% for comment in comments %}
+<form method="post" formaction="{{base_path}}/recipe/{{recipe.id}}/comment/{{user_logged_in.id}}/delete"
+      id="deleteComment"></form>
 <ul>
-    <li>{{comment.rating}}/5 {{comment.comment}} 
+    <li id="{{comment.chef_id}}">{{comment.rating}}/5 {{comment.comment}}
         {% if user_logged_in.id == comment.chef_id %}
         {% set chef_commented_yet = 1 %}
         <button onclick="editComment()" class="btn btn-primary">Muokkaa</button>
-        <form method="post">
-        <button formmethod="post" formaction="{{base_path}}/recipe/{{recipe.id}}/comment/delete" class="btn btn-danger">Poista</button></form>
+        <button form="deleteComment" formmethod="post"
+                formaction="{{base_path}}/recipe/{{recipe.id}}/comment/{{user_logged_in.id}}/delete"
+                class="btn btn-danger">Poista
+        </button>
         {% endif %}
-    </li> 
+    </li>
 </ul>
 {% endfor %}
 {% if user_logged_in and chef_commented_yet == 0 %}
 <!-- kommentin lisäyskenttä jos ei ole vielä kommentoinut -->
 <!--nyt vielä sama käyttäjä voi lisätä monta kommenttia yhteen reseptiin mutta tähän tulee muutos-->
-    <form method="post" action="{{base_path}}/recipe/{{recipe.id}}/newcomment">
-        <div class="form-group">
-            <div class="row">
-                <div class="col-xs-2">
-                    <label>Arvosana</label>
-                    <select name="rating" class="form-control">
-                        <option>1</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                         <option>5</option>
-                    </select></div>
-                <div class="col-xs-3">
-                    <label>Kommentti</label>
-                    <input class="form-control" name="comment" type="text">
-                </div>
-            </div>
-        </div>
-        <button type="submit" class="btn btn-default"> Lisää Kommentti </button>
-    </form>
+{{forms.new_comment(base_path, recipe.id)}}
+<!--<form method="post" action="{{base_path}}/recipe/{{recipe.id}}/newcomment">-->
+<!--<div class="form-group">-->
+<!--<div class="row">-->
+<!--<div class="col-xs-2">-->
+<!--<label>Arvosana</label>-->
+<!--<select name="rating" class="form-control">-->
+<!--<option>1</option>-->
+<!--<option>2</option>-->
+<!--<option>3</option>-->
+<!--<option>4</option>-->
+<!--<option>5</option>-->
+<!--</select></div>-->
+<!--<div class="col-xs-3">-->
+<!--<label>Kommentti</label>-->
+<!--<input class="form-control" name="comment" type="text">-->
+<!--</div>-->
+<!--</div>-->
+<!--</div>-->
+<!--<button type="submit" class="btn btn-default"> Lisää Kommentti</button>-->
+<!--</form>-->
 {% else %}
-    <span id="editField"></span>
+<!--<form id="editField"></form>-->
 {% endif %}
 
 <h3>Hakusanat</h3>

@@ -1,7 +1,5 @@
 <?php
 
-//
-
 class Recipe extends BaseModel
 {
 
@@ -23,14 +21,7 @@ class Recipe extends BaseModel
         $recipes = array();
 
         foreach ($rows as $row) {
-            $recipes[] = new Recipe(array(
-                'id' => $row['id'],
-                'chef_id' => $row['chef_id'],
-                'name' => $row['name'],
-                'cooking_time' => $row['cooking_time'],
-                'directions' => $row['directions'],
-                'published' => $row['published'],
-            ));
+            $recipes[] = self::new_recipe_from_row($row);
         }
 
         return $recipes;
@@ -47,14 +38,7 @@ class Recipe extends BaseModel
         $recipes = array();
 
         foreach ($rows as $row) {
-            $recipes[] = new Recipe(array(
-                'id' => $row['id'],
-                'chef_id' => $row['chef_id'],
-                'name' => $row['name'],
-                'cooking_time' => $row['cooking_time'],
-                'directions' => $row['directions'],
-                'published' => $row['published'],
-            ));
+            $recipes[] = self::new_recipe_from_row($row);
         }
 
         return $recipes;
@@ -67,73 +51,69 @@ class Recipe extends BaseModel
         $row = $query->fetch();
 
         if ($row) {
-            $recipe = new Recipe(array(
-                'id' => $row['id'],
-                'chef_id' => $row['chef_id'],
-                'name' => $row['name'],
-                'cooking_time' => $row['cooking_time'],
-                'directions' => $row['directions'],
-                'published' => $row['published'],
-            ));
+            $recipe = self::new_recipe_from_row($row);
 
             return $recipe;
         }
 
         return null;
     }
-    
-    public static function search_default($string) {
+
+    public static function search_default($string)
+    {
         // TARKISTA STRING ENNEN TIETOKANTA HAKUA
         $query = DB::connection()
-                ->prepare('SELECT Recipe.* FROM Recipe '
-                        . 'JOIN RecipeKeyword ON Recipe.id = RecipeKeyword.recipe_id '
-                        . 'JOIN Keyword ON Keyword.id = RecipeKeyword.keyword_id '
-                        . 'WHERE Recipe.name LIKE :string OR Keyword.keyword LIKE :string');
-        // VALIDATE STRING
-        $string = "\'%".$string."%\'";
-        $query->execute(array('string' => $string));
-        
+            ->prepare("SELECT Recipe.* FROM Recipe "
+                . "LEFT JOIN RecipeKeyword ON Recipe.id = RecipeKeyword.recipe_id "
+                . "JOIN Keyword ON Keyword.id = RecipeKeyword.keyword_id WHERE Recipe.name LIKE :search OR Keyword.keyword LIKE :search");
+        // VALIDATE STRING TODO
+        $string = "%" . $string . "%";
+        $query->bindParam(':search', $string, PDO::PARAM_STR);
+        $query->execute();
         $rows = $query->fetchAll();
-        
+
         $results = array();
         foreach ($rows as $row) {
-            $results[] = new Recipe(array(
-                'id' => $row['id'],
-                'chef_id' => $row['chef_id'],
-                'name' => $row['name'],
-                'cooking_time' => $row['cooking_time'],
-                'directions' => $row['directions'],
-                'published' => $row['published'],
-            ));
+            $results[] = self::new_recipe_from_row($row);
         }
         return $results;
     }
-    
-    public static function search_by_keyword($keyword){
-        
+
+    public static function search_by_keyword($keyword)
+    {
+
         $query = DB::connection()
-                ->prepare('SELECT Recipe.* FROM Recipe '
-                        . 'JOIN RecipeKeyword ON Recipe.id = RecipeKeyword.recipe_id '
-                        . 'JOIN Keyword ON Keyword.id = RecipeKeyword.keyword_id '
-                        . 'WHERE Keyword.keyword LIKE :keyword');
-        $keyword = "\'%".$keyword."%\'";
-        $query->execute(array('keyword' => $keyword));
-        
+            ->prepare("SELECT Recipe.* FROM Recipe"
+                . " JOIN RecipeKeyword ON Recipe.id = RecipeKeyword.recipe_id "
+                . "JOIN Keyword ON Keyword.id = RecipeKeyword.keyword_id WHERE Keyword.keyword LIKE :keyword");
+        $keyword = '%' . $keyword . '%';
+        $query->bindParam(':keyword', $keyword, PDO::PARAM_STR);
+        $query->execute();
+
         $rows = $query->fetchAll();
-        
+
         $results = array();
         foreach ($rows as $row) {
-            $results[] = new Recipe(array(
-                'id' => $row['id'],
-                'chef_id' => $row['chef_id'],
-                'name' => $row['name'],
-                'cooking_time' => $row['cooking_time'],
-                'directions' => $row['directions'],
-                'published' => $row['published'],
-            ));
+            $results[] = self::new_recipe_from_row($row);
         }
-        
+
         return $results;
+    }
+
+    /**
+     * @param $row
+     * @return Recipe
+     */
+    protected static function new_recipe_from_row($row)
+    {
+        return new Recipe(array(
+            'id' => $row['id'],
+            'chef_id' => $row['chef_id'],
+            'name' => $row['name'],
+            'cooking_time' => $row['cooking_time'],
+            'directions' => $row['directions'],
+            'published' => $row['published'],
+        ));
     }
 
     public function save()
@@ -169,7 +149,7 @@ class Recipe extends BaseModel
     {
         $query = DB::connection()
             ->prepare("UPDATE Recipe SET name = :name, cooking_time = :ctime, directions = :directions WHERE id = :id");
-        $query->execute(array('name' => $this->name, 'ctime' => $this->cooking_time, 'directions' => $this->directions));
+        $query->execute(array('name' => $this->name, 'ctime' => $this->cooking_time, 'directions' => $this->directions, 'id' => $this->id));
     }
 
 }
