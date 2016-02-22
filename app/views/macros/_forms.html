@@ -1,16 +1,17 @@
 {% macro destroy_button(base_path,id) %}
   <form method="post" action="{{base_path}}/recipe/{{id}}/destroy" style="display: inline-block;">
-    <button type="submit" class="btn btn-danger">Poista</button>
+    <button type="submit" class="btn btn-danger">Poista resepti</button>
   </form>
 {% endmacro %}
 
 {% macro edit_button(base_path,id) %}
   <form method="get" action="{{base_path}}/recipe/{{id}}/edit" style="display: inline-block;">
-    <button type="submit" class="btn btn-default">Muokkaa</button>
+    <button type="submit" class="btn btn-default">Muokkaa reseptiä</button>
   </form>
 {% endmacro %}
 
 {% macro edit_comment(base_path, recipe_id, chef_id, comment) %}
+<!--ei vielä käytössä eikä ehkä tulekkaan-->
 <form method="post" action="{{base_path}}/recipe/{{recipe_id}}/comment/{{chef_id}}/edit">
     <div class="form-group">
         <div class="row">

@@ -4,6 +4,14 @@
 
     <h1>{{recipe.name}}</h1>
     <p>Reseptin luonut <a href="{{base_path}}/chefs/{{chef.id}}">{{chef.name}}</a></p>
+    {% if user_logged_in %}
+        {% if user_logged_in.id == recipe.chef_id %}
+        <p>
+            {{forms.edit_button(base_path, recipe.id)}}
+            {{forms.destroy_button(base_path, recipe.id)}}
+        </p>
+        {% endif %}
+    {% endif %}
     {% set sum_rating = 0%}
     {% for comment in comments%}
         {% set sum_rating = sum_rating + comment.rating%}
@@ -32,15 +40,6 @@
     <h2> Valmistusohjeet </h2>
 
     <p>{{recipe.directions}}</p>
-
-    {% if user_logged_in %}
-        {% if user_logged_in.id == recipe.chef_id %}
-        <p>
-            {{forms.edit_button(base_path, recipe.id)}}
-            {{forms.destroy_button(base_path, recipe.id)}}
-        </p>
-        {% endif %}
-    {% endif %}
 <!--kommentit-->
     {% set chef_commented_yet = 0 %}
     {% for comment in comments %}
