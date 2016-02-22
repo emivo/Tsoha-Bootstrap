@@ -10,25 +10,20 @@ class Comment extends BaseModel
         parent::__construct($attributes);
     }
 
-    public static function find_by_recipe_id($id)
+    public static function find_by_recipe_id($recipe_id)
     {
         $query = DB::connection()->prepare("SELECT * FROM Comment WHERE recipe_id = :id");
-        $query->execute(array('id' => $id));
+        $query->execute(array('id' => $recipe_id));
 
-        $rows = $query->fetchAll();
+        return self::fetch_comments_from_query_result($query);
 
-        $comments = array();
+    }
+    public static function find_by_chef_id($chef_id) {
+        $query = DB::connection()
+            ->prepare("SELECT * FROM Comment WHERE chef_id = :chef_id");
+        $query->execute(array('chef_id' => $chef_id));
 
-        foreach ($rows as $row) {
-            $comments[] = new Comment(array(
-                'recipe_id' => $id,
-                'chef_id' => $row['chef_id'],
-                'rating' => $row['rating'],
-                'comment' => $row['comment']
-            ));
-        }
-        return $comments;
-
+        return self::fetch_comments_from_query_result($query);
     }
 
     public static function delete_chefs_from_recipe($id, $chef_id) {
@@ -47,8 +42,40 @@ class Comment extends BaseModel
 
     public function delete() {
         $query_delete_comments = DB::connection()
-            ->prepare("DELETE FROM Comment WHERE recipe_id = :recipe_id and chef_id = :chef_id");
+            ->prepare("DELETE FROM Comment WHERE recipe_id = :recipe_id AND chef_id = :chef_id");
         $query_delete_comments->execute(array('recipe_id' => $this->recipe_id, 'chef_id' => $this->chef_id));
+    }
+
+    /**
+     * @param $row
+     * @param $comments
+     * @return array
+     */
+    public static function new_comment_from_row($row, $comments)
+    {
+        $comments[] = new Comment(array(
+            'recipe_id' => $row['recipe_id'],
+            'chef_id' => $row['chef_id'],
+            'rating' => $row['rating'],
+            'comment' => $row['comment']
+        ));
+        return $comments;
+    }
+
+    /**
+     * @param $query
+     * @return array
+     */
+    public static function fetch_comments_from_query_result($query)
+    {
+        $rows = $query->fetchAll();
+
+        $comments = array();
+
+        foreach ($rows as $row) {
+            $comments = self::new_comment_from_row($row, $comments);
+        }
+        return $comments;
     }
 
     public function save()

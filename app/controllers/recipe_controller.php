@@ -23,11 +23,7 @@ class RecipeController extends BaseController
 
     public static function create()
     {
-        if (!self::check_logged_in()) {
             View::make('recipe/new.html');
-        } else {
-            Redirect::to('/login', array('error' => self::check_logged_in()));
-        }
     }
 
     public static function store()
@@ -35,11 +31,9 @@ class RecipeController extends BaseController
         $params = $_POST;
         $chef_id = self::get_user_logged_in()->id;
 
-        $logged = self::check_logged_in();
-        $validator = new Valitron\Validator($params);
-        $validator = self::validate_params_for_recipe($validator);
+        $validator = self::validate_params_for_recipe(new Valitron\Validator($params));
 
-        if ($validator->validate() && !$logged) {
+        if ($validator->validate()) {
 
             $recipe = self::create_recipe_base($params, $chef_id);
             $recipe_id = $recipe->save();
@@ -54,7 +48,7 @@ class RecipeController extends BaseController
 
             Redirect::to('/recipe/' . $recipe->id, array('message' => 'Resepti on julkaistu'));
         } else {
-            $error = self::combine_errors_to_single_string($validator, $logged);
+            $error = self::combine_errors_to_single_string($validator);
             Redirect::to('/recipe/new', array('error' => $error, 'params' => $params));
         }
     }
@@ -63,25 +57,20 @@ class RecipeController extends BaseController
     {
 
         $recipe = Recipe::find($id);
-        if (self::get_user_logged_in()->id == $recipe->chef_id) {
             $comments = Comment::find_by_recipe_id($id);
             $ingredients = Ingredient::find_by_recipe_id($id);
             $keywords = Keyword::find_by_recipe_id($id);
             View::make('recipe/edit.html', array('recipe' => $recipe, 'comments' => $comments, 'ingredients' => $ingredients, 'keywords' => $keywords));
-        } else {
-            Redirect::to('/login', array('error' => self::check_logged_in()));
-        }
     }
 
     public static function update($id)
     {
         $recipe = Recipe::find($id);
         $params = $_POST;
-        $logged = self::check_logged_in();
 
         $validator = new \Valitron\Validator($params);
         $validator = self::validate_params_for_recipe($validator);
-        if ($validator->validate() && !$logged) {
+        if ($validator->validate()) {
             $recipe->name = $params['name'];
             $recipe->cooking_time = $params['cooking_time'];
             $recipe->directions = $params['directions'];
@@ -94,7 +83,7 @@ class RecipeController extends BaseController
             $recipe->update();
             Redirect::to('/recipe/' . $id, array('message' => 'Resepti on päivitetty'));
         } else {
-            $error = self::combine_errors_to_single_string($validator, $logged);
+            $error = self::combine_errors_to_single_string($validator);
             Redirect::to('/recipe/' . $id . '/edit', array('error' => $error, 'params' => $params));
         }
     }
@@ -110,11 +99,10 @@ class RecipeController extends BaseController
     {
         $params = $_POST;
         $chef_id = $_SESSION['user'];
-        $logged = self::check_logged_in();
 
         $validator = self::validate_comment($params);
 
-        if ($validator->validate() && !$logged) {
+        if ($validator->validate()) {
             $comment = new Comment(array(
                 'recipe_id' => $id,
                 'chef_id' => $chef_id,
@@ -126,7 +114,7 @@ class RecipeController extends BaseController
 
             Redirect::to('/recipe/' . $id);
         } else {
-            $error = self::combine_errors_to_single_string($validator, $logged);
+            $error = self::combine_errors_to_single_string($validator);
             Redirect::to('/recipe/' . $id, array('error' => $error));
         }
     }
@@ -241,9 +229,8 @@ class RecipeController extends BaseController
      * @param $logged
      * @return string
      */
-    protected static function combine_errors_to_single_string($validator, $logged)
+    protected static function combine_errors_to_single_string($validator)
     {
-        $validator->errors('user', $logged);
         $error = "Virhe";
         foreach ($validator->errors() as $errors_in_errors) {
             foreach ($errors_in_errors as $err) {

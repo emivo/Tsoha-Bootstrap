@@ -1,5 +1,8 @@
 <?php
 
+function check_logged_in(){
+    BaseController::check_logged_in();
+}
 // juuripolku
 $routes->get('/', function() {
     RecipeController::index();
@@ -19,20 +22,32 @@ $routes->post('/register', function() {
     ChefController::store();
 });
 
-$routes->get('/recipe/new', function() {
+$routes->get('/recipe/new', 'check_logged_in', function() {
     RecipeController::create();
 });
 
-$routes->get('/myprofile', function() {
-    ChefController::myprofile();
+$routes->get('/chef/:id', function($id) {
+    ChefController::show($id);
+});
+
+$routes->get('/chef/myprofile', 'check_logged_in', function() {
+    ChefController::my_profile();
+});
+
+$routes->post('/chef/myprofile', 'check_logged_in', function() {
+    ChefController::update();
+});
+$routes->post('/chef/myprofile/destroy', 'check_logged_in', function() {
+    ChefController::destroy();
 });
 
 $routes->post('/search', function() {
     SearchController::find();
 });
 
-//$routes->get('/results', function($string) {
-//    SearchController::find($string);
+// TODO ehkä muuta hakunäkymä getiksi. Mutta ei ole haittaa että on post sillä vain haku
+//$routes->get('/results', function() {
+//    SearchController::show();
 //});
 
 $routes->get('/keyword/:key', function($keyword) {
@@ -43,7 +58,7 @@ $routes->get('/recipe', function() {
     RecipeController::index();
 });
 
-$routes->post('/recipe', function() {
+$routes->post('/recipe', 'check_logged_in', function() {
     RecipeController::store();
 });
 
@@ -51,23 +66,23 @@ $routes->get('/recipe/:id', function($id) {
     RecipeController::show($id);
 });
 
-$routes->get('/recipe/:id/edit', function($id) {
+$routes->get('/recipe/:id/edit', 'check_logged_in', function($id) {
     RecipeController::edit($id);
 });
 
-$routes->post('/recipe/:id/edit', function($id) {
+$routes->post('/recipe/:id/edit', 'check_logged_in', function($id) {
     RecipeController::update($id);
 });
 
-$routes->post('/recipe/:id/destroy', function($id) {
+$routes->post('/recipe/:id/destroy', 'check_logged_in', function($id) {
     RecipeController::destroy($id);
 });
 
-$routes->post('/recipe/:id/newcomment', function($id) {
+$routes->post('/recipe/:id/newcomment', 'check_logged_in', function($id) {
     RecipeController::newcomment($id);
 });
 
-$routes->post('/recipe/:id/comment/:chef_id/delete', function($id, $chef_id) {
+$routes->post('/recipe/:id/comment/:chef_id/delete', 'check_logged_in', function($id, $chef_id) {
     RecipeController::delete_comment($id, $chef_id);
 });
 
@@ -80,6 +95,6 @@ $routes->post('/login', function() {
 });
 
 // uloskirjautuminen gettinä, sillä en vielä tiedä kuinka saisin sen linkin näköisenä postiksi
-$routes->get('/logout', function() {
+$routes->get('/logout', 'check_logged_in', function() {
     SessionController::handle_logout();
 });

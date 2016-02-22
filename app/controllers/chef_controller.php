@@ -1,40 +1,92 @@
 <?php
 
-class ChefController extends BaseController {
+class ChefController extends BaseController
+{
 
-    public static function register() {
+    public static function register()
+    {
         View::make('register.html');
     }
 
-    public static function myprofile() {
-        View::make('myprofile.html');
+    // TODO YHDISTÄ MY JA SHOW SITTENKUN ON AIKAA !
+    public static function my_profile()
+    {
+        $chef = self::get_user_logged_in();
+        $recipes = Recipe::find_by_chef_id($chef->id);
+        $comments = Comment::find_by_chef_id($chef->id);
+        View::make('chef/myprofile.html', array('chef' => $chef, 'recipes' => $recipes, 'comments' => $comments));
     }
 
-    public static function show($id) {
-        throw new Exception("Not supported yet");
+    public static function show($id)
+    {
+
+        $chef = Chef::find($id);
+        if ($chef) {
+            $recipes = Recipe::find_by_chef_id($chef->id);
+            $comments = Comment::find_by_chef_id($chef->id);
+            View::make('chef/show.html', array('chef' => $chef, 'recipes' => $recipes, 'comments' => $comments));
+        } else {
+            Redirect::to('/', array('error' => 'Käyttäjää ei löytynyt'));
+        }
     }
 
-    public static function store() {
+    public static function store()
+    {
         $params = $_POST;
-        $v = new Valitron\Validator($params);
-        $v->rule('required', array('username', 'password', 'password_confirm'))->message('');
-        $v->rule('lengthMin','username', 4)->message('Käyttäjänimen tulee olla vähintää 4 merkkiä');
-        $v->rule('lengthMin','password', 4)->message('Salasanan tulee myös olla vähintään 4 merkkiä');
-        $v->rule('equals','password', 'password_confirm')->message('Salasana ei täsmää');
-        
-        if ($v->validate()) {
-            $new_chef = Chef::register($params['username'], $params['password']);
+        $validator = self::validate_params(new Valitron\Validator($params));
 
+        if ($validator->validate()) {
+            Chef::register($params['username'], $params['password']);
             Redirect::to('/', array('message' => 'Uusi käyttäjä luotu'));
         } else {
-            $error = 'Virhe';
-            foreach ($v->errors() as $errors_in_errors) {
-                foreach ($errors_in_errors as $err) {
-                    $error = $error . ".\n" . $err;
-                }
-            }
+            $error = self::collect_errors($validator);
             Redirect::to('/register', array('error' => $error, 'username' => $params['username']));
         }
+    }
+
+    public static function update()
+    {
+        $params = $_POST;
+        $validator = self::validate_params(new Valitron\Validator($params));
+
+        if ($validator->validate()) {
+            $chef = self::get_user_logged_in();
+            $chef->update($params['password']);
+
+            Redirect::to('/', array('message' => 'Käyttäjätiedot päivitetty'));
+        } else {
+            $error = self::collect_errors($validator);
+            Redirect::to('/chef/myprofile', array('error' => $error));
+        }
+    }
+
+    public static function destroy()
+    {
+        $chef = self::get_user_logged_in();
+        $chef->destroy();
+        // TODO varmistus, DONt drink and root
+        Redirect::to('/', array('message' => 'Käyttäjä sekä käyttäjän reseptit, että kommentit poistettu'));
+    }
+
+
+    protected static function validate_params($validator)
+    {
+        $validator->rule('required', array('username', 'password', 'password_confirm'))->message('');
+        $validator->rule('lengthMin', 'username', 4)->message('Käyttäjänimen tulee olla vähintää 4 merkkiä');
+        $validator->rule('lengthMin', 'password', 4)->message('Salasanan tulee myös olla vähintään 4 merkkiä');
+        $validator->rule('equals', 'password', 'password_confirm')->message('Salasana ei täsmää');
+        return $validator;
+    }
+
+    public static function collect_errors($validator)
+    {
+        $error = 'Virhe';
+        foreach ($validator->errors() as $errors_in_errors) {
+            foreach ($errors_in_errors as $err) {
+                $error = $error . ".\n" . $err;
+            }
+        }
+        return $error;
     }
 
 }

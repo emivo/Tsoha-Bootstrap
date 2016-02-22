@@ -59,17 +59,33 @@ class Recipe extends BaseModel
         return null;
     }
 
+    public static function find_by_chef_id($chef_id) {
+        $query  = DB::connection()
+            ->prepare("SELECT * FROM Recipe WHERE chef_id = :chef_id");
+        $query->execute(array('chef_id' => $chef_id));
+        $rows = $query->fetchAll();
+
+        $recipes = array();
+
+        foreach ($rows as $row) {
+            $recipes[] = self::new_recipe_from_row($row);
+        }
+
+        return $recipes;
+    }
+
     public static function search_default($string)
     {
-        // TARKISTA STRING ENNEN TIETOKANTA HAKUA
         $query = DB::connection()
             ->prepare("SELECT Recipe.* FROM Recipe "
                 . "LEFT JOIN RecipeKeyword ON Recipe.id = RecipeKeyword.recipe_id "
                 . "JOIN Keyword ON Keyword.id = RecipeKeyword.keyword_id "
                 . "JOIN RecipeIngredient ON Recipe.id = RecipeIngredient.recipe_id JOIN Ingredient ON Ingredient.id = RecipeIngredient.ingredient_id "
                 . "WHERE Recipe.name LIKE :search OR Keyword.keyword LIKE :search OR Ingredient.name LIKE :search");
-        // VALIDATE STRING TODO
+        // TODO VALIDATE STRING
         $string = "%" . $string . "%";
+//        $validator = new Valitron\Validator($string);
+//        $validator->addRule($string, $validator);
         $query->bindParam(':search', $string, PDO::PARAM_STR);
         $query->execute();
         $rows = $query->fetchAll();
@@ -120,9 +136,9 @@ class Recipe extends BaseModel
 
     public function save()
     {
-        $query = DB::connection()->prepare("INSERT INTO Recipe (name, cooking_time, directions, published) VALUES (:name, :cooking_time, :directions, NOW()) RETURNING id");
+        $query = DB::connection()->prepare("INSERT INTO Recipe (name, chef_id, cooking_time, directions, published) VALUES (:name, :chef_id, :cooking_time, :directions, NOW()) RETURNING id");
 
-        $query->execute(array('name' => $this->name, 'cooking_time' => $this->cooking_time, 'directions' => $this->directions));
+        $query->execute(array('name' => $this->name, 'chef_id' => $this->chef_id, 'cooking_time' => $this->cooking_time, 'directions' => $this->directions));
 
         $row = $query->fetch();
 

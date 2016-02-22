@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block content %}
+{% import "macros/chef.html" as chefmacro %}
+<h1>{{chef.name}}</h1>
+{{chefmacro.listrecipes(base_path, recipes)}}
+{{chefmacro.listcomments(comments)}}
+{% endblock %}

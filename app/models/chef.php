@@ -80,5 +80,29 @@ class Chef extends BaseModel {
 
         return $row['id'];
     }
+    
+    public function update($password) {
+        $query = DB::connection()
+                ->prepare("UPDATE Chef SET password = :password WHERE id = :id");
+        $password_digest = crypt($password, '$1$sillysalt$');
+        $query->execute(array('password' => $password_digest, 'id' => $this->id));
+    }
+
+    public function destroy() {
+        // Poista käyttäjän reseptit
+        $chefs_recipes = Recipe::find_by_chef_id($this->id);
+        foreach ($chefs_recipes as $recipe) {
+            $recipe->destroy();
+        }
+        // Poista käyttäjän kommentit
+        $chefs_comments = Comment::find_by_chef_id($this->id);
+        foreach ($chefs_comments as $comment) {
+            $comment->destroy();
+        }
+
+        $query = DB::connection()
+            ->prepare("DELETE FROM Chef WHERE id = :id");
+        $query->execute(array('id' => $this->id));
+    }
 
 }

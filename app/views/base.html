@@ -45,6 +45,9 @@
                     <ul class="nav navbar-nav navbar-right">
                         <li><a href="{{base_path}}/logout">Kirjaudu ulos</a></li>
                     </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="{{base_path}}/chef/myprofile">{{user_logged_in.name}}</a></li>
+                    </ul>
                     {% else %}
                     <ul class="nav navbar-nav navbar-right">
                         <li><a href="{{base_path}}/register">Rekisteröidy</a></li>
