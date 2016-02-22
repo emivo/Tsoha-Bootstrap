@@ -1,46 +1,54 @@
 {% extends "base.html" %}
 {% block content %}
 {% import "macros/_forms.html" as forms %}
-<h1>{{recipe.name}}</h1>
-{% set sum_rating = 0%}
-{% for comment in comments%}
-{% set sum_rating = sum_rating + comment.rating%}
-{% endfor %}
-<!--arvostelua sanantaivutus muista TODO-->
-<p>Arvosana {% if comments|length > 0%}
-    {{sum_rating / comments|length}}/5
-    {% else %}
-    ei ole arvosteltu
-    {% endif %}, {{comments|length}}
-    {% if comments|length == 1%}
-    arvostelu
-    {% else %}
-    arvostelua
-    {% endif %}</p>
-<h2> Ainesosat </h2>
-{%for ingredient in ingredients%}
-<ul>
-    <li>{{ingredient.quantity}} {{ingredient.name}}</li>
-</ul>
-{% endfor %}
-<h2> Valmistusohjeet </h2>
 
-<p>{{recipe.directions}}</p>
+    <h1>{{recipe.name}}</h1>
+    <!--TODO lisää polku näytä käyttäjä-->
+    <p>Reseptin luonut <a href="#">{{chef.name}}</a></p>
+    {% set sum_rating = 0%}
+    {% for comment in comments%}
+        {% set sum_rating = sum_rating + comment.rating%}
+    {% endfor %}
+    <p>
+        Arvosana
+        {% if comments|length > 0%}
+            {{sum_rating / comments|length}}/5
+        {% else %}
+            ei ole arvosteltu
+        {% endif %}, {{comments|length}}
+            {% if comments|length == 1%}
+            arvostelu
+            {% else %}
+            arvostelua
+        {% endif %}
+    </p>
 
-{% if user_logged_in %}
-{% if get_user_logged_in.id == recipe.chef_id %}
-<!--jos käyttäjän resepti, niin polut muokkaukseen ja poistoon-->
-<p>
-    {{forms.edit_button(base_path, recipe.id)}}
-    {{forms.destroy_button(base_path, recipe.id)}}
-</p>
+    <h2> Ainesosat </h2>
+    {%for ingredient in ingredients%}
+    <ul>
+        <li>{{ingredient.quantity}} {{ingredient.name}}</li>
+    </ul>
+    {% endfor %}
 
-{% endif %}
-{% endif %}
+    <h2> Valmistusohjeet </h2>
+
+    <p>{{recipe.directions}}</p>
+
+    {% if user_logged_in %}
+        {% if get_user_logged_in.id == recipe.chef_id %}
+        <!--jos käyttäjän resepti, niin polut muokkaukseen ja poistoon-->
+        <p>
+            {{forms.edit_button(base_path, recipe.id)}}
+            {{forms.destroy_button(base_path, recipe.id)}}
+        </p>
+        {% endif %}
+    {% endif %}
 <!--kommentit-->
-<!--ÄÄÄ MIKÄÄNN EI TOIMI-->
 <script>
     function editComment() {
+        var e = document.createElement("form");
+        e.setAttribute("method", 'post');
+        e.setAttribute("action", '{{base_path}}/recipe/{{recipe.id}}/comment/{{user_logged_in.id}}/edit');
         var element = document.createElement("div");
         element.setAttribute("class", 'form-group');
         var elemdiv = document.createElement("div");
@@ -68,64 +76,42 @@
         elemdiv.appendChild(elemtrat);
         elemdiv.appendChild(elemtrat2);
         element.appendChild(elemdiv);
+        e.appendChild(element);
         var editForm = document.getElementById("{{user_logged_in.id}}");
-        editForm.setAttribute("method", 'post');
-        editForm.setAttribute("action", '{{base_path}}/recipe/{{recipe.id}}/comment/{{user_logged_in.id}}/edit');
-        editForm.appendChild(element);
+        editForm.replace(e);
     }
 </script>
-{% set chef_commented_yet = 0 %}
-{% for comment in comments %}
-<form method="post" formaction="{{base_path}}/recipe/{{recipe.id}}/comment/{{user_logged_in.id}}/delete"
-      id="deleteComment"></form>
-<ul>
-    <li id="{{comment.chef_id}}">{{comment.rating}}/5 {{comment.comment}}
-        {% if user_logged_in.id == comment.chef_id %}
-        {% set chef_commented_yet = 1 %}
-        <button onclick="editComment()" class="btn btn-primary">Muokkaa</button>
-        <button form="deleteComment" formmethod="post"
-                formaction="{{base_path}}/recipe/{{recipe.id}}/comment/{{user_logged_in.id}}/delete"
-                class="btn btn-danger">Poista
-        </button>
-        {% endif %}
-    </li>
-</ul>
-{% endfor %}
-{% if user_logged_in and chef_commented_yet == 0 %}
-<!-- kommentin lisäyskenttä jos ei ole vielä kommentoinut -->
-<!--nyt vielä sama käyttäjä voi lisätä monta kommenttia yhteen reseptiin mutta tähän tulee muutos-->
-{{forms.new_comment(base_path, recipe.id)}}
-<!--<form method="post" action="{{base_path}}/recipe/{{recipe.id}}/newcomment">-->
-<!--<div class="form-group">-->
-<!--<div class="row">-->
-<!--<div class="col-xs-2">-->
-<!--<label>Arvosana</label>-->
-<!--<select name="rating" class="form-control">-->
-<!--<option>1</option>-->
-<!--<option>2</option>-->
-<!--<option>3</option>-->
-<!--<option>4</option>-->
-<!--<option>5</option>-->
-<!--</select></div>-->
-<!--<div class="col-xs-3">-->
-<!--<label>Kommentti</label>-->
-<!--<input class="form-control" name="comment" type="text">-->
-<!--</div>-->
-<!--</div>-->
-<!--</div>-->
-<!--<button type="submit" class="btn btn-default"> Lisää Kommentti</button>-->
-<!--</form>-->
-{% else %}
-<!--<form id="editField"></form>-->
-{% endif %}
 
-<h3>Hakusanat</h3>
-{% for keyword in keywords %}
-<ul class="inline">
-    <!--Teemasanan mukainen index näkymä täytyy muistaa tehdä-->
-    <li><a href="{{base_path}}/keyword/{{keyword.keyword}}">{{keyword.keyword}}</a></li>
-</ul>
-{% endfor %}
+    {% set chef_commented_yet = 0 %}
+    {% for comment in comments %}
+        <form method="post" formaction="{{base_path}}/recipe/{{recipe.id}}/comment/{{user_logged_in.id}}/delete"
+            id="deleteComment"></form>
+        <ul>
+            <li id="{{comment.chef_id}}">{{comment.rating}}/5 {{comment.comment}}
+                {% if user_logged_in.id == comment.chef_id %}
+                    {% set chef_commented_yet = 1 %}
+                    <button onclick="editComment()" class="btn btn-primary">Muokkaa</button>
+                    <button form="deleteComment" formmethod="post"
+                        formaction="{{base_path}}/recipe/{{recipe.id}}/comment/{{user_logged_in.id}}/delete"
+                        class="btn btn-danger">Poista
+                    </button>
+                {% endif %}
+            </li>
+        </ul>
+    {% endfor %}
 
+    {% if user_logged_in and chef_commented_yet == 0 %}
+    <!-- kommentin lisäyskenttä jos ei ole vielä kommentoinut -->
+        {{forms.new_comment(base_path, recipe.id)}}
+    {% else %}
+    <!--<form id="editField"></form>-->
+    {% endif %}
+
+    <h3>Hakusanat</h3>
+    {% for keyword in keywords %}
+        <ul class="inline">
+            <li><a href="{{base_path}}/keyword/{{keyword.keyword}}">{{keyword.keyword}}</a></li>
+        </ul>
+    {% endfor %}
 
 {% endblock %}

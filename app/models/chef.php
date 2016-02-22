@@ -36,7 +36,7 @@ class Chef extends BaseModel {
 
         if ($row) {
 
-            $chef[] = new Chef(array(
+            $chef = new Chef(array(
                 'id' => $row['id'],
                 'name' => $row['name']
             ));

@@ -65,7 +65,9 @@ class Recipe extends BaseModel
         $query = DB::connection()
             ->prepare("SELECT Recipe.* FROM Recipe "
                 . "LEFT JOIN RecipeKeyword ON Recipe.id = RecipeKeyword.recipe_id "
-                . "JOIN Keyword ON Keyword.id = RecipeKeyword.keyword_id WHERE Recipe.name LIKE :search OR Keyword.keyword LIKE :search");
+                . "JOIN Keyword ON Keyword.id = RecipeKeyword.keyword_id "
+                . "JOIN RecipeIngredient ON Recipe.id = RecipeIngredient.recipe_id JOIN Ingredient ON Ingredient.id = RecipeIngredient.ingredient_id "
+                . "WHERE Recipe.name LIKE :search OR Keyword.keyword LIKE :search OR Ingredient.name LIKE :search");
         // VALIDATE STRING TODO
         $string = "%" . $string . "%";
         $query->bindParam(':search', $string, PDO::PARAM_STR);
@@ -83,8 +85,8 @@ class Recipe extends BaseModel
     {
 
         $query = DB::connection()
-            ->prepare("SELECT Recipe.* FROM Recipe"
-                . " JOIN RecipeKeyword ON Recipe.id = RecipeKeyword.recipe_id "
+            ->prepare("SELECT Recipe.* FROM Recipe "
+                . "LEFT JOIN RecipeKeyword ON Recipe.id = RecipeKeyword.recipe_id "
                 . "JOIN Keyword ON Keyword.id = RecipeKeyword.keyword_id WHERE Keyword.keyword LIKE :keyword");
         $keyword = '%' . $keyword . '%';
         $query->bindParam(':keyword', $keyword, PDO::PARAM_STR);

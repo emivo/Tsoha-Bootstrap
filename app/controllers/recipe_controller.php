@@ -16,8 +16,9 @@ class RecipeController extends BaseController
         $comments = Comment::find_by_recipe_id($id);
         $ingredients = Ingredient::find_by_recipe_id($id);
         $keywords = Keyword::find_by_recipe_id($id);
+        $chef = Chef::find($recipe->chef_id);
 
-        View::make('recipe/show.html', array('recipe' => $recipe, 'comments' => $comments, 'ingredients' => $ingredients, 'keywords' => $keywords));
+        View::make('recipe/show.html', array('chef' => $chef, 'recipe' => $recipe, 'comments' => $comments, 'ingredients' => $ingredients, 'keywords' => $keywords));
     }
 
     public static function create()

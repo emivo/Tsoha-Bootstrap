@@ -8,7 +8,7 @@
             
             $user = Chef::find($user_id);
             
-            return $user[0];
+            return $user;
         }
         return null;
     }
