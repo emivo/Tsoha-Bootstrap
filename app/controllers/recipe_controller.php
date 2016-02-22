@@ -71,14 +71,7 @@ class RecipeController extends BaseController
         $validator = new \Valitron\Validator($params);
         $validator = self::validate_params_for_recipe($validator);
         if ($validator->validate()) {
-            $recipe->name = $params['name'];
-            $recipe->cooking_time = $params['cooking_time'];
-            $recipe->directions = $params['directions'];
-            foreach ($params['ingredient'] as $index => $row) {
-                $ingredient = Ingredient::find_by_recipe_id_and_ingredient_name($id, $row);
-                $validator = self::validate_ingredient($ingredient);
-                if ($validator->validate()) $ingredient->update();
-            }
+            self::make_changes_to_recipe($id, $params, $recipe);
 
             $recipe->update();
             Redirect::to('/recipe/' . $id, array('message' => 'Resepti on päivitetty'));
@@ -95,21 +88,14 @@ class RecipeController extends BaseController
         Redirect::to('/recipe', array('message' => 'Resepti poistettu'));
     }
 
-    public static function newcomment($id)
+    public static function new_comment($id)
     {
         $params = $_POST;
         $chef_id = $_SESSION['user'];
-
         $validator = self::validate_comment($params);
 
         if ($validator->validate()) {
-            $comment = new Comment(array(
-                'recipe_id' => $id,
-                'chef_id' => $chef_id,
-                'rating' => $params['rating'],
-                'comment' => $params['comment']
-            ));
-
+            $comment = self::new_comment_object($id, $chef_id, $params);
             $comment->save();
 
             Redirect::to('/recipe/' . $id);
@@ -238,6 +224,39 @@ class RecipeController extends BaseController
             }
         }
         return $error;
+    }
+
+    /**
+     * @param $id
+     * @param $params
+     * @param $recipe
+     */
+    public static function make_changes_to_recipe($id, $params, $recipe)
+    {
+        $recipe->name = $params['name'];
+        $recipe->cooking_time = $params['cooking_time'];
+        $recipe->directions = $params['directions'];
+        foreach ($params['ingredient'] as $index => $row) {
+            $ingredient = Ingredient::find_by_recipe_id_and_ingredient_name($id, $row);
+            $validator = self::validate_ingredient($ingredient);
+            if ($validator->validate()) $ingredient->update();
+        }
+    }
+
+    /**
+     * @param $id
+     * @param $chef_id
+     * @param $params
+     * @return Comment
+     */
+    public static function new_comment_object($id, $chef_id, $params)
+    {
+        return $comment = new Comment(array(
+            'recipe_id' => $id,
+            'chef_id' => $chef_id,
+            'rating' => $params['rating'],
+            'comment' => $params['comment']
+        ));
     }
 
 }

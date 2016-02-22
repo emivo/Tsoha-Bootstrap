@@ -2,7 +2,7 @@
 
 class Recipe extends BaseModel
 {
-
+// TODO Refactor
     public $id, $chef_id, $name, $cooking_time, $directions, $published;
 
     public function __construct($attributes)
@@ -13,34 +13,26 @@ class Recipe extends BaseModel
     public static function all()
     {
         $query = DB::connection()->prepare('SELECT * FROM Recipe');
-
         $query->execute();
-
         $rows = $query->fetchAll();
 
         $recipes = array();
-
         foreach ($rows as $row) {
             $recipes[] = self::new_recipe_from_row($row);
         }
-
         return $recipes;
     }
 
     public static function ten_recent()
     {
         $query = DB::connection()->prepare('SELECT * FROM Recipe ORDER BY published DESC LIMIT 10');
-
         $query->execute();
-
         $rows = $query->fetchAll();
 
         $recipes = array();
-
         foreach ($rows as $row) {
             $recipes[] = self::new_recipe_from_row($row);
         }
-
         return $recipes;
     }
 
@@ -52,10 +44,8 @@ class Recipe extends BaseModel
 
         if ($row) {
             $recipe = self::new_recipe_from_row($row);
-
             return $recipe;
         }
-
         return null;
     }
 
@@ -66,11 +56,9 @@ class Recipe extends BaseModel
         $rows = $query->fetchAll();
 
         $recipes = array();
-
         foreach ($rows as $row) {
             $recipes[] = self::new_recipe_from_row($row);
         }
-
         return $recipes;
     }
 

@@ -2,7 +2,7 @@
 
 class Keyword extends BaseModel
 {
-
+// TODO Refactor lisää
     public $id, $keyword;
 
     public function __construct($attributes)
@@ -21,15 +21,7 @@ class Keyword extends BaseModel
         $keywords = array();
 
         foreach ($rows as $row) {
-            $keyword_query = DB::connection()
-                ->prepare("SELECT * FROM Keyword WHERE id = :keyword_id");
-            $keyword_query->execute(array('keyword_id' => $row['keyword_id']));
-
-            $keyword = $keyword_query->fetch();
-            $keywords[] = new Keyword(array(
-                'id' => $keyword['id'],
-                'keyword' => $keyword['keyword']
-            ));
+            $keywords = self::find_keyword_for_juction_and_to_array($row, $keywords);
         }
 
         return $keywords;
@@ -46,13 +38,31 @@ class Keyword extends BaseModel
         $rows = $query->fetchAll();
         $array_of_recipes = array();
         foreach ($rows as $row) {
-            // muuta tähän jotta lisää reseptit listaan
             $array_of_recipes[] = $row['recipe_id'];
         }
         if (count($array_of_recipes) > 0) {
             return $array_of_recipes;
         }
         return null;
+    }
+
+    /**
+     * @param $row
+     * @param $keywords
+     * @return array
+     */
+    public static function find_keyword_for_juction_and_to_array($row, $keywords)
+    {
+        $keyword_query = DB::connection()
+            ->prepare("SELECT * FROM Keyword WHERE id = :keyword_id");
+        $keyword_query->execute(array('keyword_id' => $row['keyword_id']));
+
+        $keyword = $keyword_query->fetch();
+        $keywords[] = new Keyword(array(
+            'id' => $keyword['id'],
+            'keyword' => $keyword['keyword']
+        ));
+        return $keywords;
     }
 
     public function save($recipe_id)
@@ -86,7 +96,6 @@ class Keyword extends BaseModel
         $query = DB::connection()
             ->prepare("SELECT * FROM Keyword");
         $query->execute();
-
         $rows = $query->fetchAll();
 
         foreach ($rows as $row) {
@@ -94,7 +103,6 @@ class Keyword extends BaseModel
                 'id' => $row['id'],
                 'keyword' => $row['keyword']
             ));
-
             if (is_null($keyword->find_recipes())) $keyword->delete();
         }
     }

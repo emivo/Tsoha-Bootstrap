@@ -23,12 +23,7 @@ class Ingredient extends BaseModel
         foreach ($rows as $row) {
             $ingredient = self::find_ingredient_by_id($row['ingredient_id']);
 
-            $ingredients[] = new Ingredient(array(
-                'ingredient_id' => $row['ingredient_id'],
-                'recipe_id' => $id,
-                'name' => $ingredient['name'],
-                'quantity' => $row['quantity']
-            ));
+            $ingredients[] = self::new_ingredient_from_row($id, $row, $ingredient);
         }
 
         return $ingredients;
@@ -70,6 +65,22 @@ class Ingredient extends BaseModel
 
         $ingredient = $ingredient_query->fetch();
         return $ingredient;
+    }
+
+    /**
+     * @param $id
+     * @param $row
+     * @param $ingredient
+     * @return Ingredient
+     */
+    public static function new_ingredient_from_row($id, $row, $ingredient)
+    {
+        return new Ingredient(array(
+            'ingredient_id' => $row['ingredient_id'],
+            'recipe_id' => $id,
+            'name' => $ingredient['name'],
+            'quantity' => $row['quantity']
+        ));
     }
 
     public function save()

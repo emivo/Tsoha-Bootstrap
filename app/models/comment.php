@@ -69,9 +69,7 @@ class Comment extends BaseModel
     public static function fetch_comments_from_query_result($query)
     {
         $rows = $query->fetchAll();
-
         $comments = array();
-
         foreach ($rows as $row) {
             $comments = self::new_comment_from_row($row, $comments);
         }

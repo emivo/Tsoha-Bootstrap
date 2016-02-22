@@ -79,7 +79,7 @@ $routes->post('/recipe/:id/destroy', 'check_logged_in', function($id) {
 });
 
 $routes->post('/recipe/:id/newcomment', 'check_logged_in', function($id) {
-    RecipeController::newcomment($id);
+    RecipeController::new_comment($id);
 });
 
 $routes->post('/recipe/:id/comment/:chef_id/delete', 'check_logged_in', function($id, $chef_id) {
