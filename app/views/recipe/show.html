@@ -3,7 +3,7 @@
 {% import "macros/_forms.html" as forms %}
 
     <h1>{{recipe.name}}</h1>
-    <p>Reseptin luonut <a href="{{base_path}}/chef/{{chef.id}}">{{chef.name}}</a></p>
+    <p>Reseptin luonut <a href="{{base_path}}/chefs/{{chef.id}}">{{chef.name}}</a></p>
     {% set sum_rating = 0%}
     {% for comment in comments%}
         {% set sum_rating = sum_rating + comment.rating%}
@@ -34,8 +34,7 @@
     <p>{{recipe.directions}}</p>
 
     {% if user_logged_in %}
-        {% if get_user_logged_in.id == recipe.chef_id %}
-        <!--jos käyttäjän resepti, niin polut muokkaukseen ja poistoon-->
+        {% if user_logged_in.id == recipe.chef_id %}
         <p>
             {{forms.edit_button(base_path, recipe.id)}}
             {{forms.destroy_button(base_path, recipe.id)}}

@@ -26,7 +26,7 @@ $routes->get('/recipe/new', 'check_logged_in', function() {
     RecipeController::create();
 });
 
-$routes->get('/chef/:id', function($id) {
+$routes->get('/chefs/:id', function($id) {
     ChefController::show($id);
 });
 
