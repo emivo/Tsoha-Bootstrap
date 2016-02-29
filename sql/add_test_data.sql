@@ -1,5 +1,5 @@
-INSERT INTO Chef (name, password) VALUES ('admin', '$1$sillysal$YI2tx55Nw4QYX8JYh2qt90');
-INSERT INTO Chef (name, password) VALUES ('kallekoekokki', '$1$sillysal$YI2tx55Nw4QYX8JYh2qt90');
+INSERT INTO Chef (name, admin, active, password) VALUES ('admin', TRUE, TRUE, '$1$sillysal$YI2tx55Nw4QYX8JYh2qt90');
+INSERT INTO Chef (name, admin, active, password) VALUES ('kallekoekokki', FALSE, TRUE, '$1$sillysal$YI2tx55Nw4QYX8JYh2qt90');
 
 INSERT INTO Recipe (name, chef_id, cooking_time, directions, published) 
 VALUES ('Köyhät Ritarit', (SELECT id FROM Chef WHERE name LIKE 'admin'),'15 min', 'Vatkaa munan rakenne rikki. Lisää maito ja sokeri. Kasta pullat munamaitoon. Ruskista pannulla rasvassa. Tarjoile hillon ja kermavaahdon kera.', NOW());

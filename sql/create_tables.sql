@@ -1,6 +1,8 @@
 -- Lisää CREATE TABLE lauseet tähän tiedostoon
 CREATE TABLE Chef (
 id SERIAL PRIMARY KEY,
+admin BOOLEAN,
+active BOOLEAN,
 name TEXT UNIQUE NOT NULL,
 password TEXT NOT NULL
 );

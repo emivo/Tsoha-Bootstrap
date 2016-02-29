@@ -238,7 +238,7 @@ class RecipeController extends BaseController
         $recipe->directions = $params['directions'];
         foreach ($params['ingredient'] as $index => $row) {
             $ingredient = Ingredient::find_by_recipe_id_and_ingredient_name($id, $row);
-            $validator = self::validate_ingredient($ingredient);
+            if ($ingredient) $validator = self::validate_ingredient($ingredient);
             if ($validator->validate()) $ingredient->update();
         }
     }

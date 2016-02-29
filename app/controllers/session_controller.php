@@ -9,9 +9,12 @@ class SessionController extends BaseController {
     public static function handle_login() {
         $params = $_POST;
         $user = Chef::authenticate($params['username'], $params['password']);
+
         
         if (!$user) {
-            View::make('/login.html', array('error' => 'Väärä käyttäjätunnus tai salasana!', 'username' => $params['username']));
+            Redirect::to('/login.html', array('error' => 'Väärä käyttäjätunnus tai salasana!'));
+        } elseif (!$user->active) {
+            Redirect::to('/login.html', array('error' => 'Käyttäjä estetty. Ota yhteyttä ylläpitoon'));
         } else {
             $_SESSION['user'] = $user[0]->id;
 

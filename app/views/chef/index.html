@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+{% import "macros/chef.html" as chef_macro %}
+<h1>Käyttäjät</h1>
+<a class="btn btn-success" href="{{base_path}}/register">Lisää uusi käyttäjä</a>
+
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>Nimi</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    {% for chef in chefs %}
+    <tr>
+        <td><a href="{{base_path}}/chef/{{chef.id}}">{{chef.name}}</a></td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

@@ -26,19 +26,27 @@ $routes->get('/recipe/new', 'check_logged_in', function() {
     RecipeController::create();
 });
 
-$routes->get('/chefs/:id', function($id) {
+$routes->get('/chef/:id', function($id) {
     ChefController::show($id);
 });
 
-$routes->get('/chef/myprofile', 'check_logged_in', function() {
-    ChefController::my_profile();
+$routes->get('/my_profile', 'check_logged_in', function() {
+    ChefController::show(BaseController::get_user_logged_in()->id);
 });
 
-$routes->post('/chef/myprofile', 'check_logged_in', function() {
+$routes->post('/my_profile', 'check_logged_in', function() {
     ChefController::update();
 });
-$routes->post('/chef/myprofile/destroy', 'check_logged_in', function() {
+$routes->post('/my_profile/destroy', 'check_logged_in', function() {
     ChefController::destroy();
+});
+
+$routes->get('/chefs/index', function() {
+    ChefController::index();
+});
+
+$routes->post('/admin/change_account_activity/:id', function($id) {
+    ChefController::toggle_activity($id);
 });
 
 $routes->post('/search', function() {

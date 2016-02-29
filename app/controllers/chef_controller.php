@@ -8,15 +8,16 @@ class ChefController extends BaseController
         View::make('register.html');
     }
 
-    // TODO YHDISTÄ MY JA SHOW SITTENKUN ON AIKAA !
-    public static function my_profile()
+    public static function index()
     {
-        $chef = self::get_user_logged_in();
-        $recipes = Recipe::find_by_chef_id($chef->id);
-        $comments = Comment::find_by_chef_id($chef->id);
-        View::make('chef/myprofile.html', array('chef' => $chef, 'recipes' => $recipes, 'comments' => $comments));
+        $chefs = Chef::all();
+        View::make('chef/index.html', array('chefs' => $chefs));
     }
 
+    /**
+     * Näytä yksittäinen käyttäjä. Jos katselee omaa profiilia mahdollisuus vaihtaa salasana
+     * @param $id
+     */
     public static function show($id)
     {
 
@@ -56,7 +57,7 @@ class ChefController extends BaseController
             Redirect::to('/', array('message' => 'Käyttäjätiedot päivitetty'));
         } else {
             $error = self::collect_errors($validator);
-            Redirect::to('/chef/myprofile', array('error' => $error));
+            Redirect::to('/chef/my_profile', array('error' => $error));
         }
     }
 
@@ -66,6 +67,18 @@ class ChefController extends BaseController
         $chef->destroy();
         // TODO varmistus, DONt drink and root
         Redirect::to('/', array('message' => 'Käyttäjä sekä käyttäjän reseptit, että kommentit poistettu'));
+    }
+
+    public static function toggle_activity($id)
+    {
+
+        $chef = Chef::find($id);
+        $chef->toggle_activity();
+        if ($chef->active) {
+            Redirect::to('/chef/'.$id, array('message' => 'Käyttäjän esto poistettu'));
+        } else {
+            Redirect::to('/chef/'.$id, array('message' => 'Käyttäjä estetty'));
+        }
     }
 
 

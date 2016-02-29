@@ -3,7 +3,7 @@
 {% import "macros/_forms.html" as forms %}
 
     <h1>{{recipe.name}}</h1>
-    <p>Reseptin luonut <a href="{{base_path}}/chefs/{{chef.id}}">{{chef.name}}</a></p>
+    <p>Reseptin luonut <a href="{{base_path}}/chef/{{chef.id}}">{{chef.name}}</a></p>
     {% if user_logged_in %}
         {% if user_logged_in.id == recipe.chef_id %}
         <p>

@@ -1,7 +1,34 @@
 {% extends "base.html" %}
 {% block content %}
-{% import "macros/chef.html" as chefmacro %}
+{% import "macros/chef.html" as chef_macro %}
 <h1>{{chef.name}}</h1>
-{{chefmacro.listrecipes(base_path, recipes)}}
-{{chefmacro.listcomments(comments)}}
+{% if chef == user_logged_in %}
+<h1>Muokkaa tietoja</h1>
+
+<form method="post">
+    <div class="form-group">
+        <label>Käyttäjätunnus</label>
+        <input class="form-control" id="disabledInput" name="username" value="{{chef.name}}" type="text" disabled>
+    </div>
+
+    <div class="form-group">
+        <label>Uusi salasana</label>
+        <input class="form-control" name="password" type="password">
+    </div>
+    <div class="form-group">
+        <label>Salasana uudelleen</label>
+        <input class="form-control" name="password_confirm" type="password">
+    </div>
+
+    <button formaction="{{base_path}}/my_profile" type="submit" class="btn btn-danger">Tallenna</button>
+    <button formaction="{{base_path}}/my_profile/destroy" type="submit" class="btn btn-danger">Poista käyttäjätunnus
+    </button>
+</form>
+    {% if user_logged_in.admin and not chef.admin %}
+        <form id="froze"></form>
+        <button form="froze"  formmethod="post" formaction="/admin/change_account_activity/{{chef.id}}" class="btn btn-danger" >Estä käyttäjä</button>
+    {% endif %}
+{% endif %}
+{{chef_macro.listrecipes(base_path, recipes)}}
+{{chef_macro.listcomments(comments)}}
 {% endblock %}

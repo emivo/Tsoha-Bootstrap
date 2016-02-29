@@ -9,15 +9,10 @@
         {% endif %}!</h1>
 </div>
 {% if user_logged_in %}
-<script>function reroute() {
-        $(location).attr('href', '{{base_path}}/recipe/new');
-    }</script>
-<button class="btn btn-success" onclick="reroute()">Lisää uusi resepti</button>
+<a class="btn btn-success" href="{{base_path}}/recipe/new">Lisää uusi resepti</a>
 {% endif %}
-<p>
-
-</p>
-<table class="table table-striped table-bordered">
+<br>
+<table class="table table-striped">
     <thead>
         <tr>
             <th>Nimi</th>

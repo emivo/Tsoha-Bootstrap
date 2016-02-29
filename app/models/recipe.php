@@ -65,7 +65,7 @@ class Recipe extends BaseModel
     public static function search_default($string)
     {
         $query = DB::connection()
-            ->prepare("SELECT Recipe.* FROM Recipe "
+            ->prepare("SELECT DISTINCT Recipe.* FROM Recipe "
                 . "LEFT JOIN RecipeKeyword ON Recipe.id = RecipeKeyword.recipe_id "
                 . "JOIN Keyword ON Keyword.id = RecipeKeyword.keyword_id "
                 . "JOIN RecipeIngredient ON Recipe.id = RecipeIngredient.recipe_id JOIN Ingredient ON Ingredient.id = RecipeIngredient.ingredient_id "
@@ -89,7 +89,7 @@ class Recipe extends BaseModel
     {
 
         $query = DB::connection()
-            ->prepare("SELECT Recipe.* FROM Recipe "
+            ->prepare("SELECT DISTINCT Recipe.* FROM Recipe "
                 . "LEFT JOIN RecipeKeyword ON Recipe.id = RecipeKeyword.recipe_id "
                 . "JOIN Keyword ON Keyword.id = RecipeKeyword.keyword_id WHERE Keyword.keyword LIKE :keyword");
         $keyword = '%' . $keyword . '%';
