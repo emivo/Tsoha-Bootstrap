@@ -46,7 +46,7 @@
         <form method="post" action="{{base_path}}/recipe/{{recipe.id}}/comment/{{user_logged_in.id}}/delete"
             id="deleteComment"></form>
         <ul>
-            <li id="{{comment.chef_id}}">{{comment.rating}}/5 {{comment.comment}}
+            <li id="{{comment.chef_id}}"><a href="{{base_path}}/chef/{{comment.chef_id}}"> {{comment.rating}}/5 {{comment.comment}}</a>
                 {% if user_logged_in.id == comment.chef_id %}
                     {% set chef_commented_yet = 1 %}
                     <!-- Kommentin muokkaus nyt vielä pois käytöstä-->

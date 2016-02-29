@@ -54,7 +54,7 @@ class Chef extends BaseModel
         ));
         $row = $query->fetch();
         if ($row) {
-            $chef[] = self::new_chef_from_row($row);
+            $chef = self::new_chef_from_row($row);
 
             return $chef;
         } else {
@@ -92,7 +92,7 @@ class Chef extends BaseModel
         ));
     }
 
-    public function update($password)
+    public function update_password($password)
     {
         $query = DB::connection()
             ->prepare("UPDATE Chef SET password = :password WHERE id = :id");
@@ -116,6 +116,13 @@ class Chef extends BaseModel
         $query = DB::connection()
             ->prepare("DELETE FROM Chef WHERE id = :id");
         $query->execute(array('id' => $this->id));
+    }
+
+    public function toggle_activity() {
+        $this->active = !$this->active;
+        $query = DB::connection()
+            ->prepare("UPDATE Chef SET active = :active WHERE id = :id");
+        $query->execute(array('active' => $this->active, 'id' => $this->id));
     }
 
 }

@@ -3,6 +3,12 @@
 function check_logged_in(){
     BaseController::check_logged_in();
 }
+function check_if_admin(){
+    $user = BaseController::get_user_logged_in();
+    if (!$user->admin) {
+        Redirect::to('/', array('error' => 'Toiminto on tarkoitettu vain sivuston ylläpitäjälle'));
+    }
+}
 // juuripolku
 $routes->get('/', function() {
     RecipeController::index();
@@ -45,7 +51,7 @@ $routes->get('/chefs/index', function() {
     ChefController::index();
 });
 
-$routes->post('/admin/change_account_activity/:id', function($id) {
+$routes->post('/admin/change_account_activity/:id', 'check_if_admin', function($id) {
     ChefController::toggle_activity($id);
 });
 
@@ -82,6 +88,7 @@ $routes->post('/recipe/:id/edit', 'check_logged_in', function($id) {
     RecipeController::update($id);
 });
 
+//TODO anna poisto oikeus ylläpitäjälle
 $routes->post('/recipe/:id/destroy', 'check_logged_in', function($id) {
     RecipeController::destroy($id);
 });
@@ -89,7 +96,7 @@ $routes->post('/recipe/:id/destroy', 'check_logged_in', function($id) {
 $routes->post('/recipe/:id/newcomment', 'check_logged_in', function($id) {
     RecipeController::new_comment($id);
 });
-
+// TODO Sama kuin yllä
 $routes->post('/recipe/:id/comment/:chef_id/delete', 'check_logged_in', function($id, $chef_id) {
     RecipeController::delete_comment($id, $chef_id);
 });

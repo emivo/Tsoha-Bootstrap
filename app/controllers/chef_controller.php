@@ -25,7 +25,10 @@ class ChefController extends BaseController
         if ($chef) {
             $recipes = Recipe::find_by_chef_id($chef->id);
             $comments = Comment::find_by_chef_id($chef->id);
-            View::make('chef/show.html', array('chef' => $chef, 'recipes' => $recipes, 'comments' => $comments));
+            foreach ($comments as $comment) {
+                $recipes_for_comments[$comment->recipe_id] = Recipe::find($comment->recipe_id);
+            }
+            View::make('chef/show.html', array('chef' => $chef, 'recipes' => $recipes, 'comments' => $comments, 'recipes_for_comments' => $recipes_for_comments));
         } else {
             Redirect::to('/', array('error' => 'Käyttäjää ei löytynyt'));
         }
@@ -52,7 +55,7 @@ class ChefController extends BaseController
 
         if ($validator->validate()) {
             $chef = self::get_user_logged_in();
-            $chef->update($params['password']);
+            $chef->update_password($params['password']);
 
             Redirect::to('/', array('message' => 'Käyttäjätiedot päivitetty'));
         } else {
@@ -75,9 +78,9 @@ class ChefController extends BaseController
         $chef = Chef::find($id);
         $chef->toggle_activity();
         if ($chef->active) {
-            Redirect::to('/chef/'.$id, array('message' => 'Käyttäjän esto poistettu'));
+            Redirect::to('/chef/' . $id, array('message' => 'Käyttäjän esto poistettu'));
         } else {
-            Redirect::to('/chef/'.$id, array('message' => 'Käyttäjä estetty'));
+            Redirect::to('/chef/' . $id, array('message' => 'Käyttäjä estetty'));
         }
     }
 

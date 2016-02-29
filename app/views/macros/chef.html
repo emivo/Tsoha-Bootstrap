@@ -7,12 +7,13 @@
 {% endfor %}
 {% endmacro %}
 
-{% macro listcomments(comments) %}
+{% macro listcomments(base_path, recipes_for_comments, comments) %}
 <h2>Kommentit</h2>
-{% for comment in comments %}
-<ul>
+<ul type="none">
     <!--TODO lisää linkki tai reseptin nimi-->
-    <li>{{comment.rating}} {{comment.comment}}</a></li>
+    {% for comment in comments %}
+    <li><a href="{{base_path}}/recipe/{{comment.recipe_id}}">{{attribute(recipes_for_comments, comment.recipe_id).name}}</a>: {{comment.rating}}/5 {{comment.comment}}</li>
+    {% endfor %}
 </ul>
-{% endfor %}
+
 {% endmacro %}
