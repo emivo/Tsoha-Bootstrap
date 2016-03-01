@@ -2,79 +2,94 @@
 {% block content %}
 {% import "macros/_forms.html" as forms %}
 
-    <h1>{{recipe.name}}</h1>
-    <p>Reseptin luonut <a href="{{base_path}}/chef/{{chef.id}}">{{chef.name}}</a></p>
-    <p>
+<h1>{{recipe.name}}</h1>
+<p>Reseptin luonut <a href="{{base_path}}/chef/{{chef.id}}">{{chef.name}}</a></p>
+<p>
     {% if user_logged_in %}
-        {% if user_logged_in.id == recipe.chef_id %}
-            {{forms.edit_button(base_path, recipe.id)}}
-        {% endif %}
-        {% if user_logged_in.id == recipe.chef_id or user_logged_in.admin %}
-            {{forms.destroy_button(base_path, recipe.id)}}
-        {% endif %}
+    {% if user_logged_in.id == recipe.chef_id %}
+    {{forms.edit_button(base_path, recipe.id)}}
+    {% endif %}
+    {% if user_logged_in.id == recipe.chef_id or user_logged_in.admin %}
+    {{forms.destroy_button(base_path, recipe.id)}}
+    {% endif %}
 
     {% endif %}
-    </p>
-    {% set sum_rating = 0%}
-    {% for comment in comments%}
-        {% set sum_rating = sum_rating + comment.rating%}
-    {% endfor %}
+</p>
+{% set sum_rating = 0%}
+{% for comment in comments%}
+{% set sum_rating = sum_rating + comment.rating%}
+{% endfor %}
 <br>
-    <p>
-        Arvosana
-        {% if comments|length > 0%}
-            {{sum_rating / comments|length}}/5
-        {% else %}
-            ei ole arvosteltu
-        {% endif %}, {{comments|length}}
-            {% if comments|length == 1%}
-            arvostelu
-            {% else %}
-            arvostelua
-        {% endif %}
-    </p>
+<p>
+    Arvosana
+    {% if comments|length > 0%}
+    {{sum_rating / comments|length}}/5
+    {% else %}
+    ei ole arvosteltu
+    {% endif %}, {{comments|length}}
+    {% if comments|length == 1%}
+    arvostelu
+    {% else %}
+    arvostelua
+    {% endif %}
+</p>
 
-    <h2> Ainesosat </h2>
-    {%for ingredient in ingredients%}
-    <ul>
-        <li>{{ingredient.quantity}} {{ingredient.name}}</li>
+<h2> Ainesosat </h2>
+<div class="row">
+    <ul class="list-group col-md-4" type="none">
+        {%for ingredient in ingredients%}
+        <li class="list-group-item">{{ingredient.quantity}} {{ingredient.name}}</li>
+        {% endfor %}
     </ul>
-    {% endfor %}
+</div>
 
-    <h2> Valmistusohjeet </h2>
+<h2> Valmistusohjeet </h2>
+<div class="row">
 
-    <p>{{recipe.directions}}</p>
+    <div class="panel panel-default col-md-4">
+        <div class="panel-body">
+            {{recipe.directions}}
+        </div>
+    </div>
+</div>
 <!--kommentit-->
-    {% set chef_commented_yet = 0 %}
-    {% for comment in comments %}
-        <form method="post" id="deleteComment"></form>
-        <ul type="none">
-            <li id="{{comment.chef_id}}">&lt;<a href="{{base_path}}/chef/{{comment.chef_id}}">{{commentators[comment.chef_id].name}}</a>&gt; {{comment.rating}}/5 {{comment.comment}}
-                {% if user_logged_in and user_logged_in.id == comment.chef_id or user_logged_in.admin %}
+<h2>Kommentit</h2>
+<div class="row">
+    <div class="panel panel-default col-md-4">
+        <div class="panel-body">
+            {% set chef_commented_yet = 0 %}
+            {% for comment in comments %}
+            <form method="post" id="deleteComment"></form>
+            <ul type="none">
+                <li id="{{comment.chef_id}}">&lt;<a href="{{base_path}}/chef/{{comment.chef_id}}">{{commentators[comment.chef_id].name}}</a>&gt;
+                    {{comment.rating}}/5 {{comment.comment}}
+                    {% if user_logged_in and user_logged_in.id == comment.chef_id or user_logged_in.admin %}
                     {% if user_logged_in and user_logged_in.id == comment.chef_id %}
-                        {% set chef_commented_yet = 1 %}
+                    {% set chef_commented_yet = 1 %}
                     {% endif %}
                     <!-- Kommentin muokkaus nyt vielä pois käytöstä-->
                     <!--<button id="editCommentButton" onclick="editComment()" class="btn btn-primary">Muokkaa</button>-->
                     <button form="deleteComment" formmethod="post"
-                        formaction="{{base_path}}/recipe/{{recipe.id}}/comment/{{comment.chef_id}}/delete"
-                        class="btn btn-danger">Poista
+                            formaction="{{base_path}}/recipe/{{recipe.id}}/comment/{{comment.chef_id}}/delete"
+                            class="btn btn-danger">Poista
                     </button>
-                {% endif %}
-            </li>
-        </ul>
-    {% endfor %}
+                    {% endif %}
+                </li>
+            </ul>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% if user_logged_in and chef_commented_yet == 0 %}
+<!-- kommentin lisäyskenttä jos ei ole vielä kommentoinut -->
+{{forms.new_comment(base_path, recipe.id)}}
+{% endif %}
 
-    {% if user_logged_in and chef_commented_yet == 0 %}
-    <!-- kommentin lisäyskenttä jos ei ole vielä kommentoinut -->
-        {{forms.new_comment(base_path, recipe.id)}}
-    {% endif %}
-
-    <h3>Hakusanat</h3>
-    {% for keyword in keywords %}
-        <ul class="inline">
-            <li><a href="{{base_path}}/keyword/{{keyword.keyword}}">{{keyword.keyword}}</a></li>
-        </ul>
-    {% endfor %}
+<h3>Hakusanat</h3>
+{% for keyword in keywords %}
+<ul class="inline">
+    <li><a href="{{base_path}}/keyword/{{keyword.keyword}}">{{keyword.keyword}}</a></li>
+</ul>
+{% endfor %}
 
 {% endblock %}
