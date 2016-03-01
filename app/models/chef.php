@@ -119,10 +119,17 @@ class Chef extends BaseModel
     }
 
     public function toggle_activity() {
+//        if ($this->active) {
+//            $this->active = (bool) FALSE;
+//        } else {
+//            $this->active = (bool) TRUE;
+//        }
         $this->active = !$this->active;
         $query = DB::connection()
             ->prepare("UPDATE Chef SET active = :active WHERE id = :id");
-        $query->execute(array('active' => $this->active, 'id' => $this->id));
+        $query->bindParam(':active', $this->active, PDO::PARAM_BOOL);
+        $query->bindParam(':id', $this->id, PDO::PARAM_INT);
+        $query->execute();
     }
 
 }

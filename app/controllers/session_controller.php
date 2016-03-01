@@ -12,12 +12,11 @@ class SessionController extends BaseController {
 
         
         if (!$user) {
-            Redirect::to('/login.html', array('error' => 'Väärä käyttäjätunnus tai salasana!'));
+            Redirect::to('/login', array('error' => 'Väärä käyttäjätunnus tai salasana!'));
         } elseif ($user->active == false) {
-            Redirect::to('/login.html', array('error' => 'Käyttäjä estetty. Ota yhteyttä ylläpitoon'));
+            Redirect::to('/login', array('error' => 'Käyttäjä estetty. Ota yhteyttä ylläpitoon'));
         } else {
             $_SESSION['user'] = $user->id;
-
             Redirect::to('/', array('message' => 'Tervetuloa ' . $user->name));
         }
     }

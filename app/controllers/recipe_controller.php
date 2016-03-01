@@ -6,24 +6,38 @@ class RecipeController extends BaseController
     public static function index()
     {
         $recipes = Recipe::all();
+        $chefs = self::find_chefs($recipes);
 
-        View::make('recipe/index.html', array('recipes' => $recipes));
+        View::make('recipe/index.html', array('recipes' => $recipes, 'chefs' => $chefs));
+    }
+
+    public static function find_chefs($recipes)
+    {
+        $chefs = array();
+        foreach ($recipes as $recipe) {
+            $chefs[$recipe->chef_id] = Chef::find($recipe->chef_id);
+        }
+        return $chefs;
     }
 
     public static function show($id)
     {
         $recipe = Recipe::find($id);
         $comments = Comment::find_by_recipe_id($id);
+        $commentators = array();
+        foreach ($comments as $comment) {
+            $commentators[$comment->chef_id] = Chef::find($comment->chef_id);
+        }
         $ingredients = Ingredient::find_by_recipe_id($id);
         $keywords = Keyword::find_by_recipe_id($id);
         $chef = Chef::find($recipe->chef_id);
 
-        View::make('recipe/show.html', array('chef' => $chef, 'recipe' => $recipe, 'comments' => $comments, 'ingredients' => $ingredients, 'keywords' => $keywords));
+        View::make('recipe/show.html', array('chef' => $chef, 'recipe' => $recipe, 'comments' => $comments, 'commentators' => $commentators, 'ingredients' => $ingredients, 'keywords' => $keywords));
     }
 
     public static function create()
     {
-            View::make('recipe/new.html');
+        View::make('recipe/new.html');
     }
 
     public static function store()
@@ -57,10 +71,14 @@ class RecipeController extends BaseController
     {
 
         $recipe = Recipe::find($id);
-            $comments = Comment::find_by_recipe_id($id);
-            $ingredients = Ingredient::find_by_recipe_id($id);
-            $keywords = Keyword::find_by_recipe_id($id);
+        $comments = Comment::find_by_recipe_id($id);
+        $ingredients = Ingredient::find_by_recipe_id($id);
+        $keywords = Keyword::find_by_recipe_id($id);
+        if ($recipe->chef_id == self::get_user_logged_in()->id) {
             View::make('recipe/edit.html', array('recipe' => $recipe, 'comments' => $comments, 'ingredients' => $ingredients, 'keywords' => $keywords));
+        } else {
+            Redirect::to('recipe/'.$id, array('error' => 'Vain reseptin tekijä voi muokata reseptiä'));
+        }
     }
 
     public static function update($id)
@@ -70,7 +88,7 @@ class RecipeController extends BaseController
 
         $validator = new \Valitron\Validator($params);
         $validator = self::validate_params_for_recipe($validator);
-        if ($validator->validate()) {
+        if ($validator->validate() && self::get_user_logged_in()->id == $recipe->chef_id) {
             self::make_changes_to_recipe($id, $params, $recipe);
 
             $recipe->update();
@@ -84,8 +102,12 @@ class RecipeController extends BaseController
     public static function destroy($id)
     {
         $recipe = Recipe::find($id);
-        $recipe->destroy();
-        Redirect::to('/recipe', array('message' => 'Resepti poistettu'));
+        if (self::get_user_logged_in()->id == $recipe->chef_id || self::get_user_logged_in()->admin) {
+            $recipe->destroy();
+            Redirect::to('/recipe', array('message' => 'Resepti poistettu'));
+        } else {
+            Redirect::to('/recipe/' . $id, array('error' => 'Reseptin voi poistaa vain reseptin luoja'));
+        }
     }
 
     public static function new_comment($id)
@@ -107,7 +129,7 @@ class RecipeController extends BaseController
 
     public static function delete_comment($id, $chef_id)
     {
-        if (self::get_user_logged_in()->id == $chef_id) {
+        if (self::get_user_logged_in()->id == $chef_id || self::get_user_logged_in()->admin) {
             Comment::delete_chefs_from_recipe($id, $chef_id);
             Redirect::to('/recipe/' . $id, array('message' => 'Kommentti poistettu!'));
         } else {

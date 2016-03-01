@@ -25,6 +25,7 @@ class ChefController extends BaseController
         if ($chef) {
             $recipes = Recipe::find_by_chef_id($chef->id);
             $comments = Comment::find_by_chef_id($chef->id);
+            $recipes_for_comments = array();
             foreach ($comments as $comment) {
                 $recipes_for_comments[$comment->recipe_id] = Recipe::find($comment->recipe_id);
             }

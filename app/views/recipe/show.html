@@ -4,18 +4,22 @@
 
     <h1>{{recipe.name}}</h1>
     <p>Reseptin luonut <a href="{{base_path}}/chef/{{chef.id}}">{{chef.name}}</a></p>
+    <p>
     {% if user_logged_in %}
         {% if user_logged_in.id == recipe.chef_id %}
-        <p>
             {{forms.edit_button(base_path, recipe.id)}}
-            {{forms.destroy_button(base_path, recipe.id)}}
-        </p>
         {% endif %}
+        {% if user_logged_in.id == recipe.chef_id or user_logged_in.admin %}
+            {{forms.destroy_button(base_path, recipe.id)}}
+        {% endif %}
+
     {% endif %}
+    </p>
     {% set sum_rating = 0%}
     {% for comment in comments%}
         {% set sum_rating = sum_rating + comment.rating%}
     {% endfor %}
+<br>
     <p>
         Arvosana
         {% if comments|length > 0%}
@@ -43,16 +47,17 @@
 <!--kommentit-->
     {% set chef_commented_yet = 0 %}
     {% for comment in comments %}
-        <form method="post" action="{{base_path}}/recipe/{{recipe.id}}/comment/{{user_logged_in.id}}/delete"
-            id="deleteComment"></form>
-        <ul>
-            <li id="{{comment.chef_id}}"><a href="{{base_path}}/chef/{{comment.chef_id}}"> {{comment.rating}}/5 {{comment.comment}}</a>
-                {% if user_logged_in.id == comment.chef_id %}
-                    {% set chef_commented_yet = 1 %}
+        <form method="post" id="deleteComment"></form>
+        <ul type="none">
+            <li id="{{comment.chef_id}}">&lt;<a href="{{base_path}}/chef/{{comment.chef_id}}">{{commentators[comment.chef_id].name}}</a>&gt; {{comment.rating}}/5 {{comment.comment}}
+                {% if user_logged_in and user_logged_in.id == comment.chef_id or user_logged_in.admin %}
+                    {% if user_logged_in and user_logged_in.id == comment.chef_id %}
+                        {% set chef_commented_yet = 1 %}
+                    {% endif %}
                     <!-- Kommentin muokkaus nyt vielä pois käytöstä-->
                     <!--<button id="editCommentButton" onclick="editComment()" class="btn btn-primary">Muokkaa</button>-->
                     <button form="deleteComment" formmethod="post"
-                        formaction="{{base_path}}/recipe/{{recipe.id}}/comment/{{user_logged_in.id}}/delete"
+                        formaction="{{base_path}}/recipe/{{recipe.id}}/comment/{{comment.chef_id}}/delete"
                         class="btn btn-danger">Poista
                     </button>
                 {% endif %}
