@@ -36,7 +36,7 @@
 
 <h2> Ainesosat </h2>
 <div class="row">
-    <ul class="list-group col-md-4" type="none">
+    <ul class="list-group col-md-5" type="none">
         {%for ingredient in ingredients%}
         <li class="list-group-item">{{ingredient.quantity}} {{ingredient.name}}</li>
         {% endfor %}
@@ -46,7 +46,7 @@
 <h2> Valmistusohjeet </h2>
 <div class="row">
 
-    <div class="panel panel-default col-md-4">
+    <div class="panel panel-default col-md-5">
         <div class="panel-body">
             {{recipe.directions}}
         </div>
@@ -54,29 +54,32 @@
 </div>
 <!--kommentit-->
 <h2>Kommentit</h2>
+<form method="post" id="deleteComment"></form>
 <div class="row">
-    <div class="panel panel-default col-md-4">
+    <div class="panel panel-default col-md-5">
         <div class="panel-body">
+            <table class="table">
+                <tbody>
             {% set chef_commented_yet = 0 %}
             {% for comment in comments %}
-            <form method="post" id="deleteComment"></form>
-            <ul type="none">
-                <li id="{{comment.chef_id}}">&lt;<a href="{{base_path}}/chef/{{comment.chef_id}}">{{commentators[comment.chef_id].name}}</a>&gt;
+
+                <tr> <td id="{{comment.chef_id}}">&lt;<a href="{{base_path}}/chef/{{comment.chef_id}}">{{commentators[comment.chef_id].name}}</a>&gt;
                     {{comment.rating}}/5 {{comment.comment}}
                     {% if user_logged_in and user_logged_in.id == comment.chef_id or user_logged_in.admin %}
                     {% if user_logged_in and user_logged_in.id == comment.chef_id %}
                     {% set chef_commented_yet = 1 %}
-                    {% endif %}
+                    {% endif %}</td>
                     <!-- Kommentin muokkaus nyt vielä pois käytöstä-->
                     <!--<button id="editCommentButton" onclick="editComment()" class="btn btn-primary">Muokkaa</button>-->
-                    <button form="deleteComment" formmethod="post"
+                    <td><button form="deleteComment" formmethod="post"
                             formaction="{{base_path}}/recipe/{{recipe.id}}/comment/{{comment.chef_id}}/delete"
-                            class="btn btn-danger">Poista
-                    </button>
+                            class="btn btn-danger col-md-offset-4"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>Poista
+                    </button></td>
                     {% endif %}
-                </li>
-            </ul>
+                </tr>
             {% endfor %}
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
@@ -86,10 +89,10 @@
 {% endif %}
 
 <h3>Hakusanat</h3>
+<ul class="nav nav-pills">
 {% for keyword in keywords %}
-<ul class="inline">
-    <li><a href="{{base_path}}/keyword/{{keyword.keyword}}">{{keyword.keyword}}</a></li>
-</ul>
+    <li role="presentation"><a href="{{base_path}}/keyword/{{keyword.keyword}}">{{keyword.keyword}}</a></li>
 {% endfor %}
+</ul>
 
 {% endblock %}
