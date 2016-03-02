@@ -107,11 +107,23 @@ class RecipeController extends BaseController
     public static function destroy($id)
     {
         $recipe = Recipe::find($id);
-        if (self::get_user_logged_in()->id == $recipe->chef_id || self::get_user_logged_in()->admin) {
+        if ($_SESSION['user'] == $recipe->chef_id || self::get_user_logged_in()->admin) {
             $recipe->destroy();
             Redirect::to('/recipe', array('message' => 'Resepti poistettu'));
         } else {
             Redirect::to('/recipe/' . $id, array('error' => 'Reseptin voi poistaa vain reseptin luoja'));
+        }
+    }
+
+    public static function delete_keyword($id, $keyword)
+    {
+        if ($_SESSION['user'] == Recipe::find($id)->chef_id) {
+            $keyword = Keyword::find_by_name($keyword);
+            $keyword->delete_from_recipe($id);
+
+            Redirect::to('/recipe/' . $id . '/edit', array('message' => 'Hakusana poistettu'));
+        } else {
+            Redirect::to('/recipe/' . $id, array('error' => 'Reseptin hakusanan voi poistaa vain reseptin luoja'));
         }
     }
 

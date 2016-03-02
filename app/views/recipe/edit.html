@@ -46,14 +46,23 @@
         <input class="form-control" name="cooking_time" value="{{recipe.cooking_time}}" type="text">
     </div>
 
+    {% set keywordCount = 0 %}
+    {% for keyword in keywords %}
     <div class="form-group">
-        {% set keywordCount = 1 %}
-        {% for keyword in keywords %}
-        <!--// TODO LISÄÄ POISTONAPPI MUIHIN PAITSI ENSIMMÄISEEN!! -->
-        <input disabled class="form-control" name="keyword[{{keywordCount}}]" value="{{keyword.keyword}}" type="text">
-        {% set keywordCount = keywordCount + 1 %}
-        {% endfor %}
+        <div class="input-group">
+            <input disabled class="form-control" name="keyword[{{keywordCount}}]" value="{{keyword.keyword}}"
+                   type="text">
+        <span class="input-group-btn">
+            <button formmethod="post"
+                    formaction="{{base_path}}/recipe/{{recipe.id}}/delete_keyword/{{keyword.keyword}}"
+                    class="btn btn-danger">
+                Poista Hakusana
+            </button>
+        </span>
+        </div>
     </div>
+    {% set keywordCount = keywordCount + 1 %}
+    {% endfor %}
     <span id="newKeyword"></span>
 
     <div class="form-group">
@@ -64,7 +73,8 @@
     <div class="form-group">
         <button type="submit" class="btn btn-primary">
             <span class="glyphicon glyphicon-floppy-disk"></span>
-                Tallenna</button>
+            Tallenna
+        </button>
         {{ forms.destroy_button(base_path,recipe.id)}}
     </div>
 </form>

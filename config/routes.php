@@ -96,6 +96,10 @@ $routes->post('/recipe/:id/edit', 'check_logged_in', function ($id) {
     RecipeController::update($id);
 });
 
+$routes->post('/recipe/:id/delete_keyword/:keyword', 'check_logged_in', function ($id, $keyword) {
+    RecipeController::delete_keyword($id, $keyword);
+});
+
 $routes->post('/recipe/:id/destroy', 'check_logged_in', function ($id) {
     RecipeController::destroy($id);
 });

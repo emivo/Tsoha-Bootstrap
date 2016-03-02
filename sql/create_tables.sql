@@ -4,6 +4,7 @@ id SERIAL PRIMARY KEY,
 admin BOOLEAN,
 active BOOLEAN,
 name TEXT UNIQUE NOT NULL,
+info TEXT,
 password TEXT NOT NULL
 );
 

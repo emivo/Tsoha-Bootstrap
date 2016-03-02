@@ -13,34 +13,6 @@
 <a class="btn btn-success" href="{{base_path}}/recipe/new">Lisää uusi resepti</a>
 {% endif %}
 <br>
+<h2> Viimeksi lisätyt reseptit </h2>
 {{ macro.recipes_table(base_path, recipes, chefs, comments_for_recipes, user_logged_in) }}
-
-<!--<table class="table table-striped">-->
-    <!--<thead>-->
-        <!--<tr>-->
-            <!--<th>Nimi</th>-->
-            <!--&lt;!&ndash;<th>Julkaisija</th>&ndash;&gt;-->
-            <!--<th>Lisäyspäivä</th>-->
-        <!--</tr>-->
-    <!--</thead>-->
-
-    <!--<tbody>-->
-        <!--{% for recipe in recipes %}-->
-        <!--<tr>-->
-            <!--<td><a href="{{base_path}}/recipe/{{recipe.id}}">{{recipe.name}}</a></td>-->
-            <!--&lt;!&ndash;            <td>{{recipe.chef_id}}</td>&ndash;&gt;-->
-            <!--<td>{{recipe.published}}</td>-->
-            <!--{% if user_logged_in.id == recipe.chef_id %}-->
-            <!--<td>-->
-                <!--{{ forms.edit_button(base_path,recipe.id)}}-->
-                <!--{{ forms.destroy_button(base_path,recipe.id)}}-->
-            <!--</td>-->
-            <!--{% else %}-->
-            <!--<td></td>-->
-            <!--{% endif %}-->
-        <!--</tr>-->
-        <!--{% endfor %}-->
-    <!--</tbody>-->
-<!--</table>-->
-
 {% endblock %}

@@ -3,7 +3,7 @@
 class Chef extends BaseModel
 {
 
-    public $id, $name, $active, $admin;
+    public $id, $name, $active, $admin, $info;
 
     public function __construct($attributes)
     {
@@ -62,16 +62,20 @@ class Chef extends BaseModel
         }
     }
 
-    public static function register($name, $password)
+    public static function register($name, $password, $info)
     {
         $query = DB::connection()
-            ->prepare("INSERT INTO Chef (name, admin, active, password) VALUES (:name, FALSE, TRUE, :password) RETURNING id");
+            ->prepare("INSERT INTO Chef (name, admin, active, info, password) "
+                . "VALUES (:name, FALSE, TRUE, :info, :password) "
+                . "RETURNING id");
 
         $password_digest = crypt($password, '$1$sillysalt$');
 
         $query->execute(array(
             'name' => $name,
-            'password' => $password_digest));
+            'password' => $password_digest,
+            'info' => $info
+        ));
 
         $row = $query->fetch();
 
@@ -89,7 +93,15 @@ class Chef extends BaseModel
             'name' => $row['name'],
             'active' => $row['active'],
             'admin' => $row['admin'],
+            'info' => $row['info']
         ));
+    }
+
+    public function update()
+    {
+        $query = DB::connection()
+            ->prepare("UPDATE Chef SET info = :info WHERE id = :id");
+        $query->execute(array('info' => $this->info, 'id' => $this->id));
     }
 
     public function update_password($password)
@@ -118,7 +130,8 @@ class Chef extends BaseModel
         $query->execute(array('id' => $this->id));
     }
 
-    public function toggle_activity() {
+    public function toggle_activity()
+    {
 //        if ($this->active) {
 //            $this->active = (bool) FALSE;
 //        } else {

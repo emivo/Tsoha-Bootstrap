@@ -2,7 +2,6 @@
 
 class Keyword extends BaseModel
 {
-// TODO Refactor lisää
     public $id, $keyword;
 
     public function __construct($attributes)
@@ -21,7 +20,7 @@ class Keyword extends BaseModel
         $keywords = array();
 
         foreach ($rows as $row) {
-            $keywords = self::find_keyword_for_juction_and_to_array($row, $keywords);
+            $keywords = self::find_keyword_for_junction_and_to_array($row, $keywords);
         }
 
         return $keywords;
@@ -51,18 +50,28 @@ class Keyword extends BaseModel
      * @param $keywords
      * @return array
      */
-    public static function find_keyword_for_juction_and_to_array($row, $keywords)
+    public static function find_keyword_for_junction_and_to_array($row, $keywords)
     {
         $keyword_query = DB::connection()
             ->prepare("SELECT * FROM Keyword WHERE id = :keyword_id");
         $keyword_query->execute(array('keyword_id' => $row['keyword_id']));
 
         $keyword = $keyword_query->fetch();
-        $keywords[] = new Keyword(array(
-            'id' => $keyword['id'],
-            'keyword' => $keyword['keyword']
-        ));
+        $keywords[] = self::new_keyword_from_row($keyword);
         return $keywords;
+    }
+
+    /**
+     * @param $row
+     * @return Keyword
+     */
+    public static function new_keyword_from_row($row)
+    {
+        $keyword = new Keyword(array(
+            'id' => $row['id'],
+            'keyword' => $row['keyword']
+        ));
+        return $keyword;
     }
 
     public function save($recipe_id)
@@ -86,9 +95,13 @@ class Keyword extends BaseModel
         $insert_query->execute(array('recipe_id' => $recipe_id, 'keyword_id' => $this->id));
     }
 
-    public static function find_by_name($string)
+    public static function find_by_name($keyword)
     {
-        throw Exception("Not supported yet");
+        $query = DB::connection()
+            ->prepare("SELECT * FROM Keyword WHERE keyword = :keyword LIMIT 1");
+        $query->execute(array('keyword' => $keyword));
+        $row = $query->fetch();
+        return self::new_keyword_from_row($row);
     }
 
     public static function delete_unused()
@@ -99,10 +112,7 @@ class Keyword extends BaseModel
         $rows = $query->fetchAll();
 
         foreach ($rows as $row) {
-            $keyword = new Keyword(array(
-                'id' => $row['id'],
-                'keyword' => $row['keyword']
-            ));
+            $keyword = self::new_keyword_from_row($row);
             if (is_null($keyword->find_recipes())) $keyword->delete();
         }
     }
@@ -112,6 +122,13 @@ class Keyword extends BaseModel
         $query_delete_keywords = DB::connection()
             ->prepare("DELETE FROM RecipeKeyword WHERE recipe_id = :id");
         $query_delete_keywords->execute(array('id' => $recipe_id));
+    }
+
+    public function delete_from_recipe($id) {
+        $query_delete_keywords = DB::connection()
+            ->prepare("DELETE FROM RecipeKeyword WHERE recipe_id = :id AND keyword_id = :key_id ");
+        $query_delete_keywords->execute(array('id' => $id, 'key_id' => $this->id));
+        self::delete_unused();
     }
 
     public function delete()

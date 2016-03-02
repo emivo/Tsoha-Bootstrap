@@ -38,7 +38,7 @@ class ChefController extends BaseController
 
 
         if ($validator->validate()) {
-            Chef::register($params['username'], $params['password']);
+            Chef::register($params['username'], $params['password'], $params['info']);
             Redirect::to('/', array('message' => 'Uusi käyttäjä luotu'));
         } else {
             $error = self::collect_errors($validator);
@@ -56,9 +56,11 @@ class ChefController extends BaseController
     {
         $params = $_POST;
         $validator = self::validate_params(new Valitron\Validator($params));
-
+//TODO VALIDOInti
         if ($validator->validate()) {
             $chef = self::get_user_logged_in();
+            $chef->info = $params['info'];
+            $chef->update();
             $chef->update_password($params['password']);
 
             Redirect::to('/', array('message' => 'Käyttäjätiedot päivitetty'));
@@ -72,7 +74,6 @@ class ChefController extends BaseController
     {
         $chef = self::get_user_logged_in();
         $chef->destroy();
-        // TODO varmistus, DONt drink and root
         Redirect::to('/', array('message' => 'Käyttäjä sekä käyttäjän reseptit, että kommentit poistettu'));
     }
 

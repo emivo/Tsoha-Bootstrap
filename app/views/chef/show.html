@@ -23,6 +23,9 @@
 </button>
 </p>
 {% endif %}
+<h2>Tietoja käyttjästä</h2>
+<p>{{chef.info}}
+    </p>
 {% if recipes|length > 0%}
     {{chef_macro.listrecipes(base_path, recipes)}}
 {% endif %}
