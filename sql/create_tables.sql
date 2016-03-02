@@ -10,7 +10,7 @@ password TEXT NOT NULL
 
 CREATE TABLE Recipe (
 id SERIAL PRIMARY KEY,
-chef_id INTEGER REFERENCES Chef(id),
+chef_id INTEGER REFERENCES Chef(id) ON DELETE CASCADE,
 name TEXT NOT NULL,
 cooking_time TEXT,
 directions TEXT,
@@ -18,8 +18,8 @@ published DATE
 );
 
 CREATE TABLE Comment ( 
-chef_id INTEGER REFERENCES Chef(id),
-recipe_id INTEGER REFERENCES Recipe(id),
+chef_id INTEGER REFERENCES Chef(id) ON DELETE CASCADE,
+recipe_id INTEGER REFERENCES Recipe(id) ON DELETE CASCADE,
 rating INTEGER NOT NULL,
 comment TEXT NOT NULL
 );
@@ -35,12 +35,12 @@ keyword TEXT
 );
 
 CREATE TABLE RecipeIngredient (
-recipe_id INTEGER REFERENCES Recipe(id),
-ingredient_id INTEGER REFERENCES Ingredient(id),
+recipe_id INTEGER REFERENCES Recipe(id) ON DELETE CASCADE,
+ingredient_id INTEGER REFERENCES Ingredient(id) ON DELETE CASCADE,
 quantity TEXT
 );
 
 CREATE TABLE RecipeKeyword (
-recipe_id INTEGER REFERENCES Recipe(id),
-keyword_id INTEGER REFERENCES Keyword(id)
+recipe_id INTEGER REFERENCES Recipe(id) ON DELETE CASCADE,
+keyword_id INTEGER REFERENCES Keyword(id) ON DELETE CASCADE
 );

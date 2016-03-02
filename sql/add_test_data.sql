@@ -40,14 +40,25 @@ VALUES ((SELECT id FROM Recipe WHERE name LIKE 'Perunamuussi'), (SELECT id FROM 
 INSERT INTO RecipeIngredient (recipe_id, ingredient_id, quantity)
 VALUES ((SELECT id FROM Recipe WHERE name LIKE 'Perunamuussi'), (SELECT id FROM Ingredient WHERE name LIKE 'voita'), '1 rkl');
 
-INSERT INTO Keyword (keyword) VALUES ('jälkiruoka');
-INSERT INTO Keyword (keyword) VALUES ('lisäke');
+INSERT INTO Keyword (keyword) VALUES ('Jälkiruoka');
+INSERT INTO Keyword (keyword) VALUES ('Pääruoka');
+INSERT INTO Keyword (keyword) VALUES ('Välipala');
+INSERT INTO Keyword (keyword) VALUES ('Muu');
+INSERT INTO Keyword (keyword) VALUES ('Alkuruoka');
+INSERT INTO Keyword (keyword) VALUES ('Lisäke');
 
 INSERT INTO RecipeKeyword (recipe_id, keyword_id)
-VALUES ((SELECT id FROM Recipe WHERE name LIKE 'Köyhät Ritarit'), (SELECT id FROM Keyword WHERE keyword LIKE 'jälkiruoka'));
+VALUES ((SELECT id FROM Recipe WHERE name LIKE 'Köyhät Ritarit'), (SELECT id FROM Keyword WHERE keyword LIKE 'Jälkiruoka'));
 
 INSERT INTO RecipeKeyword (recipe_id, keyword_id)
-VALUES ((SELECT id FROM Recipe WHERE name LIKE 'Perunamuussi'), (SELECT id FROM Keyword WHERE keyword LIKE 'lisäke'));
+VALUES ((SELECT id FROM Recipe WHERE name LIKE 'Perunamuussi'), (SELECT id FROM Keyword WHERE keyword LIKE 'Lisäke'));
+
+INSERT INTO RecipeKeyword (recipe_id, keyword_id)
+VALUES ((SELECT id FROM Recipe WHERE name LIKE 'Perunamuussi'), (SELECT id FROM Keyword WHERE keyword LIKE 'Muu'));
 
 INSERT INTO Comment (chef_id, recipe_id, rating, comment) VALUES ((SELECT id FROM Chef WHERE name LIKE 'admin'), (SELECT id FROM Recipe WHERE name LIKE 'Köyhät Ritarit'), 4, 'ei maistu salami');
+
+INSERT INTO Comment (chef_id, recipe_id, rating, comment) VALUES ((SELECT id FROM Chef WHERE name LIKE 'kallekoekokki'), (SELECT id FROM Recipe WHERE name LIKE 'Köyhät Ritarit'), 3, 'en ole makean ystävä');
+
+INSERT INTO Comment (chef_id, recipe_id, rating, comment) VALUES ((SELECT id FROM Chef WHERE name LIKE 'kallekoekokki'), (SELECT id FROM Recipe WHERE name LIKE 'Perunamuussi'), 5, 'Paras ikinä');
 
