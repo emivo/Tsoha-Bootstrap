@@ -14,10 +14,6 @@ class ChefController extends BaseController
         View::make('chef/index.html', array('chefs' => $chefs));
     }
 
-    /**
-     * Näytä yksittäinen käyttäjä. Jos katselee omaa profiilia mahdollisuus vaihtaa salasana
-     * @param $id
-     */
     public static function show($id)
     {
 
@@ -40,6 +36,7 @@ class ChefController extends BaseController
         $params = $_POST;
         $validator = self::validate_params(new Valitron\Validator($params));
 
+
         if ($validator->validate()) {
             Chef::register($params['username'], $params['password']);
             Redirect::to('/', array('message' => 'Uusi käyttäjä luotu'));
@@ -47,6 +44,12 @@ class ChefController extends BaseController
             $error = self::collect_errors($validator);
             Redirect::to('/register', array('error' => $error, 'username' => $params['username']));
         }
+    }
+
+    public static function edit()
+    {
+        $chef = self::get_user_logged_in();
+        View::make('chef/edit.html', array('chef' => $chef));
     }
 
     public static function update()
@@ -88,7 +91,14 @@ class ChefController extends BaseController
 
     protected static function validate_params($validator)
     {
-        $validator->rule('required', array('username', 'password', 'password_confirm'))->message('');
+        $validator->rule('required', array('username', 'password', 'password_confirm'))->message('Täytä vaadittavat kentät');
+        $validator->rule('slug', 'username')->message('Käyttäjänimeen vain a-z, 0-9, -, _, merkkejä');
+        $chefs = Chef::all();
+        $chefnames = array();
+        foreach ($chefs as $chef) {
+            $chefnames[] = $chef->name;
+        }
+        $validator->rule('notIn', 'username', $chefnames)->message('Käyttäjänimi on jo olemassa');
         $validator->rule('lengthMin', 'username', 4)->message('Käyttäjänimen tulee olla vähintää 4 merkkiä');
         $validator->rule('lengthMin', 'password', 4)->message('Salasanan tulee myös olla vähintään 4 merkkiä');
         $validator->rule('equals', 'password', 'password_confirm')->message('Salasana ei täsmää');

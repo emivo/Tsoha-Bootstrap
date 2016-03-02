@@ -1,19 +1,20 @@
 {% extends "base.html" %}
 {% block content %}
 <h1>Lisää uusi resepti</h1>
+<p>Täytä kaikki tähdellä merkityt</p>
 <form method="post" action="{{base_path}}/recipe">
     <div class="form-group">
-        <label>Nimi</label>
+        <label>Nimi <span class="badge"><span class="glyphicon glyphicon-asterisk" aria-disabled="true"></span></span></label>
         <input name="name" class="form-control" type="text">
     </div>
     <div class="form-group">
         <table>
             <tr>
                 <td>
-                    <label>Määrä</label>
+                    <label>Määrä <span class="badge"><span class="glyphicon glyphicon-asterisk" aria-disabled="true"></span></span></label>
                 </td>
                 <td>
-                    <label>Ainesosa</label>
+                    <label>Ainesosa <span class="badge"><span class="glyphicon glyphicon-asterisk" aria-disabled="true"></span></span></label>
                 </td>
             </tr>
             <tr>
@@ -26,41 +27,6 @@
             </tr>
         </table>
     </div>
-    <script>
-        var indexCount = 1;
-        function newInput() {
-            var quantityElement = document.createElement("input");
-            var ingredientElement = document.createElement("input");
-            var tableElement = document.createElement("table");
-            var tr = document.createElement("tr");
-            var td1 = document.createElement("td");
-            var td2 = document.createElement("td");
-
-            tableElement.setAttribute("class", 'form-group');
-
-            ingredientElement.setAttribute("type", 'text');
-            quantityElement.setAttribute("type", 'text');
-
-            var quantityField = "quantity[" + indexCount + "]";
-            var ingredientField = "ingredient[" + indexCount++ + "]";
-
-            ingredientElement.setAttribute("name", ingredientField);
-            ingredientElement.setAttribute("class", 'form-control');
-
-            quantityElement.setAttribute("name", quantityField);
-            quantityElement.setAttribute("class", 'form-control');
-            td1.appendChild(quantityElement);
-            td2.appendChild(ingredientElement);
-
-            tr.appendChild(td1);
-            tr.appendChild(td2);
-            tableElement.appendChild(tr);
-
-
-            var ingredientElement = document.getElementById("newIngredient");
-
-            ingredientElement.appendChild(tableElement);
-        }</script>
 
     <span id="newIngredient"></span>
     <div class="form-group">
@@ -68,43 +34,31 @@
     </div>
 
     <div class="form-group">
-        <label>Valmistusohje</label>
+        <label>Valmistusohje <span class="badge"><span class="glyphicon glyphicon-asterisk" aria-disabled="true"></span></span></label>
         <textarea name="directions" class="form-control"></textarea>
     </div>
     <div class="form-group">
-        <label>Valmistusaika</label>
+        <label>Valmistusaika <span class="badge"><span class="glyphicon glyphicon-asterisk" aria-disabled="true"></span></span></label>
         <input name="cooking_time" class="form-control" type="text">
     </div>
     <div class="form-group">
-        <label>Hakusana</label>
-        <input name="keyword[0]" class="form-control" type="text">
+        <label>Hakusanat <span class="badge"><span class="glyphicon glyphicon-asterisk" aria-disabled="true"></span></span></label>
+        <select name="keyword[0]" class="form-control">
+            <option>Alkuruoka</option>
+            <option>Pääruoka</option>
+            <option>Jälkiruoka</option>
+            <option>Välipala</option>
+            <option>Muu</option>
+        </select>
     </div>
-    <script>
-        var indexCount = 1;
-        function newKeywordInput() {
-            var parentElement = document.createElement("div");
-            parentElement.setAttribute("class", 'form-group');
-            var element = document.createElement("input");
 
-            element.setAttribute("type", 'text');
-
-            var ingredientField = "keyword[" + indexCount++ + "]";
-
-            element.setAttribute("name", ingredientField);
-            element.setAttribute("class", 'form-control');
-
-            var ingredientElement = document.getElementById("newKeyword");
-            parentElement.appendChild(element);
-            ingredientElement.appendChild(parentElement);
-        }
-    </script>
     <span id="newKeyword"></span>
     <div class="form-group">
-        <button type="button" onclick="newKeywordInput()" class="btn btn-success">Lisää hakusana</button>
+        <button type="button" onclick="newKeywordInput(1)" class="btn btn-success">Lisää hakusana</button>
     </div>
-    
+
     <div class="form-group">
-        <button type="submit" class="btn btn-primary">Tallenna</button>
+        <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-save" aria-disabled="true"></span> Tallenna</button>
     </div>
 </form>
 {% endblock %}

@@ -54,36 +54,42 @@
 </div>
 <!--kommentit-->
 <h2>Kommentit</h2>
-<form method="post" id="deleteComment"></form>
-<!--TODO ÄLÄ TEE PANEELIA JOS EI KOMMENTTEJA-->
+<form method="post" id="deleteComment" name="destroy" data-confirm="Haluatko varmasti poistaa kommentin?"></form>
+{% if comments|length > 0 %}
 <div class="row">
     <div class="panel panel-default col-md-5">
         <div class="panel-body">
             <table class="table">
                 <tbody>
-            {% set chef_commented_yet = 0 %}
-            {% for comment in comments %}
+                {% set chef_commented_yet = 0 %}
+                {% for comment in comments %}
 
-                <tr> <td id="{{comment.chef_id}}">&lt;<a href="{{base_path}}/chef/{{comment.chef_id}}">{{commentators[comment.chef_id].name}}</a>&gt;
-                    {{comment.rating}}/5 {{comment.comment}}
-                    {% if user_logged_in and user_logged_in.id == comment.chef_id or user_logged_in.admin %}
-                    {% if user_logged_in and user_logged_in.id == comment.chef_id %}
-                    {% set chef_commented_yet = 1 %}
-                    {% endif %}</td>
+                <tr>
+                    <td id="{{comment.chef_id}}">&lt;<a href="{{base_path}}/chef/{{comment.chef_id}}">{{commentators[comment.chef_id].name}}</a>&gt;
+                        {{comment.rating}}/5 {{comment.comment}}
+                        {% if user_logged_in and user_logged_in.id == comment.chef_id or user_logged_in.admin %}
+                        {% if user_logged_in and user_logged_in.id == comment.chef_id %}
+                        {% set chef_commented_yet = 1 %}
+                        {% endif %}
+                    </td>
                     <!-- Kommentin muokkaus nyt vielä pois käytöstä-->
                     <!--<button id="editCommentButton" onclick="editComment()" class="btn btn-primary">Muokkaa</button>-->
-                    <td><button form="deleteComment" formmethod="post"
-                            formaction="{{base_path}}/recipe/{{recipe.id}}/comment/{{comment.chef_id}}/delete"
-                            class="btn btn-danger col-md-offset-4"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>Poista
-                    </button></td>
+                    <td>
+                        <button form="deleteComment" formmethod="post"
+                                formaction="{{base_path}}/recipe/{{recipe.id}}/comment/{{comment.chef_id}}/delete"
+                                class="btn btn-danger col-md-offset-4"><span class="glyphicon glyphicon-remove"
+                                                                             aria-hidden="true"></span>Poista
+                        </button>
+                    </td>
                     {% endif %}
                 </tr>
-            {% endfor %}
+                {% endfor %}
                 </tbody>
             </table>
         </div>
     </div>
 </div>
+{% endif %}
 {% if user_logged_in and chef_commented_yet == 0 %}
 <!-- kommentin lisäyskenttä jos ei ole vielä kommentoinut -->
 {{forms.new_comment(base_path, recipe.id)}}
@@ -91,9 +97,9 @@
 
 <h3>Hakusanat</h3>
 <ul class="nav nav-pills">
-{% for keyword in keywords %}
+    {% for keyword in keywords %}
     <li role="presentation"><a href="{{base_path}}/keyword/{{keyword.keyword}}">{{keyword.keyword}}</a></li>
-{% endfor %}
+    {% endfor %}
 </ul>
 
 {% endblock %}

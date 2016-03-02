@@ -1,10 +1,11 @@
-{% macro recipes_table(base_path, recipes, chefs, user_logged_in) %}
+{% macro recipes_table(base_path, recipes, chefs, comments_for_recipes, user_logged_in) %}
 {% import "macros/_forms.html" as forms %}
 <table class="table table-striped">
     <thead>
         <tr>
             <th>Nimi</th>
             <th>Julkaisija</th>
+            <th>Arvosana</th>
             <th>Lisäyspäivä</th>
             <th></th>
         </tr>
@@ -15,6 +16,19 @@
         <tr>
             <td><a href="{{base_path}}/recipe/{{recipe.id}}">{{recipe.name}}</a></td>
                         <td><a href="{{base_path}}/chef/{{recipe.chef_id}}">{{chefs[recipe.chef_id].name}}</a></td>
+            {% set sum_ratings = 0 %}
+            {% for comments in comments_for_recipes[recipe.id] %}
+                {% for comment in comments %}
+                    {% set sum_ratings = sum_ratings + comment.rating %}
+                {% endfor %}
+            {% endfor %}
+            <td>
+                {% if comments_for_recipes[recipe.id][recipe.id]|length > 0 %}
+                    {{ sum_ratings/comments_for_recipes[recipe.id][recipe.id]|length }}/5
+                {% else %}
+                    ei arvosteltu
+                {% endif %}
+            </td>
             <td>{{recipe.published}}</td>
             {% if user_logged_in.id == recipe.chef_id %}
             <td>
@@ -28,4 +42,5 @@
         {% endfor %}
     </tbody>
 </table>
+
 {% endmacro %}

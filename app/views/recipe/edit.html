@@ -2,7 +2,7 @@
 {% block content %}
 {% import "macros/_forms.html" as forms %}
 <h1>Muokkaa reseptiä</h1>
-<form method="post", action="{{base_path}}/recipe/{{recipe.id}}/edit">
+<form method="post" , action="{{base_path}}/recipe/{{recipe.id}}/edit">
     <div class="form-group">
         <label>Nimi</label>
         <input class="form-control" name="name" value="{{recipe.name}}" type="text">
@@ -22,38 +22,18 @@
             {% for ingredient in ingredients %}
             <tr>
                 <td>
-                    <input class="form-control" name="quantity[{{ingredientCount}}]" value="{{ingredient.quantity}}" type="text">
+                    <input class="form-control" name="quantity[{{ingredientCount}}]" value="{{ingredient.quantity}}"
+                           type="text">
                 </td>
                 <td>
-                    <input class="form-control" name="ingredient[{{ingredientCount}}]" value="{{ingredient.name}}" type="text">
+                    <input class="form-control" name="ingredient[{{ingredientCount}}]" value="{{ingredient.name}}"
+                           type="text">
                 </td>
             </tr>
             {% set ingredientCount = ingredientCount + 1 %}
             {% endfor %}
         </table>
     </div>
-    <!--tämä osa pidetään vielä hetken pois käytöstä eli ainesosia ei voi enää lisätä reseptiin-->
-<!--    <script>
-        var optionCount = 0;
-        function newInput() {
-
-            var element = document.createElement("input");
-            var label = document.createElement("label");
-            label.innerHTML = "Ainesosa " + optionCount++;
-            element.setAttribute("type", 'text');
-            element.setAttribute("value", '');
-            element.setAttribute("class", 'form-control');
-
-
-            var ingredientElement = document.getElementById("fooBar");
-            ingredientElement.appendChild(label);
-            ingredientElement.appendChild(element);
-        }</script>
-
-    <span id="fooBar"></span>
-    <div class="form-group">
-        <button type="button" onclick="newInput()" class="btn btn-success">Lisää ainesosa</button>
-    </div>-->
 
     <div class="form-group">
         <label>Valmistusohje</label>
@@ -67,8 +47,25 @@
     </div>
 
     <div class="form-group">
-        <button type="submit" class="btn btn-primary">Tallenna</button>
+        {% set keywordCount = 1 %}
+        {% for keyword in keywords %}
+        <!--// TODO LISÄÄ POISTONAPPI MUIHIN PAITSI ENSIMMÄISEEN!! -->
+        <input disabled class="form-control" name="keyword[{{keywordCount}}]" value="{{keyword.keyword}}" type="text">
+        {% set keywordCount = keywordCount + 1 %}
+        {% endfor %}
+    </div>
+    <span id="newKeyword"></span>
+
+    <div class="form-group">
+        <button type="button" onclick="newKeywordInput(0)" class="btn btn-success">Lisää hakusana</button>
+    </div>
+
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">
+            <span class="glyphicon glyphicon-floppy-disk"></span>
+                Tallenna</button>
+        {{ forms.destroy_button(base_path,recipe.id)}}
     </div>
 </form>
-{{ forms.destroy_button(base_path,recipe.id)}}
 {% endblock %}

@@ -1,19 +1,37 @@
 {% macro listrecipes(base_path, recipes) %}
 <h2>Reseptit</h2>
-{% for recipe in recipes %}
-<ul>
-    <li><a href="{{base_path}}/recipe/{{recipe.id}}">{{recipe.name}}</a></li>
-</ul>
-{% endfor %}
+<div class="row">
+            <ul class="list-group col-md-5" type="none">
+                {% for recipe in recipes %}
+                <li class="list-group-item"><a href="{{base_path}}/recipe/{{recipe.id}}">{{recipe.name}}</a></li>
+                {% endfor %}
+            </ul>
+</div>
 {% endmacro %}
 
 {% macro listcomments(base_path, recipes_for_comments, comments) %}
 <h2>Kommentit</h2>
-<ul type="none">
-    <!--TODO lisää linkki tai reseptin nimi-->
-    {% for comment in comments %}
-    <li><a href="{{base_path}}/recipe/{{comment.recipe_id}}">{{attribute(recipes_for_comments, comment.recipe_id).name}}</a>: {{comment.rating}}/5 {{comment.comment}}</li>
-    {% endfor %}
-</ul>
+<div class="row">
+    <div class="panel panel-default col-md-5">
+        <div class="panel-body">
+            <table class="table">
+                <tbody>
+                {% for comment in comments %}
+                <tr>
+                    <td>
+                        <a href="{{base_path}}/recipe/{{comment.recipe_id}}">
+                            {{attribute(recipes_for_comments,comment.recipe_id).name}}
+                        </a>
+                    </td>
+                    <td>
+                        {{comment.rating}}/5 {{comment.comment}}
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 
 {% endmacro %}

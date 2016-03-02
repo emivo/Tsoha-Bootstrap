@@ -70,7 +70,7 @@ class Recipe extends BaseModel
                 . "JOIN Keyword ON Keyword.id = RecipeKeyword.keyword_id "
                 . "JOIN RecipeIngredient ON Recipe.id = RecipeIngredient.recipe_id JOIN Ingredient ON Ingredient.id = RecipeIngredient.ingredient_id "
                 . "WHERE Recipe.name LIKE :search OR Keyword.keyword LIKE :search OR Ingredient.name LIKE :search");
-        // TODO VALIDATE STRING
+        // TODO VALIDATE STRING ehkä
         $string = "%" . $string . "%";
 //        $validator = new Valitron\Validator($string);
 //        $validator->addRule($string, $validator);

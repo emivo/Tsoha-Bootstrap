@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+{% if chef == user_logged_in %}
+<h1>Muokkaa tietoja</h1>
+
+<form method="post">
+    <div class="form-group">
+        <label>Käyttäjätunnus</label>
+        <input class="form-control" id="disabledInput" name="username" value="{{chef.name}}" type="text" disabled>
+    </div>
+<!--TODO Add more forms-->
+    <div class="form-group">
+        <label>Uusi salasana</label>
+        <input class="form-control" name="password" type="password">
+    </div>
+    <div class="form-group">
+        <label>Salasana uudelleen</label>
+        <input class="form-control" name="password_confirm" type="password">
+    </div>
+
+    <button formaction="{{base_path}}/my_profile" type="submit" class="btn btn-danger">Tallenna</button>
+    <button form="destroy" formaction="{{base_path}}/my_profile/destroy" type="submit" class="btn btn-danger"><span class="glyphicon glyphicon-remove"
+                                                                                                                    aria-hidden="true"></span> Poista käyttäjätunnus
+    </button>
+</form>
+<form id="destroy" name="destroy" method="post" data-confirm="Käyttäjän poistaminen poistaa kaikki käyttäjän reseptit sekä kommentit!"></form>
+{% endif %}
+{% endblock %}

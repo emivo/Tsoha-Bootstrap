@@ -30,9 +30,14 @@
     private static function get_twig(){
       Twig_Autoloader::register();
 
+      // TODO MUISTA OTTAA DEBUGGERI POIS LOPUKSI
       $twig_loader = new Twig_Loader_Filesystem('app/views');
+      $twig = new Twig_Environment($twig_loader, array(
+          'debug' => true
+      ));
+      $twig->addExtension(new Twig_Extension_Debug());
 
-      return new Twig_Environment($twig_loader);
+      return $twig;
     }
 
     private static function set_flash_message(&$content){

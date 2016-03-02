@@ -7,8 +7,12 @@ class RecipeController extends BaseController
     {
         $recipes = Recipe::all();
         $chefs = self::find_chefs($recipes);
+        $comments_for_recipes = array();
+        foreach ($recipes as $recipe) {
+            $comments_for_recipes[$recipe->id][$recipe->id] = Comment::find_by_recipe_id($recipe->id);
+        }
 
-        View::make('recipe/index.html', array('recipes' => $recipes, 'chefs' => $chefs));
+        View::make('recipe/index.html', array('recipes' => $recipes, 'comments_for_recipes' => $comments_for_recipes, 'chefs' => $chefs));
     }
 
     public static function find_chefs($recipes)
@@ -56,8 +60,9 @@ class RecipeController extends BaseController
             ** Seuraavat tallentavat vain validit komponentit.
             ** Invalidit vain ohitetaan ja resepti tallentuu niistä huolimatta
             */
+// TODO AINAKIN YKSI VALIDI PITÄS VARMAAN OLLA SIIS SIIRRÄ ENSIN TÄÄ
             self::create_and_store_ingredients($params, $recipe_id);
-
+            // KEYWORDS EI NIIN V*LIÄ
             self::create_and_store_keywords($params, $recipe_id);
 
             Redirect::to('/recipe/' . $recipe->id, array('message' => 'Resepti on julkaistu'));
@@ -77,7 +82,7 @@ class RecipeController extends BaseController
         if ($recipe->chef_id == self::get_user_logged_in()->id) {
             View::make('recipe/edit.html', array('recipe' => $recipe, 'comments' => $comments, 'ingredients' => $ingredients, 'keywords' => $keywords));
         } else {
-            Redirect::to('recipe/'.$id, array('error' => 'Vain reseptin tekijä voi muokata reseptiä'));
+            Redirect::to('recipe/' . $id, array('error' => 'Vain reseptin tekijä voi muokata reseptiä'));
         }
     }
 
@@ -178,11 +183,7 @@ class RecipeController extends BaseController
     protected static function create_and_store_keywords($params, $recipe_id)
     {
         foreach ($params['keyword'] as $word) {
-            $keyword = new Keyword(array(
-                'keyword' => $word));
-            if (strlen($keyword->keyword) > 1) {
-                $keyword->save($recipe_id);
-            }
+            self::save_new_keyword($recipe_id, $word);
         }
     }
 
@@ -199,11 +200,11 @@ class RecipeController extends BaseController
             'directions',
             'ingredient',
             'quantity'
-        ))->message('');
+        ))->message('Täytä vaadittavat kentät');
 
         $validator->rule('lengthMin', 'name', 2)->message('Nimen tulee olla vähintään 2 merkkiä');
         $validator->rule('lengthMin', 'cooking_time', 2)->message('Valmistusaika tulee olla vähintään 2 merkkiä');
-        $validator->rule('lengthMin', 'directions', 2)->message('Ohjeiden tulee olla vähintään 2 merkkiä');
+        $validator->rule('lengthMin', 'directions', 4)->message('Ohjeiden tulee olla vähintään 4 merkkiä');
         return $validator;
     }
 
@@ -214,6 +215,7 @@ class RecipeController extends BaseController
     protected static function validate_ingredient($ingredient)
     {
         $validator = new Valitron\Validator(array('name' => $ingredient->name, 'quantity' => $ingredient));
+        //TODO muuta että tyhjät ohitetaan
         $validator->rule('required', array(0 => 'name', 1 => 'quantity'))->message('');
         $validator->rule('lengthMin', 'name', 3)->message('Ainesosan nimen pituus tulee olla vähintään 3 merkkiä');
         $validator->rule('lengthMin', 'quantity', 1)->message("Määrän tulee vähintään olla yksi merkki");
@@ -263,6 +265,10 @@ class RecipeController extends BaseController
             if ($ingredient) $validator = self::validate_ingredient($ingredient);
             if ($validator->validate()) $ingredient->update();
         }
+        foreach ($params['keywordNew'] as $word) {
+            // TODO VALIDOINTI paremmaksi
+            self::save_new_keyword($recipe->id, $word);
+        }
     }
 
     /**
@@ -279,6 +285,19 @@ class RecipeController extends BaseController
             'rating' => $params['rating'],
             'comment' => $params['comment']
         ));
+    }
+
+    /**
+     * @param $recipe
+     * @param $word
+     */
+    public static function save_new_keyword($recipe_id, $word)
+    {
+        $keyword = new Keyword(array(
+            'keyword' => $word));
+        if (strlen($keyword->keyword) > 1) {
+            $keyword->save($recipe_id);
+        }
     }
 
 }

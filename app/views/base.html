@@ -39,6 +39,22 @@
             <ul class="nav navbar-nav">
                 <li><a href="{{base_path}}/chefs/index"/>Käyttäjät</a></li>
             </ul>
+            <ul class="nav navbar-nav">
+                <li role="presentation" class="dropdown">
+                    <a class=" dropdown-toggle" href="#" role="button"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Kategoriat
+                        <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-left">
+                        <li><a href="{{base_path}}/keyword/Alkuruoka">Alkuruoka</a></li>
+                        <li><a href="{{base_path}}/keyword/Pääruoka">Pääruoka</a></li>
+                        <li><a href="{{base_path}}/keyword/Jälkiruoka">Jälkiruoka</a></li>
+                        <li><a href="{{base_path}}/keyword/Välipala">Välipala</a></li>
+                        <li><a href="{{base_path}}/keyword/Muu">Muu</a></li>
+                    </ul>
+                </li>
+            </ul>
             {% if user_logged_in %}
             <ul class="nav navbar-nav navbar-left">
                 <li><a href="{{base_path}}/recipe/new">Lisää uusi resepti</a></li>
@@ -51,11 +67,12 @@
                             <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-left">
-                            <li><button class="btn-link" form="logout" formmethod="get" formaction="{{base_path}}/my_profile">Oma tili</button></li>
-                            <li><button class="btn-link" form="logout" formmethod="post" formaction="{{base_path}}/logout">Kirjaudu ulos</button></li>
+                            <li><button class="btn-link" form="dropdownButtons" formmethod="get" formaction="{{base_path}}/my_profile">Oma tili</button></li>
+                            <li><button class="btn-link" form="dropdownButtons" formmethod="get" formaction="{{base_path}}/my_profile/edit">Muokkaa tietoja</button></li>
+                            <li><button class="btn-link" form="dropdownButtons" formmethod="post" formaction="{{base_path}}/logout">Kirjaudu ulos</button></li>
                         </ul>
                 </li>
-                <form id="logout"></form>
+                <form id="dropdownButtons"></form>
             </ul>
             {% else %}
             <ul class="nav navbar-nav navbar-right">
@@ -86,7 +103,7 @@
 
     {% if error %}
     <div class="alert alert-warning">
-        {{error}}
+        {{error|nl2br}}
     </div>
     {% endif %}
 

@@ -44,6 +44,10 @@ $routes->get('/my_profile', 'check_logged_in', function () {
     ChefController::show(BaseController::get_user_logged_in()->id);
 });
 
+$routes->get('/my_profile/edit', 'check_logged_in', function () {
+    ChefController::edit();
+});
+
 $routes->post('/my_profile', 'check_logged_in', function () {
     ChefController::update();
 });

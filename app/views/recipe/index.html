@@ -13,7 +13,8 @@
 <a class="btn btn-success" href="{{base_path}}/recipe/new">Lisää uusi resepti</a>
 {% endif %}
 <br>
-{{ macro.recipes_table(base_path, recipes, chefs, user_logged_in) }}
+{{ macro.recipes_table(base_path, recipes, chefs, comments_for_recipes, user_logged_in) }}
+
 <!--<table class="table table-striped">-->
     <!--<thead>-->
         <!--<tr>-->
