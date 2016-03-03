@@ -34,14 +34,14 @@ class ChefController extends BaseController
     public static function store()
     {
         $params = $_POST;
-        $validator = self::validate_params(new Valitron\Validator($params));
+        $validator = self::validate_params(new Valitron\Validator($params), false);
 
 
         if ($validator->validate()) {
             Chef::register($params['username'], $params['password'], $params['info']);
             Redirect::to('/', array('message' => 'Uusi käyttäjä luotu'));
         } else {
-            $error = self::collect_errors($validator);
+            $error = self::combine_errors_to_single_string($validator);
             Redirect::to('/register', array('error' => $error, 'username' => $params['username']));
         }
     }
@@ -55,66 +55,98 @@ class ChefController extends BaseController
     public static function update()
     {
         $params = $_POST;
-        $validator = self::validate_params(new Valitron\Validator($params));
+        $validator = self::validate_params(new Valitron\Validator($params), true);
 //TODO VALIDOInti
         if ($validator->validate()) {
             $chef = self::get_user_logged_in();
             $chef->info = $params['info'];
-            $chef->update();
-            $chef->update_password($params['password']);
+            $chef->update_info();
+            if (strlen($params['password'] > 3)) {
+                $chef->update_password($params['password']);
+            }
 
             Redirect::to('/', array('message' => 'Käyttäjätiedot päivitetty'));
         } else {
-            $error = self::collect_errors($validator);
-            Redirect::to('/chef/my_profile', array('error' => $error));
+            $error = self::combine_errors_to_single_string($validator);
+            Redirect::to('/my_profile/edit', array('error' => $error));
         }
     }
 
     public static function destroy()
     {
         $chef = self::get_user_logged_in();
-        $chef->destroy();
-        Redirect::to('/', array('message' => 'Käyttäjä sekä käyttäjän reseptit, että kommentit poistettu'));
+        if ($chef->admin) {
+            Redirect::to('/', array('error' => 'Ylläpitäjää ei voi poistaa'));
+        } else {
+            $chef->destroy();
+            Redirect::to('/', array('message' => 'Käyttäjä sekä käyttäjän reseptit, että kommentit poistettu'));
+        }
     }
 
     public static function toggle_activity($id)
     {
 
         $chef = Chef::find($id);
-        $chef->toggle_activity();
-        if ($chef->active) {
-            Redirect::to('/chef/' . $id, array('message' => 'Käyttäjän esto poistettu'));
+        if ($chef) {
+            if ($chef->admin) {
+                Redirect::to('/', array('error' => 'Ylläpitäjää ei voi estää'));
+            } else {
+                $chef->toggle_activity();
+                if ($chef->active) {
+                    Redirect::to('/chef/' . $id, array('message' => 'Käyttäjän esto poistettu'));
+                } else {
+                    Redirect::to('/chef/' . $id, array('message' => 'Käyttäjä estetty'));
+                }
+            }
         } else {
-            Redirect::to('/chef/' . $id, array('message' => 'Käyttäjä estetty'));
+            Redirect::to('/', array('error' => 'Käyttäjää ei ole'));
+        }
+    }
+
+    public static function toggle_admin_status($id)
+    {
+        $chef = Chef::find($id);
+        if ($chef) {
+            // TODO admin nimeseltä ei voi poistaa
+            $chef->toggle_admin_status();
+            if ($chef->admin) {
+                Redirect::to('/chef/' . $id, array('message' => 'Käyttäjällä on nyt ylläpito-oikeudet'));
+            } else {
+                Redirect::to('/chef/' . $id, array('message' => 'Käyttäjän oikeudet poistettu'));
+            }
+        } else {
+            Redirect::to('/', array('error' => 'Käyttäjää ei ole'));
         }
     }
 
 
-    protected static function validate_params($validator)
+    /**
+     * @param $validator
+     * @param bool $update
+     * @return \Valitron\Validator
+     */
+    protected static function validate_params($validator, $update = false)
     {
-        $validator->rule('required', array('username', 'password', 'password_confirm'))->message('Täytä vaadittavat kentät');
-        $validator->rule('slug', 'username')->message('Käyttäjänimeen vain a-z, 0-9, -, _, merkkejä');
-        $chefs = Chef::all();
-        $chefnames = array();
-        foreach ($chefs as $chef) {
-            $chefnames[] = $chef->name;
+        if (!$update) {
+            $validator->rule('required', array('username', 'password', 'password_confirm'))->message('Täytä vaadittavat kentät');
+            $validator->rule('slug', 'username')->message('Käyttäjänimeen vain a-z, 0-9, -, _, merkkejä');
+            $chefs = Chef::all();
+            $chefnames = array();
+            foreach ($chefs as $chef) {
+                $chefnames[] = $chef->name;
+            }
+            $validator->rule('notIn', 'username', $chefnames)->message('Käyttäjänimi on jo olemassa');
+            $validator->rule('lengthMin', 'username', 4)->message('Käyttäjänimen tulee olla vähintää 4 merkkiä');
+            $validator->rule('lengthMax', 'username', 20)->message('Käyttäjänimi enintään 20 merkkiä');
         }
-        $validator->rule('notIn', 'username', $chefnames)->message('Käyttäjänimi on jo olemassa');
-        $validator->rule('lengthMin', 'username', 4)->message('Käyttäjänimen tulee olla vähintää 4 merkkiä');
-        $validator->rule('lengthMin', 'password', 4)->message('Salasanan tulee myös olla vähintään 4 merkkiä');
+        $validator->rule('lengthMin', 'password', 4)->message('Salasanan tulee olla vähintään 4 merkkiä');
+        $validator->rule('lengthMax', 'password', 72)->message('Salasana enintään 72 merkkiä');
         $validator->rule('equals', 'password', 'password_confirm')->message('Salasana ei täsmää');
+
+        $validator->rule('required', 'info')->message('Täytä tietoja kenttä');
+        $validator->rule('lengthMin', 'info', 4)->message('Tietojen tulee olla vähintään 4 merkkiä');
+        $validator->rule('lengthMax', 'info', 200)->message('Tietojen tulee olla enintään 200 merkkiä');
+
         return $validator;
     }
-
-    public static function collect_errors($validator)
-    {
-        $error = 'Virhe';
-        foreach ($validator->errors() as $errors_in_errors) {
-            foreach ($errors_in_errors as $err) {
-                $error = $error . ".\n" . $err;
-            }
-        }
-        return $error;
-    }
-
 }

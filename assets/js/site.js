@@ -71,8 +71,8 @@ function newKeywordInput(option) {
     parentElement.appendChild(element);
     ingredientElement.appendChild(parentElement);
 }
-function newInput() {
-    var indexCount = 1;
+function newInput(option) {
+    var indexCount = option;
     var quantityElement = document.createElement("input");
     var ingredientElement = document.createElement("input");
     var tableElement = document.createElement("table");
@@ -84,9 +84,15 @@ function newInput() {
 
     ingredientElement.setAttribute("type", 'text');
     quantityElement.setAttribute("type", 'text');
+    var qFieldName = "quantity";
+    var iFieldName = "ingredient";
+    if (option == 0) {
+        qFieldName += "New";
+        iFieldName += "New";
+    }
 
-    var quantityField = "quantity[" + indexCount + "]";
-    var ingredientField = "ingredient[" + indexCount++ + "]";
+    var quantityField = qFieldName + "[" + indexCount + "]";
+    var ingredientField = iFieldName + "[" + indexCount++ + "]";
 
     ingredientElement.setAttribute("name", ingredientField);
     ingredientElement.setAttribute("class", 'form-control');

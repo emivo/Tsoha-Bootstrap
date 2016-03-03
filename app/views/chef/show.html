@@ -2,34 +2,53 @@
 {% block content %}
 {% import "macros/chef.html" as chef_macro %}
 <h1>{{chef.name}} </h1>
-{% if not chef.active %}
 <p>
-<span class="label label-info">Käyttäjä jäädytetty</span>
+    {% if not chef.active %}
+    <span class="label label-info">Käyttäjä jäädytetty</span>
+    {% endif %}
+    {% if chef.admin %}
+    <span class="label label-danger">Ylläpitäjä</span>
+    {% endif %}
 </p>
-{% endif %}
 {% if chef == user_logged_in %}
 <a href="{{base_path}}/my_profile/edit" class="btn btn-default">Muokkaa tietoja</a>
 {% endif %}
+<form id="froze">
+</form>
+<form id="admin">
+</form>
+<div class="row">
 
-{% if user_logged_in.admin and not chef.admin %}
-<p>
-<form id="froze"></form>
-<button form="froze" formmethod="post" formaction="{{base_path}}/admin/change_account_activity/{{chef.id}}" class="btn btn-danger">
-    {% if chef.active %}
-        Estä käyttäjä
-    {% else %}
-        Poista käyttäjän esto
-    {% endif %}
-</button>
-</p>
-{% endif %}
+        {% if user_logged_in.admin and not chef.admin %}
+        <button form="froze" formmethod="post" formaction="{{base_path}}/admin/change_account_activity/{{chef.id}}"
+                class="btn btn-danger">
+            {% if chef.active %}
+            Estä käyttäjä
+            {% else %}
+            Poista käyttäjän esto
+            {% endif %}
+        </button>
+        {% endif %}
+        {% if user_logged_in.admin and chef.active and chef.name != 'admin' %}
+        <button form="admin" formmethod="post"
+                formaction="{{base_path}}/admin/change_account_admin_status/{{chef.id}}"
+                class="btn btn-primary">
+            {% if chef.admin %}
+            Poisto ylläpito oikeudet
+            {% else %}
+            Aseta ylläpitäjäksi
+            {% endif %}
+        </button>
+        {% endif %}
+</div>
+
 <h2>Tietoja käyttäjästä</h2>
 <p>{{chef.info}}
-    </p>
+</p>
 {% if recipes|length > 0%}
-    {{chef_macro.listrecipes(base_path, recipes)}}
+{{chef_macro.listrecipes(base_path, recipes)}}
 {% endif %}
 {% if comments|length > 0%}
-    {{chef_macro.listcomments(base_path, recipes_for_comments, comments)}}
+{{chef_macro.listcomments(base_path, recipes_for_comments, comments)}}
 {% endif %}
 {% endblock %}

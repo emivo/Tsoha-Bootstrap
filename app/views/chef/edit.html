@@ -8,7 +8,7 @@
         <label>Käyttäjätunnus</label>
         <input class="form-control" id="disabledInput" name="username" value="{{chef.name}}" type="text" disabled>
     </div>
-<!--TODO Add more forms-->
+    <!--TODO ehkä Add more forms -->
     <div class="form-group">
         <label>Tietoja käyttäjästä</label>
         <textarea class="form-control" name="info" type="text">{{chef.info}}</textarea>
@@ -23,10 +23,14 @@
     </div>
 
     <button formaction="{{base_path}}/my_profile" type="submit" class="btn btn-danger">Tallenna</button>
-    <button form="destroy" formaction="{{base_path}}/my_profile/destroy" type="submit" class="btn btn-danger"><span class="glyphicon glyphicon-remove"
-                                                                                                                    aria-hidden="true"></span> Poista käyttäjätunnus
+    {% if not chef.admin %}
+    <button form="destroy" formaction="{{base_path}}/my_profile/destroy" type="submit" class="btn btn-danger"><span
+            class="glyphicon glyphicon-remove"
+            aria-hidden="true"></span> Poista käyttäjätunnus
     </button>
+    {% endif %}
 </form>
-<form id="destroy" name="destroy" method="post" data-confirm="Käyttäjän poistaminen poistaa kaikki käyttäjän reseptit sekä kommentit!"></form>
+<form id="destroy" name="destroy" method="post"
+      data-confirm="Käyttäjän poistaminen poistaa kaikki käyttäjän reseptit sekä kommentit!"></form>
 {% endif %}
 {% endblock %}

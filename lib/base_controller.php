@@ -21,4 +21,30 @@ class BaseController
             Redirect::to('/login', array('error' => 'Kirjaudu ensin sisään!'));
         }
     }
+
+    protected static function combine_errors_to_single_string($validator, $v = null)
+    {
+        $error = "Virhe";
+        $error = self::loop_through_errors($validator, $error);
+        if ($v) {
+            $error = self::loop_through_errors($v, $error);
+        }
+        $error = $error . ".";
+        return $error;
+    }
+
+    /**
+     * @param $validator \Valitron\Validator
+     * @param $error
+     * @return string
+     */
+    protected static function loop_through_errors($validator, $error)
+    {
+        foreach ($validator->errors() as $errors_in_errors) {
+            foreach ($errors_in_errors as $err) {
+                $error = $error . ".\n" . $err;
+            }
+        }
+        return $error;
+    }
 }

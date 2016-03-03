@@ -1,5 +1,5 @@
 {% macro destroy_button(base_path,id) %}
-  <form name="destroy" method="post" action="{{base_path}}/recipe/{{id}}/destroy"
+  <form id="destroy" name="destroy" method="post" action="{{base_path}}/recipe/{{id}}/destroy"
         style="display: inline-block;" data-confirm="Oletko varma, että haluat poistaa reseptin?">
     <button type="submit" class="btn btn-danger">
         <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>

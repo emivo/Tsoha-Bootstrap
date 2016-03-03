@@ -63,6 +63,10 @@ $routes->post('/admin/change_account_activity/:id', 'check_if_admin', function (
     ChefController::toggle_activity($id);
 });
 
+$routes->post('/admin/change_account_admin_status/:id', 'check_if_admin', function ($id) {
+    ChefController::toggle_admin_status($id);
+});
+
 $routes->post('/search', function () {
     SearchController::find();
 });
@@ -98,6 +102,9 @@ $routes->post('/recipe/:id/edit', 'check_logged_in', function ($id) {
 
 $routes->post('/recipe/:id/delete_keyword/:keyword', 'check_logged_in', function ($id, $keyword) {
     RecipeController::delete_keyword($id, $keyword);
+});
+$routes->post('/recipe/:id/delete_ingredient/:ingredient_name', 'check_logged_in', function ($id, $ingredient_name) {
+    RecipeController::delete_ingredient($id, $ingredient_name);
 });
 
 $routes->post('/recipe/:id/destroy', 'check_logged_in', function ($id) {

@@ -13,34 +13,24 @@ class Chef extends BaseModel
     public static function all()
     {
         $query = DB::connection()->prepare('SELECT * FROM Chef');
-
         $query->execute();
-
         $rows = $query->fetchAll();
-
         $chefs = array();
-
         foreach ($rows as $row) {
             $chefs[] = self::new_chef_from_row($row);
         }
-
         return $chefs;
     }
 
     public static function find($id)
     {
         $query = DB::connection()->prepare('SELECT * FROM Chef WHERE id = :id LIMIT 1');
-
         $query->execute(array('id' => $id));
-
         $row = $query->fetch();
-
         if ($row) {
-
             $chef = self::new_chef_from_row($row);
             return $chef;
         }
-
         return null;
     }
 
@@ -97,7 +87,7 @@ class Chef extends BaseModel
         ));
     }
 
-    public function update()
+    public function update_info()
     {
         $query = DB::connection()
             ->prepare("UPDATE Chef SET info = :info WHERE id = :id");
@@ -132,15 +122,27 @@ class Chef extends BaseModel
 
     public function toggle_activity()
     {
-//        if ($this->active) {
-//            $this->active = (bool) FALSE;
-//        } else {
-//            $this->active = (bool) TRUE;
-//        }
         $this->active = !$this->active;
         $query = DB::connection()
             ->prepare("UPDATE Chef SET active = :active WHERE id = :id");
         $query->bindParam(':active', $this->active, PDO::PARAM_BOOL);
+        $this->bind_id_param_and_execute($query);
+    }
+
+    public function toggle_admin_status()
+    {
+        $this->admin = !$this->admin;
+        $query = DB::connection()
+            ->prepare("UPDATE Chef SET admin = :admin WHERE id = :id");
+        $query->bindParam(':admin', $this->admin, PDO::PARAM_BOOL);
+        $this->bind_id_param_and_execute($query);
+    }
+
+    /**
+     * @param $query
+     */
+    protected function bind_id_param_and_execute($query)
+    {
         $query->bindParam(':id', $this->id, PDO::PARAM_INT);
         $query->execute();
     }

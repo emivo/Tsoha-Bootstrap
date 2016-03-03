@@ -22,17 +22,31 @@
             {% for ingredient in ingredients %}
             <tr>
                 <td>
-                    <input class="form-control" name="quantity[{{ingredientCount}}]" value="{{ingredient.quantity}}"
+                    <input disabled class="form-control" name="quantity[{{ingredientCount}}]"
+                           value="{{ingredient.quantity}}"
                            type="text">
                 </td>
                 <td>
-                    <input class="form-control" name="ingredient[{{ingredientCount}}]" value="{{ingredient.name}}"
+                    <input disabled class="form-control" name="ingredient[{{ingredientCount}}]"
+                           value="{{ingredient.name}}"
                            type="text">
+                </td>
+                <td>
+                    <button formmethod="post"
+                            formaction="{{base_path}}/recipe/{{recipe.id}}/delete_ingredient/{{ingredient.name}}"
+                            class="btn btn-danger" data-confirm="Oletko varma?" name="destroy">
+                        Poista ainesosa
+                    </button>
                 </td>
             </tr>
             {% set ingredientCount = ingredientCount + 1 %}
             {% endfor %}
         </table>
+    </div>
+
+    <span id="newIngredient"></span>
+    <div class="form-group">
+        <button type="button" onclick="newInput(0)" class="btn btn-success">Lisää ainesosa</button>
     </div>
 
     <div class="form-group">
@@ -55,7 +69,7 @@
         <span class="input-group-btn">
             <button formmethod="post"
                     formaction="{{base_path}}/recipe/{{recipe.id}}/delete_keyword/{{keyword.keyword}}"
-                    class="btn btn-danger">
+                    class="btn btn-danger" data-confirm="Oletko varma?" name="destroy">
                 Poista Hakusana
             </button>
         </span>
@@ -75,7 +89,7 @@
             <span class="glyphicon glyphicon-floppy-disk"></span>
             Tallenna
         </button>
-        {{ forms.destroy_button(base_path,recipe.id)}}
     </div>
 </form>
+{{ forms.destroy_button(base_path, recipe.id)}}
 {% endblock %}
