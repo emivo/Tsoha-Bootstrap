@@ -49,25 +49,22 @@ class RecipeController extends BaseController
         $params = $_POST;
         $chef_id = self::get_user_logged_in()->id;
 
+        $ingredients = self::create_ingredients($params);
+        $v = self::validate_ingredients($ingredients);
         $validator = self::validate_params_for_recipe(new Valitron\Validator($params));
 
-        if ($validator->validate()) {
+        if ($validator->validate() && $v->validate()) {
 
             $recipe = self::create_recipe_base($params, $chef_id);
             $recipe_id = $recipe->save();
+            self::save_ingredients_for_recipe($ingredients, $recipe_id);
 
-            /*
-            ** Seuraavat tallentavat vain validit komponentit.
-            ** Invalidit vain ohitetaan ja resepti tallentuu niistä huolimatta
-            */
-// TODO AINAKIN YKSI VALIDI PITÄS VARMAAN OLLA SIIS SIIRRÄ ENSIN TÄÄ
-            self::create_and_store_ingredients($params, $recipe_id);
-            // KEYWORDS EI NIIN V*LIÄ
+            // Invalid keywords will be skipped
             self::create_and_store_keywords($params, $recipe_id);
 
             Redirect::to('/recipe/' . $recipe->id, array('message' => 'Resepti on julkaistu'));
         } else {
-            $error = self::combine_errors_to_single_string($validator);
+            $error = self::combine_errors_to_single_string($validator, $v);
             Redirect::to('/recipe/new', array('error' => $error, 'params' => $params));
         }
     }
@@ -86,20 +83,23 @@ class RecipeController extends BaseController
         }
     }
 
+    //TODO MUIST MUUTTAA TÄÄLLÄKIN
     public static function update($id)
     {
         $recipe = Recipe::find($id);
         $params = $_POST;
 
-        $validator = new \Valitron\Validator($params);
-        $validator = self::validate_params_for_recipe($validator);
-        if ($validator->validate() && self::get_user_logged_in()->id == $recipe->chef_id) {
+        $ingredients = self::create_ingredients($params);
+        $v = self::validate_ingredients($ingredients);
+        $validator = self::validate_params_for_recipe(new \Valitron\Validator($params));
+
+        if ($validator->validate() && $v->validate() && self::get_user_logged_in()->id == $recipe->chef_id) {
             self::make_changes_to_recipe($id, $params, $recipe);
 
             $recipe->update();
             Redirect::to('/recipe/' . $id, array('message' => 'Resepti on päivitetty'));
         } else {
-            $error = self::combine_errors_to_single_string($validator);
+            $error = self::combine_errors_to_single_string($validator, $v);
             Redirect::to('/recipe/' . $id . '/edit', array('error' => $error, 'params' => $params));
         }
     }
@@ -139,7 +139,7 @@ class RecipeController extends BaseController
 
             Redirect::to('/recipe/' . $id);
         } else {
-            $error = self::combine_errors_to_single_string($validator);
+            $error = self::combine_errors_to_single_string($validator, new \Valitron\Validator(array()));
             Redirect::to('/recipe/' . $id, array('error' => $error));
         }
     }
@@ -162,30 +162,28 @@ class RecipeController extends BaseController
     protected static function create_recipe_base($params, $chef_id)
     {
         $recipe = new Recipe(array(
-            'name' => $params['name'],
+            'name' => trim($params['name']),
             'chef_id' => $chef_id,
-            'cooking_time' => $params['cooking_time'],
-            'directions' => $params['directions']));
+            'cooking_time' => trim($params['cooking_time']),
+            'directions' => trim($params['directions'])));
         return $recipe;
     }
 
-    /**
-     * @param $params
-     * @param $recipe_id
-     */
-    protected static function create_and_store_ingredients($params, $recipe_id)
+    protected static function create_ingredients($params)
     {
+        $ingredients = array();
         foreach ($params['ingredient'] as $index => $row) {
+            if (strlen(trim($row) . '' . trim($params['quantity'][$index])) > 0) {
 
-            $ingredient = new Ingredient(array(
-                'recipe_id' => $recipe_id,
-                'name' => $row,
-                'quantity' => $params['quantity'][$index]));
-//            $validator = self::validate_ingredient($ingredient);
+                $ingredient = new Ingredient(array(
+                    'name' => trim($row),
+                    'quantity' => trim($params['quantity'][$index])
+                ));
 
-//            if ($validator->validate()) $ingredient->save();
-            $ingredient->save();
+                $ingredients[] = $ingredient;
+            }
         }
+        return $ingredients;
     }
 
     /**
@@ -199,10 +197,7 @@ class RecipeController extends BaseController
         }
     }
 
-    /**
-     * @param $params
-     * @return mixed
-     */
+
     protected static function validate_params_for_recipe($validator)
     {
 
@@ -217,20 +212,28 @@ class RecipeController extends BaseController
         $validator->rule('lengthMin', 'name', 2)->message('Nimen tulee olla vähintään 2 merkkiä');
         $validator->rule('lengthMin', 'cooking_time', 2)->message('Valmistusaika tulee olla vähintään 2 merkkiä');
         $validator->rule('lengthMin', 'directions', 4)->message('Ohjeiden tulee olla vähintään 4 merkkiä');
+
         return $validator;
     }
 
-    /**
-     * @param $ingredient
-     * @return \Valitron\Validator
-     */
-    protected static function validate_ingredient($ingredient)
+
+    private static function validate_ingredients($ingredients)
     {
-        $validator = new Valitron\Validator(array('name' => $ingredient->name, 'quantity' => $ingredient));
-        //TODO muuta että tyhjät ohitetaan
-        $validator->rule('required', array(0 => 'name', 1 => 'quantity'))->message('');
-        $validator->rule('lengthMin', 'name', 3)->message('Ainesosan nimen pituus tulee olla vähintään 3 merkkiä');
-        $validator->rule('lengthMin', 'quantity', 1)->message("Määrän tulee vähintään olla yksi merkki");
+        $array = array();
+        foreach ($ingredients as $key => $ingredient) {
+            $array['name' . $key] = $ingredient->name;
+            $array['quantity' . $key] = $ingredient->quantity;
+        }
+
+        $validator = new Valitron\Validator($array);
+        foreach ($ingredients as $key => $ingredient) {
+            $validator->rule('required', array('name' . $key, 'quantity' . $key))->message('Ainesosille vaaditaan määrä ja ainesosan nimi');
+            $validator->rule('lengthMin', 'name' . $key, 3)->message('Ainesosan nimen pituus tulee olla vähintään 3 merkkiä');
+            $validator->rule('lengthMin', 'quantity' . $key, 1)->message("Määrän tulee vähintään olla yksi merkki");
+        }
+        if (count($ingredients) == 0) {
+            $validator->error('name', 'Yhtään ainesosaa ei ole annettu');
+        }
         return $validator;
     }
 
@@ -246,19 +249,12 @@ class RecipeController extends BaseController
         return $validator;
     }
 
-    /**
-     * @param $validator
-     * @param $logged
-     * @return string
-     */
-    protected static function combine_errors_to_single_string($validator)
+    protected static function combine_errors_to_single_string($validator, $v)
     {
         $error = "Virhe";
-        foreach ($validator->errors() as $errors_in_errors) {
-            foreach ($errors_in_errors as $err) {
-                $error = $error . ".\n" . $err;
-            }
-        }
+        $error = self::loop_through_errors($validator, $error);
+        $error = self::loop_through_errors($v, $error);
+        $error = $error . ".";
         return $error;
     }
 
@@ -269,16 +265,15 @@ class RecipeController extends BaseController
      */
     public static function make_changes_to_recipe($id, $params, $recipe)
     {
-        $recipe->name = $params['name'];
-        $recipe->cooking_time = $params['cooking_time'];
-        $recipe->directions = $params['directions'];
+        $recipe->name = trim($params['name']);
+        $recipe->cooking_time = trim($params['cooking_time']);
+        $recipe->directions = trim($params['directions']);
         foreach ($params['ingredient'] as $index => $row) {
-            $ingredient = Ingredient::find_by_recipe_id_and_ingredient_name($id, $row);
-            if ($ingredient) $validator = self::validate_ingredient($ingredient);
-            if ($validator->validate()) $ingredient->update();
+            $ingredient = Ingredient::find_by_recipe_id_and_ingredient_name($id, trim($row));
+            $ingredient->update();
         }
         foreach ($params['keywordNew'] as $word) {
-            // TODO VALIDOINTI paremmaksi
+            // Invalids won't be saved
             self::save_new_keyword($recipe->id, $word);
         }
     }
@@ -295,21 +290,37 @@ class RecipeController extends BaseController
             'recipe_id' => $id,
             'chef_id' => $chef_id,
             'rating' => $params['rating'],
-            'comment' => $params['comment']
+            'comment' => trim($params['comment'])
         ));
     }
 
-    /**
-     * @param $recipe
-     * @param $word
-     */
     public static function save_new_keyword($recipe_id, $word)
     {
         $keyword = new Keyword(array(
-            'keyword' => $word));
+            'keyword' => trim($word)));
         if (strlen($keyword->keyword) > 1) {
             $keyword->save($recipe_id);
         }
     }
+
+
+    protected static function loop_through_errors($validator, $error)
+    {
+        foreach ($validator->errors() as $errors_in_errors) {
+            foreach ($errors_in_errors as $err) {
+                $error = $error . ".\n" . $err;
+            }
+        }
+        return $error;
+    }
+
+    private static function save_ingredients_for_recipe($ingredients, $recipe_id)
+    {
+        foreach ($ingredients as $ingredient) {
+            $ingredient->recipe_id = $recipe_id;
+            $ingredient->save();
+        }
+    }
+
 
 }
