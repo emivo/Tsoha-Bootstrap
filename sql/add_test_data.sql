@@ -59,9 +59,9 @@ VALUES ((SELECT id FROM Recipe WHERE name LIKE 'Pizzaleivät'), (SELECT id FROM 
 INSERT INTO RecipeIngredient (recipe_id, ingredient_id, quantity)
 VALUES ((SELECT id FROM Recipe WHERE name LIKE 'Pizzaleivät'), (SELECT id FROM Ingredient WHERE name LIKE 'Juustoa'), 'reilusti');
 INSERT INTO RecipeIngredient (recipe_id, ingredient_id, quantity)
-VALUES ((SELECT id FROM Recipe WHERE name LIKE 'Pizzaleivät'), (SELECT id FROM Ingredient WHERE name LIKE 'Ketsuppia'), 'muutama tl');
+VALUES ((SELECT id FROM Recipe WHERE name LIKE 'Pizzaleivät'), (SELECT id FROM Ingredient WHERE name LIKE 'Ketsuppia'), '1 rkl');
 INSERT INTO RecipeIngredient (recipe_id, ingredient_id, quantity)
-VALUES ((SELECT id FROM Recipe WHERE name LIKE 'Pizzaleivät'), (SELECT id FROM Ingredient WHERE name LIKE 'Meetvurstia'), 'muutama per leipä');
+VALUES ((SELECT id FROM Recipe WHERE name LIKE 'Pizzaleivät'), (SELECT id FROM Ingredient WHERE name LIKE 'Meetvurstia'), '4');
 
 INSERT INTO Keyword (keyword) VALUES ('Jälkiruoka');
 INSERT INTO Keyword (keyword) VALUES ('Pääruoka');
