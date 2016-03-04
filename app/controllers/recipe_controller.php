@@ -6,31 +6,13 @@ class RecipeController extends BaseController
     public static function index()
     {
         $params = $_GET;
-        $recipes_count = Recipe::count();
         $page_size = 10;
+        $recipes_count = Recipe::count();
         $pages = ceil($recipes_count / $page_size);
         if (isset($params['page'])) {
-            $page = $params['page'];
-            if ($page <= 0 || $page > $pages) {
-                Redirect::to('/', array('error' => 'sivua ei ole olemassa'));
-            } else {
-                $recipes = Recipe::all(array('page' => $page, 'page_size' => $page_size));
-                list($chefs, $comments_for_recipes) = self::get_chefs_and_comments_for_recipes($recipes);
-
-                $content = array('recipes' => $recipes, 'comments_for_recipes' => $comments_for_recipes, 'chefs' => $chefs, 'current_page' => $params['page']);
-                if ($page > 1) {
-                    $content['prev_page'] = $page - 1;
-                }
-                if ($page < $pages) {
-                    $content['next_page'] = $page - 1;
-                }
-                View::make('recipe/index.html', $content);
-            }
+            self::make_paged_index($params, $pages, $page_size);
         } else {
-            $recipes = Recipe::all(array('limit' => 10));
-            list($chefs, $comments_for_recipes) = self::get_chefs_and_comments_for_recipes($recipes);
-
-            View::make('home.html', array('recipes' => $recipes, 'comments_for_recipes' => $comments_for_recipes, 'chefs' => $chefs));
+            self::without_page_param_show_home();
         }
     }
 
@@ -45,17 +27,8 @@ class RecipeController extends BaseController
 
     public static function show($id)
     {
-        $recipe = Recipe::find($id);
-        $comments = Comment::find_by_recipe_id($id);
-        $commentators = array();
-        foreach ($comments as $comment) {
-            $commentators[$comment->chef_id] = Chef::find($comment->chef_id);
-        }
-        $ingredients = Ingredient::find_by_recipe_id($id);
-        $keywords = Keyword::find_by_recipe_id($id);
-        $chef = Chef::find($recipe->chef_id);
-
-        View::make('recipe/show.html', array('chef' => $chef, 'recipe' => $recipe, 'comments' => $comments, 'commentators' => $commentators, 'ingredients' => $ingredients, 'keywords' => $keywords));
+        $content = self::collect_content_for_show_recipe($id);
+        View::make('recipe/show.html', $content);
     }
 
     public static function create()
@@ -74,14 +47,7 @@ class RecipeController extends BaseController
 
         if ($validator->validate() && $v->validate()) {
 
-            $recipe = self::create_recipe_base($params, $chef_id);
-            $recipe_id = $recipe->save();
-            self::save_ingredients_for_recipe($ingredients, $recipe_id);
-
-            // Invalid keywords will be skipped
-            self::create_and_store_keywords($params, $recipe_id);
-
-            Redirect::to('/recipe/' . $recipe->id, array('message' => 'Resepti on julkaistu'));
+            self::save_and_redirect($params, $chef_id, $ingredients);
         } else {
             $error = self::combine_errors_to_single_string($validator, $v);
             Redirect::to('/recipe/new', array('error' => $error, 'params' => $params));
@@ -262,7 +228,7 @@ class RecipeController extends BaseController
 
 
     /**
-     * @param $validator
+     * @param $validator \Valitron\Validator
      * @return \Valitron\Validator
      */
     protected static function validate_params_for_recipe($validator)
@@ -320,15 +286,6 @@ class RecipeController extends BaseController
         return $validator;
     }
 
-//    protected static function combine_errors_to_single_string($validator, $v)
-//    {
-//        $error = "Virhe";
-//        $error = self::loop_through_errors($validator, $error);
-//        $error = self::loop_through_errors($v, $error);
-//        $error = $error . ".";
-//        return $error;
-//    }
-
     public static function make_changes_to_recipe($params, $recipe, $new_ingredients)
     {
         $recipe->name = $params['name'];
@@ -372,10 +329,14 @@ class RecipeController extends BaseController
         }
     }
 
-
+    /**
+     * @param array
+     * @param $recipe_id
+     */
     private static function save_ingredients_for_recipe($ingredients, $recipe_id)
     {
         foreach ($ingredients as $ingredient) {
+            /* @var $ingredient Ingredient */
             $ingredient->recipe_id = $recipe_id;
             $ingredient->save();
         }
@@ -393,6 +354,89 @@ class RecipeController extends BaseController
             $comments_for_recipes[$recipe->id][$recipe->id] = Comment::find_by_recipe_id($recipe->id);
         }
         return array($chefs, $comments_for_recipes);
+    }
+
+    protected static function without_page_param_show_home()
+    {
+        $recipes = Recipe::all(array('limit' => 10));
+        list($chefs, $comments_for_recipes) = self::get_chefs_and_comments_for_recipes($recipes);
+
+        View::make('home.html', array('recipes' => $recipes, 'comments_for_recipes' => $comments_for_recipes, 'chefs' => $chefs));
+    }
+
+    /**
+     * @param $params
+     * @param $pages
+     * @param $page_size
+     */
+    protected static function make_paged_index($params, $pages, $page_size)
+    {
+        $page = $params['page'];
+        if ($page <= 0 || $page > $pages) {
+            Redirect::to('/', array('error' => 'Sivua ei ole olemassa'));
+        } else {
+            $recipes = Recipe::all(array('page' => $page, 'page_size' => $page_size));
+            $content = self::make_paged_content($pages, $recipes, $page);
+            View::make('recipe/index.html', $content);
+        }
+    }
+
+    /**
+     * @param $id
+     * @return array
+     */
+    protected static function collect_content_for_show_recipe($id)
+    {
+        $recipe = Recipe::find($id);
+        $comments = Comment::find_by_recipe_id($id);
+        $commentators = array();
+        foreach ($comments as $comment) {
+            $commentators[$comment->chef_id] = Chef::find($comment->chef_id);
+        }
+        $ingredients = Ingredient::find_by_recipe_id($id);
+        $keywords = Keyword::find_by_recipe_id($id);
+        $chef = Chef::find($recipe->chef_id);
+
+        $content = array('chef' => $chef, 'recipe' => $recipe, 'comments' => $comments, 'commentators' => $commentators, 'ingredients' => $ingredients, 'keywords' => $keywords);
+        return $content;
+    }
+
+    /**
+     * @param $params
+     * @param $chef_id
+     * @param $ingredients
+     */
+    protected static function save_and_redirect($params, $chef_id, $ingredients)
+    {
+        $recipe = self::create_recipe_base($params, $chef_id);
+        $recipe_id = $recipe->save();
+        self::save_ingredients_for_recipe($ingredients, $recipe_id);
+
+        // Invalid keywords will be skipped
+        self::create_and_store_keywords($params, $recipe_id);
+
+        Redirect::to('/recipe/' . $recipe->id, array('message' => 'Resepti on julkaistu'));
+    }
+
+    /**
+     * @param $pages
+     * @param $recipes
+     * @param $page
+     * @return array
+     */
+    public static function make_paged_content($pages, $recipes, $page)
+    {
+        list($chefs, $comments_for_recipes) = self::get_chefs_and_comments_for_recipes($recipes);
+
+        $content = array('recipes' => $recipes, 'comments_for_recipes' => $comments_for_recipes, 'chefs' => $chefs, 'current_page' => $page, 'pages' => $pages);
+        if ($page > 1) {
+            $content['prev_page'] = $page - 1;
+        }
+        if ($page < $pages) {
+            $content['next_page'] = $page + 1;
+            return $content;
+        }
+        return $content;
     }
 
 

@@ -13,7 +13,6 @@ $(document).ready(function () {
 
 });
 
-// TODO INDEKSÖINTI RIKKI
 function newKeywordInput(option) {
     var parentElement = document.createElement("div");
     parentElement.setAttribute("class", 'form-group');

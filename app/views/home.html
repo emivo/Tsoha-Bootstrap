@@ -6,7 +6,7 @@
     <h1>Tervetuloa Reseptikirjastoon
         {% if user_logged_in %}
         {{user_logged_in.name}}
-        {% endif %}!</h1>
+        {% endif %}</h1>
 </div>
 {% if user_logged_in %}
 <a class="btn btn-success" href="{{base_path}}/recipe/new">Lisää uusi resepti</a>

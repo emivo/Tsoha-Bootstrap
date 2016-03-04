@@ -3,7 +3,7 @@
 {% block content %}
 {% import "macros/recipes.html" as macro %}
 <div class="page-header">
-    <h1>Haun tulokset</h1>
+    <h1>Hakusana vastaavat reseptit</h1>
 </div>
 
 {{ macro.recipes_table(base_path, recipes, chefs, comments_for_recipes, user_logged_in, current_page, pages, next_page, prev_page, path) }}

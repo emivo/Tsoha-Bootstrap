@@ -67,11 +67,11 @@ $routes->group('/admin', function () use ($routes) {
 });
 
 $routes->post('/search', function () {
-    SearchController::find();
+    SearchController::search();
 });
 
 $routes->get('/results', function() {
-    SearchController::show();
+    SearchController::show_search_results();
 });
 
 $routes->get('/keyword/:key', function ($keyword) {

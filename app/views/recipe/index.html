@@ -8,5 +8,5 @@
 {% if user_logged_in %}
 <a class="btn btn-success" href="{{base_path}}/recipe/new">Lisää uusi resepti</a>
 {% endif %}
-{{ macro.recipes_table(base_path, recipes, chefs, comments_for_recipes, user_logged_in, current_page, pages, next_page, prev_page) }}
+{{ macro.recipes_table(base_path, recipes, chefs, comments_for_recipes, user_logged_in, current_page, pages, next_page, prev_page, 'recipes?') }}
 {% endblock %}

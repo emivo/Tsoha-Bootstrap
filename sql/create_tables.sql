@@ -14,7 +14,7 @@ chef_id INTEGER REFERENCES Chef(id) ON DELETE CASCADE,
 name TEXT NOT NULL,
 cooking_time TEXT,
 directions TEXT,
-published DATE
+published TIMESTAMP
 );
 
 CREATE TABLE Comment ( 

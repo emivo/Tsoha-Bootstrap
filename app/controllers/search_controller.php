@@ -2,31 +2,24 @@
 
 class SearchController extends BaseController
 {
-    // TODO LISÄÄ OPTIONI ETTÄ VOI HAKEA MYÖS KÄYTTÄJÄÄ
-    public static function find()
+    public static function search()
     {
         $params = $_POST;
-        // TODO HAKUSANAN PITUUS tms validointi
         if (strlen($params['search']) > 3) {
-            Redirect::to('/results?search='.$params['search'].'&option='.$params['option']);
+            Redirect::to('/results?search=' . $params['search'] . '&option=' . $params['option']);
         } else {
             Redirect::to('/', array('error' => 'Kirjoita hakusanaan ainakin 4 merkkiä'));
         }
     }
 
-    public static function show()
+    public static function show_search_results()
     {
         $params = $_GET;
         $search_word = $params['search'];
         if ($params['option'] == 'resepti') {
             $recipes = Recipe::search_default($search_word);
-            $comments_for_recipes = array();
-            foreach ($recipes as $recipe) {
-                $comments_for_recipes[$recipe->id][$recipe->id] = Comment::find_by_recipe_id($recipe->id);
-            }
-            $chefs = self::find_chefs($recipes);
-
-            View::make('/results.html', array('recipes' => $recipes, 'comments_for_recipes' => $comments_for_recipes, 'chefs' => $chefs));
+            $path = 'results?search=' . $search_word . '&option=resepti&';
+            self::make_paged_view($recipes, $path, 'results.html');
         } else {
             ChefController::index($search_word);
         }
@@ -34,23 +27,34 @@ class SearchController extends BaseController
 
     public static function find_by_keyword($keyword)
     {
-
         $recipes = Recipe::search_by_keyword($keyword);
-
-        $chefs = self::find_chefs($recipes);
-        View::make('/results.html', array('recipes' => $recipes, 'chefs' => $chefs));
+        $path = 'keyword/' . $keyword . '?';
+        self::make_paged_view($recipes, $path, 'keyword/index.html');
     }
 
     /**
      * @param $recipes
-     * @return array
+     * @param $path
+     * @param $template
      */
-    public static function find_chefs($recipes)
+    public static function make_paged_view($recipes, $path, $template)
     {
-        $chefs = array();
-        foreach ($recipes as $recipe) {
-            $chefs[$recipe->chef_id] = Chef::find($recipe->chef_id);
+        $pages = ceil(count($recipes) / 10);
+        if ($pages == 0) $pages = 1;
+        $page = 1;
+        if (isset($_GET['page'])) $page = $_GET['page'];
+        if ($page < 1 || $page > $pages) {
+            Redirect::to('/', array('error' => 'Sivua ei ole olemassa'));
+        } else {
+            //
+            if (count($recipes) > 0) {
+                $recipes = array_chunk($recipes, 10);
+            } else {
+                $recipes[0] = array();
+            }
+            $content = RecipeController::make_paged_content($pages, $recipes[$page - 1], $page);
+            $content['path'] = $path;
+            View::make($template, $content);
         }
-        return $chefs;
     }
 }

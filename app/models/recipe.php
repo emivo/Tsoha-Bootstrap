@@ -2,7 +2,6 @@
 
 class Recipe extends BaseModel
 {
-// TODO Refactor
     public $id, $chef_id, $name, $cooking_time, $directions, $published;
 
     public function __construct($attributes)
@@ -20,21 +19,18 @@ class Recipe extends BaseModel
             if ($option && isset($option['page']) && isset($option['page_size'])) {
                 $page_size = $option['page_size'];
                 $offset = $page_size * ($option['page'] - 1);
-                $query_string .= ' LIMIT '.$page_size.' OFFSET '.$offset ;
+                $query_string .= ' LIMIT ' . $page_size . ' OFFSET ' . $offset;
             }
         }
         $query = DB::connection()->prepare($query_string);
         $query->execute();
         $rows = $query->fetchAll();
 
-        $recipes = array();
-        foreach ($rows as $row) {
-            $recipes[] = self::new_recipe_from_row($row);
-        }
-        return $recipes;
+        return self::recipes_from_rows($rows);
     }
 
-    public static function count() {
+    public static function count()
+    {
         $query = DB::connection()->prepare('SELECT COUNT(*) FROM Recipe');
         $query->execute();
         $row = $query->fetch();
@@ -59,57 +55,34 @@ class Recipe extends BaseModel
     {
         $query = DB::connection()
             ->prepare("SELECT * FROM Recipe WHERE chef_id = :chef_id");
-        $query->execute(array('chef_id' => $chef_id));
+        $query->bindParam(':chef_id', $chef_id, PDO::PARAM_INT);
+        $query->execute();
         $rows = $query->fetchAll();
 
-        $recipes = array();
-        foreach ($rows as $row) {
-            $recipes[] = self::new_recipe_from_row($row);
-        }
-        return $recipes;
+        return self::recipes_from_rows($rows);
     }
 
     public static function search_default($string)
     {
         $query = DB::connection()
-            ->prepare("SELECT DISTINCT Recipe.* FROM Recipe "
-                . "LEFT JOIN RecipeKeyword ON Recipe.id = RecipeKeyword.recipe_id "
-                . "JOIN Keyword ON Keyword.id = RecipeKeyword.keyword_id "
-                . "JOIN RecipeIngredient ON Recipe.id = RecipeIngredient.recipe_id JOIN Ingredient ON Ingredient.id = RecipeIngredient.ingredient_id "
-                . "WHERE Recipe.name LIKE :search OR Keyword.keyword LIKE :search OR Ingredient.name LIKE :search OR Recipe.directions LIKE :search");
+            ->prepare(self::search_query_string());
         $string = "%" . $string . "%";
-//        $validator = new Valitron\Validator($string);
-//        $validator->addRule($string, $validator);
-        $query->bindParam(':search', $string, PDO::PARAM_STR);
-        $query->execute();
-        $rows = $query->fetchAll();
-
-        $results = array();
-        foreach ($rows as $row) {
-            $results[] = self::new_recipe_from_row($row);
-        }
-        return $results;
+        $rows = self::bind_param_and_fetch_from_query($query, ':search', $string);
+        return self::recipes_from_rows($rows);
     }
 
     public static function search_by_keyword($keyword)
     {
 
+        $query_string = "SELECT DISTINCT Recipe.* FROM Recipe "
+            . "LEFT JOIN RecipeKeyword ON Recipe.id = RecipeKeyword.recipe_id "
+            . "JOIN Keyword ON Keyword.id = RecipeKeyword.keyword_id WHERE Keyword.keyword LIKE :keyword";
         $query = DB::connection()
-            ->prepare("SELECT DISTINCT Recipe.* FROM Recipe "
-                . "LEFT JOIN RecipeKeyword ON Recipe.id = RecipeKeyword.recipe_id "
-                . "JOIN Keyword ON Keyword.id = RecipeKeyword.keyword_id WHERE Keyword.keyword LIKE :keyword");
+            ->prepare($query_string);
         $keyword = '%' . $keyword . '%';
-        $query->bindParam(':keyword', $keyword, PDO::PARAM_STR);
-        $query->execute();
-
-        $rows = $query->fetchAll();
-
-        $results = array();
-        foreach ($rows as $row) {
-            $results[] = self::new_recipe_from_row($row);
-        }
-
-        return $results;
+        $rows = self::bind_param_and_fetch_from_query($query, ':keyword', $keyword);
+        $recipes = self::recipes_from_rows($rows);
+        return $recipes;
     }
 
     /**
@@ -124,15 +97,66 @@ class Recipe extends BaseModel
             'name' => $row['name'],
             'cooking_time' => $row['cooking_time'],
             'directions' => $row['directions'],
-            'published' => $row['published'],
+            'published' => date("j.n.Y", strtotime($row['published']))
         ));
+    }
+
+    /**
+     * @param $query
+     * @param $param
+     * @param
+     * @return mixed
+     */
+    protected static function bind_param_and_fetch_from_query($query, $param, $string)
+    {
+        $query->bindParam($param, $string, PDO::PARAM_STR);
+        $query->execute();
+
+        $rows = $query->fetchAll();
+        return $rows;
+    }
+
+    /**
+     * This so long query.
+     * @return string
+     */
+    protected static function search_query_string()
+    {
+        return "SELECT DISTINCT Recipe.* FROM Recipe "
+            . "LEFT JOIN RecipeKeyword ON Recipe.id = RecipeKeyword.recipe_id "
+            . "JOIN Keyword ON Keyword.id = RecipeKeyword.keyword_id "
+            . "JOIN RecipeIngredient ON Recipe.id = RecipeIngredient.recipe_id "
+            . "JOIN Ingredient ON Ingredient.id = RecipeIngredient.ingredient_id "
+            . "WHERE Recipe.name LIKE :search "
+            . "OR Keyword.keyword LIKE :search "
+            . "OR Ingredient.name LIKE :search "
+            . "OR Recipe.directions LIKE :search";
+    }
+
+    /**
+     * @param $rows
+     * @return array
+     */
+    protected static function recipes_from_rows($rows)
+    {
+        $recipes = array();
+        foreach ($rows as $row) {
+            $recipes[] = self::new_recipe_from_row($row);
+        }
+        return $recipes;
     }
 
     public function save()
     {
-        $query = DB::connection()->prepare("INSERT INTO Recipe (name, chef_id, cooking_time, directions, published) VALUES (:name, :chef_id, :cooking_time, :directions, NOW()) RETURNING id");
-
-        $query->execute(array('name' => $this->name, 'chef_id' => $this->chef_id, 'cooking_time' => $this->cooking_time, 'directions' => $this->directions));
+        $query_string = "INSERT INTO Recipe (name, chef_id, cooking_time, directions, published) "
+            . "VALUES (:name, :chef_id, :cooking_time, :directions, NOW()) RETURNING id";
+        $query = DB::connection()
+            ->prepare($query_string);
+        $query->execute(array(
+            'name' => $this->name,
+            'chef_id' => $this->chef_id,
+            'cooking_time' => $this->cooking_time,
+            'directions' => $this->directions));
 
         $row = $query->fetch();
 
