@@ -2,20 +2,18 @@
 {% block content %}
 {% import "macros/_forms.html" as forms %}
 <h1>Muokkaa reseptiä</h1>
-<form method="post" , action="{{base_path}}/recipe/{{recipe.id}}/edit">
+<form method="post" action="{{base_path}}/recipe/{{recipe.id}}/edit">
+    {{ forms.name_input(recipe) }}
     <div class="form-group">
-        <label>Nimi</label>
-        <input class="form-control" name="name" value="{{recipe.name}}" type="text">
-    </div>
-    <div class="form-group">
-
         <table>
             <tr>
                 <td>
-                    <label>Määrä</label>
+                    <label>Määrä<span class="badge"><span class="glyphicon glyphicon-asterisk"
+                                                          aria-disabled="true"></span></span></label>
                 </td>
                 <td>
-                    <label>Ainesosa</label>
+                    <label>Ainesosa<span class="badge"><span class="glyphicon glyphicon-asterisk"
+                                                             aria-disabled="true"></span></span></label>
                 </td>
             </tr>
             {% set ingredientCount = 0 %}
@@ -35,6 +33,7 @@
                     <button formmethod="post"
                             formaction="{{base_path}}/recipe/{{recipe.id}}/delete_ingredient/{{ingredient.name}}"
                             class="btn btn-danger" data-confirm="Oletko varma?" name="destroy">
+                        <span class="glyphicon glyphicon-remove-sign"></span>
                         Poista ainesosa
                     </button>
                 </td>
@@ -46,19 +45,13 @@
     <script>var indexCountForIngredient = 0;</script>
     <span id="newIngredient"></span>
     <div class="form-group">
-        <button type="button" onclick="newInput(0)" class="btn btn-success">Lisää ainesosa</button>
+        {{ forms.add_new_ingredient(0)}}
     </div>
 
-    <div class="form-group">
-        <label>Valmistusohje</label>
-        <textarea name="directions" class="form-control">{{recipe.directions}}
-        </textarea>
-    </div>
+    {{ forms.directions_textarea(recipe) }}
 
-    <div class="form-group">
-        <label>Valmistusaika</label>
-        <input class="form-control" name="cooking_time" value="{{recipe.cooking_time}}" type="text">
-    </div>
+    {{ forms.cooking_time_input(recipe) }}
+
 
     {% set keywordCount = 0 %}
     {% for keyword in keywords %}
@@ -70,6 +63,7 @@
             <button formmethod="post"
                     formaction="{{base_path}}/recipe/{{recipe.id}}/delete_keyword/{{keyword.keyword}}"
                     class="btn btn-danger" data-confirm="Oletko varma?" name="destroy">
+                <span class="glyphicon glyphicon-remove-sign"></span>
                 Poista Hakusana
             </button>
         </span>
@@ -80,7 +74,7 @@
     <span id="newKeyword"></span>
     <script>var indexCountForKeyword = 0;</script>
     <div class="form-group">
-        <button type="button" onclick="newKeywordInput(0)" class="btn btn-success">Lisää hakusana</button>
+        {{ forms.add_new_keyword(0)}}
     </div>
 
 

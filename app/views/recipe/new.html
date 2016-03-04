@@ -1,13 +1,10 @@
 {% extends "base.html" %}
 {% block content %}
+{% import "macros/_forms.html" as forms %}
 <h1>Lisää uusi resepti</h1>
 <p>Täytä kaikki tähdellä merkityt</p>
 <form method="post" action="{{base_path}}/recipe">
-    <div class="form-group">
-        <label>Nimi <span class="badge"><span class="glyphicon glyphicon-asterisk"
-                                              aria-disabled="true"></span></span></label>
-        <input name="name" class="form-control" type="text">
-    </div>
+    {{ forms.name_input() }}
     <div class="form-group">
         <table>
             <tr>
@@ -33,17 +30,13 @@
     <script>var indexCountForIngredient = 1;</script>
     <span id="newIngredient"></span>
     <div class="form-group">
-        <button type="button" onclick="newInput(1)" class="btn btn-success">Lisää ainesosa</button>
+        {{ forms.add_new_ingredient(1)}}
     </div>
+{{ forms.directions_textarea() }}
 
-    <div class="form-group">
-        <label>Valmistusohje <span class="badge"><span class="glyphicon glyphicon-asterisk" aria-disabled="true"></span></span></label>
-        <textarea name="directions" class="form-control"></textarea>
-    </div>
-    <div class="form-group">
-        <label>Valmistusaika <span class="badge"><span class="glyphicon glyphicon-asterisk" aria-disabled="true"></span></span></label>
-        <input name="cooking_time" class="form-control" type="text">
-    </div>
+{{ forms.cooking_time_input() }}
+
+
     <div class="form-group">
         <label>Hakusanat <span class="badge"><span class="glyphicon glyphicon-asterisk"
                                                    aria-disabled="true"></span></span></label>
@@ -58,7 +51,7 @@
     <script>var indexCountForKeyword = 1;</script>
     <span id="newKeyword"></span>
     <div class="form-group">
-        <button type="button" onclick="newKeywordInput(1)" class="btn btn-success">Lisää hakusana</button>
+        {{ forms.add_new_keyword(1)}}
     </div>
 
     <div class="form-group">

@@ -2,19 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="019b86ff-ad98-4d0f-bdef-75a57a3c3624" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/views/keyword/index.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/controllers/recipe_controller.php" afterPath="$PROJECT_DIR$/app/controllers/recipe_controller.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/controllers/search_controller.php" afterPath="$PROJECT_DIR$/app/controllers/search_controller.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/models/recipe.php" afterPath="$PROJECT_DIR$/app/models/recipe.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/views/home.html" afterPath="$PROJECT_DIR$/app/views/home.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/views/macros/recipes.html" afterPath="$PROJECT_DIR$/app/views/macros/recipes.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/views/recipe/index.html" afterPath="$PROJECT_DIR$/app/views/recipe/index.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/views/results.html" afterPath="$PROJECT_DIR$/app/views/results.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/assets/js/site.js" afterPath="$PROJECT_DIR$/assets/js/site.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config/routes.php" afterPath="$PROJECT_DIR$/config/routes.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sql/create_tables.sql" afterPath="$PROJECT_DIR$/sql/create_tables.sql" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/views/macros/_forms.html" afterPath="$PROJECT_DIR$/app/views/macros/_forms.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/views/recipe/edit.html" afterPath="$PROJECT_DIR$/app/views/recipe/edit.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/views/recipe/new.html" afterPath="$PROJECT_DIR$/app/views/recipe/new.html" />
     </list>
     <ignored path="Tsoha-Bootstrap.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -36,113 +26,31 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="recipes.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/views/macros/recipes.html">
+      <file leaf-file-name="edit.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/views/recipe/edit.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-11.333333">
-              <caret line="17" column="47" selection-start-line="17" selection-start-column="47" selection-end-line="17" selection-end-column="47" />
+            <state vertical-scroll-proportion="-34.666668">
+              <caret line="52" column="42" selection-start-line="52" selection-start-column="42" selection-end-line="52" selection-end-column="42" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="home.html" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/app/views/home.html">
+      <file leaf-file-name="_forms.html" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/views/macros/_forms.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.1485849">
-              <caret line="7" column="31" selection-start-line="7" selection-start-column="31" selection-end-line="7" selection-end-column="31" />
+            <state vertical-scroll-proportion="0.5966981">
+              <caret line="57" column="47" selection-start-line="57" selection-start-column="47" selection-end-line="57" selection-end-column="47" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="recipe_controller.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/controllers/recipe_controller.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-16.074074">
-              <caret line="426" column="27" selection-start-line="426" selection-start-column="27" selection-end-line="426" selection-end-column="27" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="results.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/views/results.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-3.3333333">
-              <caret line="5" column="26" selection-start-line="5" selection-start-column="26" selection-end-line="5" selection-end-column="26" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="search_controller.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/controllers/search_controller.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-24.074074">
-              <caret line="48" column="14" selection-start-line="48" selection-start-column="14" selection-end-line="48" selection-end-column="14" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="create_tables.sql" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/sql/create_tables.sql">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="16" column="19" selection-start-line="16" selection-start-column="19" selection-end-line="16" selection-end-column="19" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="recipe.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/models/recipe.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-9.518518">
-              <caret line="99" column="70" selection-start-line="99" selection-start-column="70" selection-end-line="99" selection-end-column="70" />
-              <folding>
-                <marker date="1457124284647" expanded="true" signature="293:313" placeholder="SELECT * FRO... Recipe" />
-                <marker date="1457124284647" expanded="true" signature="293:337" placeholder="SELECT * FRO... Recipe" />
-                <marker date="1457124284647" expanded="true" signature="1029:1056" placeholder="SELECT COUNT... Recipe" />
-                <marker date="1457124284647" expanded="true" signature="1280:1323" placeholder="SELECT * FRO... Recipe" />
-                <marker date="1457124284647" expanded="true" signature="1662:1707" placeholder="SELECT * FRO... Recipe" />
-                <marker date="1457124284647" expanded="true" signature="2300:2523" placeholder="SELECT DISTI... Recipe" />
-                <marker date="1457124284647" expanded="true" signature="3737:4285" placeholder="SELECT DISTI... Recipe" />
-                <marker date="1457124284647" expanded="true" signature="4633:4704" placeholder="INSERT INTO Recipe... " />
-                <marker date="1457124284647" expanded="true" signature="4633:4794" placeholder="INSERT INTO Recipe... " />
-                <marker date="1457124284647" expanded="true" signature="5573:5606" placeholder="DELETE FROM " />
-                <marker date="1457124284647" expanded="true" signature="5760:5854" placeholder="UPDATE Recip... " />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/views/keyword/index.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-3.3333333">
-              <caret line="5" column="35" selection-start-line="5" selection-start-column="35" selection-end-line="5" selection-end-column="35" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="routes.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/config/routes.php">
+      <file leaf-file-name="new.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/views/recipe/new.html">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="-11.407408">
-              <caret line="72" column="14" selection-start-line="72" selection-start-column="14" selection-end-line="72" selection-end-column="22" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/views/recipe/index.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-6.6666665">
-              <caret line="10" column="140" selection-start-line="10" selection-start-column="140" selection-end-line="10" selection-end-column="140" />
+              <caret line="36" column="27" selection-start-line="36" selection-start-column="27" selection-end-line="36" selection-end-column="27" />
               <folding />
             </state>
           </provider>
@@ -175,7 +83,6 @@
         <option value="$PROJECT_DIR$/app/models/hello_world.php" />
         <option value="$PROJECT_DIR$/app/models/keyword.php" />
         <option value="$PROJECT_DIR$/app/views/register.html" />
-        <option value="$PROJECT_DIR$/app/views/macros/_forms.html" />
         <option value="$PROJECT_DIR$/app/models/ingredient.php" />
         <option value="$PROJECT_DIR$/app/views/chef/show.html" />
         <option value="$PROJECT_DIR$/app/views/chef/edit.html" />
@@ -185,8 +92,6 @@
         <option value="$PROJECT_DIR$/config/routes.php" />
         <option value="$PROJECT_DIR$/app/views/base.html" />
         <option value="$PROJECT_DIR$/lib/view.php" />
-        <option value="$PROJECT_DIR$/app/views/recipe/edit.html" />
-        <option value="$PROJECT_DIR$/app/views/recipe/new.html" />
         <option value="$PROJECT_DIR$/sql/add_test_data.sql" />
         <option value="$PROJECT_DIR$/app/views/recipe/show.html" />
         <option value="$PROJECT_DIR$/assets/js/site.js" />
@@ -201,6 +106,9 @@
         <option value="$PROJECT_DIR$/sql/create_tables.sql" />
         <option value="$PROJECT_DIR$/app/models/recipe.php" />
         <option value="$PROJECT_DIR$/app/views/home.html" />
+        <option value="$PROJECT_DIR$/app/views/recipe/new.html" />
+        <option value="$PROJECT_DIR$/app/views/recipe/edit.html" />
+        <option value="$PROJECT_DIR$/app/views/macros/_forms.html" />
       </list>
     </option>
   </component>
@@ -293,6 +201,50 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="views" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Tsoha-Bootstrap" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Tsoha-Bootstrap" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="views" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="recipe" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Tsoha-Bootstrap" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Tsoha-Bootstrap" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="views" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="macros" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -496,13 +448,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/vendor/slim/slim/Slim/Slim.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.5691221">
-          <caret line="470" column="26" selection-start-line="470" selection-start-column="26" selection-end-line="470" selection-end-column="26" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/views/login.html">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-2.6666667">
@@ -610,16 +555,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/views/macros/_forms.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.5306604">
-          <caret line="25" column="59" selection-start-line="25" selection-start-column="59" selection-end-line="25" selection-end-column="59" />
-          <folding>
-            <element signature="n#style#0;n#form#0;n#!!top" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/views/chef/show.html">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-27.333334">
@@ -719,14 +654,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/views/recipe/edit.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.63013697">
-          <caret line="80" column="4" selection-start-line="80" selection-start-column="4" selection-end-line="80" selection-end-column="50" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/lib/view.php">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.24266145">
@@ -771,14 +698,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="1.864">
           <caret line="93" column="0" selection-start-line="93" selection-start-column="0" selection-end-line="93" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/views/recipe/new.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.1509434">
-          <caret line="35" column="43" selection-start-line="35" selection-start-column="43" selection-end-line="35" selection-end-column="43" />
           <folding />
         </state>
       </provider>
@@ -858,14 +777,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/controllers/recipe_controller.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-16.074074">
-          <caret line="426" column="27" selection-start-line="426" selection-start-column="27" selection-end-line="426" selection-end-column="27" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/controllers/search_controller.php">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-24.074074">
@@ -904,8 +815,48 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/views/home.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.1485849">
+        <state vertical-scroll-proportion="-4.6666665">
           <caret line="7" column="31" selection-start-line="7" selection-start-column="31" selection-end-line="7" selection-end-column="31" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/controllers/recipe_controller.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-16.074074">
+          <caret line="426" column="27" selection-start-line="426" selection-start-column="27" selection-end-line="426" selection-end-column="27" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$APPLICATION_HOME_DIR$/lib/phpstorm.jar!/resources/html5-schema/html5/block.rnc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.424">
+          <caret line="227" column="16" selection-start-line="227" selection-start-column="16" selection-end-line="227" selection-end-column="16" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/views/recipe/new.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-11.407408">
+          <caret line="36" column="27" selection-start-line="36" selection-start-column="27" selection-end-line="36" selection-end-column="27" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/views/recipe/edit.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-34.666668">
+          <caret line="52" column="42" selection-start-line="52" selection-start-column="42" selection-end-line="52" selection-end-column="42" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/views/macros/_forms.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.5966981">
+          <caret line="57" column="47" selection-start-line="57" selection-start-column="47" selection-end-line="57" selection-end-column="47" />
           <folding />
         </state>
       </provider>
