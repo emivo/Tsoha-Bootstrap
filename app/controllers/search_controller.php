@@ -39,7 +39,7 @@ class SearchController extends BaseController
      */
     public static function make_paged_view($recipes, $path, $template)
     {
-        $pages = ceil(count($recipes) / 10);
+        $pages = ceil(count($recipes) / 5);
         if ($pages == 0) $pages = 1;
         $page = 1;
         if (isset($_GET['page'])) $page = $_GET['page'];

@@ -6,7 +6,7 @@ class RecipeController extends BaseController
     public static function index()
     {
         $params = $_GET;
-        $page_size = 10;
+        $page_size = 5;
         $recipes_count = Recipe::count();
         $pages = ceil($recipes_count / $page_size);
         if (isset($params['page'])) {
