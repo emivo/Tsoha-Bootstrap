@@ -1,21 +1,42 @@
-{% macro recipes_table(base_path, recipes, chefs, comments_for_recipes, user_logged_in) %}
+{% macro recipes_table(base_path, recipes, chefs, comments_for_recipes, user_logged_in, current_page, pages, next_page, prev_page) %}
 {% import "macros/_forms.html" as forms %}
+{% if current_page >= 1 %}
+    <nav>
+        <ul class="pagination">
+            <li {% if not prev_page %}class="disabled" {% endif %}>
+                <a href="{{base_path}}/recipes?page={{prev_page}}" {% if not prev_page %} class="disabled" disabled="disabled"{% endif %}>
+                    <span aria-hidden="true">«</span>
+                    <span class="sr-only">Previous</span></a></li>
+            {% for page in range(low=1, high=pages, step=1) %}
+            <!--{% if page != 0 %}-->
+                <li class="{% if current_page == page %}active{% endif %}">
+                    <a href="{{base_path}}/recipes?page={{page}}">{{page}}</a>
+                </li>
+            <!--{% endif %}-->
+            {% endfor %}
+            <li {% if not next_page %}class="disabled" {% endif %}>
+                <a href="{{base_path}}/recipes?page={{next_page}}" {% if not next_page %}class="disabled" disabled="disabled"{% endif %}><span
+                        aria-hidden="true">»</span><span class="sr-only">Next</span></a></li>
+        </ul>
+    </nav>
+{% endif %}
+
 <table class="table table-striped">
     <thead>
-        <tr>
-            <th>Nimi</th>
-            <th>Julkaisija</th>
-            <th>Arvosana</th>
-            <th>Lisäyspäivä</th>
-            <th></th>
-        </tr>
+    <tr>
+        <th>Nimi</th>
+        <th>Julkaisija</th>
+        <th>Arvosana</th>
+        <th>Lisäyspäivä</th>
+        <th></th>
+    </tr>
     </thead>
 
     <tbody>
-        {% for recipe in recipes %}
+    {% for recipe in recipes %}
         <tr>
             <td><a href="{{base_path}}/recipe/{{recipe.id}}">{{recipe.name}}</a></td>
-                        <td><a href="{{base_path}}/chef/{{recipe.chef_id}}">{{chefs[recipe.chef_id].name}}</a></td>
+            <td><a href="{{base_path}}/chef/{{recipe.chef_id}}">{{chefs[recipe.chef_id].name}}</a></td>
             {% set sum_ratings = 0 %}
             {% for comments in comments_for_recipes[recipe.id] %}
                 {% for comment in comments %}
@@ -31,15 +52,15 @@
             </td>
             <td>{{recipe.published}}</td>
             {% if user_logged_in.id == recipe.chef_id %}
-            <td>
-                {{ forms.edit_button(base_path,recipe.id)}}
-                {{ forms.destroy_button(base_path,recipe.id)}}
-            </td>
+                <td>
+                    {{ forms.edit_button(base_path,recipe.id)}}
+                    {{ forms.destroy_button(base_path,recipe.id)}}
+                </td>
             {% else %}
-            <td></td> 
+                <td></td>
             {% endif %}
         </tr>
-        {% endfor %}
+    {% endfor %}
     </tbody>
 </table>
 

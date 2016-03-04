@@ -10,9 +10,17 @@ class Chef extends BaseModel
         parent::__construct($attributes);
     }
 
-    public static function all()
+    public static function all($option = null)
     {
-        $query = DB::connection()->prepare('SELECT * FROM Chef');
+        $query_string = 'SELECT * FROM Chef';
+        if (is_string($option)) {
+            $query_string .= ' WHERE name LIKE :name';
+        }
+        $query = DB::connection()->prepare($query_string);
+        if (is_string($option)) {
+            $option = '%'.$option.'%';
+            $query->bindParam(':name', $option, PDO::PARAM_STR);
+        }
         $query->execute();
         $rows = $query->fetchAll();
         $chefs = array();

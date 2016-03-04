@@ -13,7 +13,6 @@ function check_if_admin()
     }
 }
 
-// juuripolku
 $routes->get('/', function () {
     RecipeController::index();
 });
@@ -32,91 +31,99 @@ $routes->post('/register', function () {
     ChefController::store();
 });
 
-$routes->get('/recipe/new', 'check_logged_in', function () {
-    RecipeController::create();
-});
 
 $routes->get('/chef/:id', function ($id) {
     ChefController::show($id);
 });
+$routes->group('/my_profile', function () use ($routes) {
+    $routes->get('/', 'check_logged_in', function () {
+        ChefController::show(BaseController::get_user_logged_in()->id);
+    });
 
-$routes->get('/my_profile', 'check_logged_in', function () {
-    ChefController::show(BaseController::get_user_logged_in()->id);
+    $routes->get('/edit', 'check_logged_in', function () {
+        ChefController::edit();
+    });
+    $routes->post('/', 'check_logged_in', function () {
+        ChefController::update();
+    });
+    $routes->post('/destroy', 'check_logged_in', function () {
+        ChefController::destroy();
+    });
 });
 
-$routes->get('/my_profile/edit', 'check_logged_in', function () {
-    ChefController::edit();
-});
-
-$routes->post('/my_profile', 'check_logged_in', function () {
-    ChefController::update();
-});
-$routes->post('/my_profile/destroy', 'check_logged_in', function () {
-    ChefController::destroy();
-});
 
 $routes->get('/chefs/index', function () {
     ChefController::index();
 });
+$routes->group('/admin', function () use ($routes) {
 
-$routes->post('/admin/change_account_activity/:id', 'check_if_admin', function ($id) {
-    ChefController::toggle_activity($id);
-});
+    $routes->post('/change_account_activity/:id', 'check_if_admin', function ($id) {
+        ChefController::toggle_activity($id);
+    });
 
-$routes->post('/admin/change_account_admin_status/:id', 'check_if_admin', function ($id) {
-    ChefController::toggle_admin_status($id);
+    $routes->post('/change_account_admin_status/:id', 'check_if_admin', function ($id) {
+        ChefController::toggle_admin_status($id);
+    });
 });
 
 $routes->post('/search', function () {
     SearchController::find();
 });
 
-// TODO ehkä muuta hakunäkymä getiksi. Mutta ei ole haittaa että on post sillä vain haku
-//$routes->get('/results', function() {
-//    SearchController::show();
-//});
+$routes->get('/results', function() {
+    SearchController::show();
+});
 
 $routes->get('/keyword/:key', function ($keyword) {
     SearchController::find_by_keyword($keyword);
 });
 
-$routes->get('/recipe', function () {
-    RecipeController::index();
+
+$routes->group('/recipe', function () use ($routes) {
+    $routes->get('s', function () {
+        RecipeController::index();
+    });
+
+    $routes->post('/', 'check_logged_in', function () {
+        RecipeController::store();
+    });
+
+    $routes->get('/new', 'check_logged_in', function () {
+        RecipeController::create();
+    });
+
+    $routes->get('/:id', function ($id) {
+        RecipeController::show($id);
+    });
+
+    $routes->get('/:id/edit', 'check_logged_in', function ($id) {
+        RecipeController::edit($id);
+    });
+
+    $routes->post('/:id/edit', 'check_logged_in', function ($id) {
+        RecipeController::update($id);
+    });
+
+    $routes->post('/:id/delete_keyword/:keyword', 'check_logged_in', function ($id, $keyword) {
+        RecipeController::delete_keyword($id, $keyword);
+    });
+    $routes->post('/:id/delete_ingredient/:ingredient_name', 'check_logged_in', function ($id, $ingredient_name) {
+        RecipeController::delete_ingredient($id, $ingredient_name);
+    });
+
+    $routes->post('/:id/destroy', 'check_logged_in', function ($id) {
+        RecipeController::destroy($id);
+    });
+
+    $routes->post('/:id/newcomment', 'check_logged_in', function ($id) {
+        RecipeController::new_comment($id);
+    });
+    $routes->post('/:id/comment/:chef_id/delete', 'check_logged_in', function ($id, $chef_id) {
+        RecipeController::delete_comment($id, $chef_id);
+    });
 });
 
-$routes->post('/recipe', 'check_logged_in', function () {
-    RecipeController::store();
-});
 
-$routes->get('/recipe/:id', function ($id) {
-    RecipeController::show($id);
-});
-
-$routes->get('/recipe/:id/edit', 'check_logged_in', function ($id) {
-    RecipeController::edit($id);
-});
-
-$routes->post('/recipe/:id/edit', 'check_logged_in', function ($id) {
-    RecipeController::update($id);
-});
-
-$routes->post('/recipe/:id/delete_keyword/:keyword', 'check_logged_in', function ($id, $keyword) {
-    RecipeController::delete_keyword($id, $keyword);
-});
-$routes->post('/recipe/:id/delete_ingredient/:ingredient_name', 'check_logged_in', function ($id, $ingredient_name) {
-    RecipeController::delete_ingredient($id, $ingredient_name);
-});
-
-$routes->post('/recipe/:id/destroy', 'check_logged_in', function ($id) {
-    RecipeController::destroy($id);
-});
-
-$routes->post('/recipe/:id/newcomment', 'check_logged_in', function ($id) {
-    RecipeController::new_comment($id);
-});
-$routes->post('/recipe/:id/comment/:chef_id/delete', 'check_logged_in', function ($id, $chef_id) {
-    RecipeController::delete_comment($id, $chef_id);
-});
 $routes->get('/login', function () {
     SessionController::login();
 });

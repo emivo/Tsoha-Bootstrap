@@ -1,18 +1,12 @@
 {% extends "base.html" %}
 
 {% block content %}
-<!--{% import "macros/_forms.html" as forms %}-->
 {% import "macros/recipes.html" as macro %}
-<div class="page-header">
-    <h1>Tervetuloa Reseptikirjastoon
-        {% if user_logged_in %}
-        {{user_logged_in.name}}
-        {% endif %}!</h1>
-</div>
+
+<h1>Reseptit</h1>
+
 {% if user_logged_in %}
 <a class="btn btn-success" href="{{base_path}}/recipe/new">Lisää uusi resepti</a>
 {% endif %}
-<br>
-<h2> Viimeksi lisätyt reseptit </h2>
-{{ macro.recipes_table(base_path, recipes, chefs, comments_for_recipes, user_logged_in) }}
+{{ macro.recipes_table(base_path, recipes, chefs, comments_for_recipes, user_logged_in, current_page, pages, next_page, prev_page) }}
 {% endblock %}

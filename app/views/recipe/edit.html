@@ -43,7 +43,7 @@
             {% endfor %}
         </table>
     </div>
-
+    <script>var indexCountForIngredient = 0;</script>
     <span id="newIngredient"></span>
     <div class="form-group">
         <button type="button" onclick="newInput(0)" class="btn btn-success">Lisää ainesosa</button>
@@ -78,7 +78,7 @@
     {% set keywordCount = keywordCount + 1 %}
     {% endfor %}
     <span id="newKeyword"></span>
-
+    <script>var indexCountForKeyword = 0;</script>
     <div class="form-group">
         <button type="button" onclick="newKeywordInput(0)" class="btn btn-success">Lisää hakusana</button>
     </div>

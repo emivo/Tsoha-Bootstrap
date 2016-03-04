@@ -4,17 +4,20 @@
 <p>Täytä kaikki tähdellä merkityt</p>
 <form method="post" action="{{base_path}}/recipe">
     <div class="form-group">
-        <label>Nimi <span class="badge"><span class="glyphicon glyphicon-asterisk" aria-disabled="true"></span></span></label>
+        <label>Nimi <span class="badge"><span class="glyphicon glyphicon-asterisk"
+                                              aria-disabled="true"></span></span></label>
         <input name="name" class="form-control" type="text">
     </div>
     <div class="form-group">
         <table>
             <tr>
                 <td>
-                    <label>Määrä <span class="badge"><span class="glyphicon glyphicon-asterisk" aria-disabled="true"></span></span></label>
+                    <label>Määrä <span class="badge"><span class="glyphicon glyphicon-asterisk"
+                                                           aria-disabled="true"></span></span></label>
                 </td>
                 <td>
-                    <label>Ainesosa <span class="badge"><span class="glyphicon glyphicon-asterisk" aria-disabled="true"></span></span></label>
+                    <label>Ainesosa <span class="badge"><span class="glyphicon glyphicon-asterisk"
+                                                              aria-disabled="true"></span></span></label>
                 </td>
             </tr>
             <tr>
@@ -27,7 +30,7 @@
             </tr>
         </table>
     </div>
-
+    <script>var indexCountForIngredient = 1;</script>
     <span id="newIngredient"></span>
     <div class="form-group">
         <button type="button" onclick="newInput(1)" class="btn btn-success">Lisää ainesosa</button>
@@ -42,7 +45,8 @@
         <input name="cooking_time" class="form-control" type="text">
     </div>
     <div class="form-group">
-        <label>Hakusanat <span class="badge"><span class="glyphicon glyphicon-asterisk" aria-disabled="true"></span></span></label>
+        <label>Hakusanat <span class="badge"><span class="glyphicon glyphicon-asterisk"
+                                                   aria-disabled="true"></span></span></label>
         <select name="keyword[0]" class="form-control">
             <option>Alkuruoka</option>
             <option>Pääruoka</option>
@@ -51,14 +55,16 @@
             <option>Muu</option>
         </select>
     </div>
-
+    <script>var indexCountForKeyword = 1;</script>
     <span id="newKeyword"></span>
     <div class="form-group">
         <button type="button" onclick="newKeywordInput(1)" class="btn btn-success">Lisää hakusana</button>
     </div>
 
     <div class="form-group">
-        <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-save" aria-disabled="true"></span> Tallenna</button>
+        <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-save"
+                                                            aria-disabled="true"></span> Tallenna
+        </button>
     </div>
 </form>
 {% endblock %}

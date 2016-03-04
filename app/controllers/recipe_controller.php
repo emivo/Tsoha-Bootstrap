@@ -5,14 +5,33 @@ class RecipeController extends BaseController
 
     public static function index()
     {
-        $recipes = Recipe::all();
-        $chefs = self::find_chefs($recipes);
-        $comments_for_recipes = array();
-        foreach ($recipes as $recipe) {
-            $comments_for_recipes[$recipe->id][$recipe->id] = Comment::find_by_recipe_id($recipe->id);
-        }
+        $params = $_GET;
+        $recipes_count = Recipe::count();
+        $page_size = 10;
+        $pages = ceil($recipes_count / $page_size);
+        if (isset($params['page'])) {
+            $page = $params['page'];
+            if ($page <= 0 || $page > $pages) {
+                Redirect::to('/', array('error' => 'sivua ei ole olemassa'));
+            } else {
+                $recipes = Recipe::all(array('page' => $page, 'page_size' => $page_size));
+                list($chefs, $comments_for_recipes) = self::get_chefs_and_comments_for_recipes($recipes);
 
-        View::make('recipe/index.html', array('recipes' => $recipes, 'comments_for_recipes' => $comments_for_recipes, 'chefs' => $chefs));
+                $content = array('recipes' => $recipes, 'comments_for_recipes' => $comments_for_recipes, 'chefs' => $chefs, 'current_page' => $params['page']);
+                if ($page > 1) {
+                    $content['prev_page'] = $page - 1;
+                }
+                if ($page < $pages) {
+                    $content['next_page'] = $page - 1;
+                }
+                View::make('recipe/index.html', $content);
+            }
+        } else {
+            $recipes = Recipe::all(array('limit' => 10));
+            list($chefs, $comments_for_recipes) = self::get_chefs_and_comments_for_recipes($recipes);
+
+            View::make('home.html', array('recipes' => $recipes, 'comments_for_recipes' => $comments_for_recipes, 'chefs' => $chefs));
+        }
     }
 
     public static function find_chefs($recipes)
@@ -46,7 +65,7 @@ class RecipeController extends BaseController
 
     public static function store()
     {
-        $params = $_POST;
+        $params = self::trim_double_spaces_from_params($_POST);
         $chef_id = self::get_user_logged_in()->id;
 
         $ingredients = self::create_ingredients($params, false);
@@ -89,7 +108,7 @@ class RecipeController extends BaseController
     public static function update($id)
     {
         $recipe = Recipe::find($id);
-        $params = $_POST;
+        $params = self::trim_double_spaces_from_params($_POST);
 
         $new_ingredients = array();
         $v = new \Valitron\Validator(array());
@@ -115,7 +134,7 @@ class RecipeController extends BaseController
         $recipe = Recipe::find($id);
         if ($_SESSION['user'] == $recipe->chef_id || self::get_user_logged_in()->admin) {
             $recipe->destroy();
-            Redirect::to('/recipe', array('message' => 'Resepti poistettu'));
+            Redirect::to('/recipes?=1', array('message' => 'Resepti poistettu'));
         } else {
             Redirect::to('/recipe/' . $id, array('error' => 'Reseptin voi poistaa vain reseptin luoja'));
         }
@@ -161,6 +180,7 @@ class RecipeController extends BaseController
     public static function new_comment($id)
     {
         $params = $_POST;
+        $params['comment'] = preg_replace('/\s+/', ' ', $params['comment']);
         $chef_id = $_SESSION['user'];
         $validator = self::validate_comment($params);
 
@@ -193,11 +213,18 @@ class RecipeController extends BaseController
     protected static function create_recipe_base($params, $chef_id)
     {
         $recipe = new Recipe(array(
-            'name' => preg_replace('/\s+/', ' ', $params['name']),
+            'name' => $params['name'],
             'chef_id' => $chef_id,
-            'cooking_time' => preg_replace('/\s+/', ' ', $params['cooking_time']),
-            'directions' => preg_replace('/\s+/', ' ', $params['directions'])));
+            'cooking_time' => $params['cooking_time'],
+            'directions' => $params['directions']));
         return $recipe;
+    }
+
+    protected static function trim_double_spaces_from_params($params) {
+        $params['name'] = preg_replace('/\s+/', ' ', $params['name']);
+        $params['cooking_time'] = preg_replace('/\s+/', ' ', $params['cooking_time']);
+        $params['directions'] = preg_replace('/\s+/', ' ', $params['directions']);
+        return $params;
     }
 
     protected static function create_ingredients($params, $edit)
@@ -248,9 +275,9 @@ class RecipeController extends BaseController
         ))->message('Täytä vaadittavat kentät');
 
         $validator->rule('lengthMin', 'name', 2)->message('Nimen tulee olla vähintään 2 merkkiä');
-        $validator->rule('lengthMax', 'name', 20)->message('Nimi enintään 20 merkkiä');
+        $validator->rule('lengthMax', 'name', 30)->message('Nimi enintään 30 merkkiä');
         $validator->rule('lengthMin', 'cooking_time', 2)->message('Valmistusaika tulee olla vähintään 2 merkkiä');
-        $validator->rule('lengthMax', 'cooking_time', 10)->message('Valmistusaika tulee olla vähintään 2 merkkiä');
+        $validator->rule('lengthMax', 'cooking_time', 15)->message('Valmistusaika enintää 15 merkkiä');
         $validator->rule('lengthMin', 'directions', 4)->message('Ohjeiden tulee olla vähintään 4 merkkiä');
         $validator->rule('lengthMax', 'directions', 500)->message('Ohjeiden maksimipituus 500 merkkiä');
 
@@ -304,9 +331,9 @@ class RecipeController extends BaseController
 
     public static function make_changes_to_recipe($params, $recipe, $new_ingredients)
     {
-        $recipe->name = preg_replace('/\s+/', ' ', $params['name']);
-        $recipe->cooking_time = preg_replace('/\s+/', ' ', $params['cooking_time']);
-        $recipe->directions = preg_replace('/\s+/', ' ', $params['directions']);
+        $recipe->name = $params['name'];
+        $recipe->cooking_time = $params['cooking_time'];
+        $recipe->directions = $params['directions'];
 
         if (count($new_ingredients) > 0) {
             self::save_ingredients_for_recipe($new_ingredients, $recipe->id);
@@ -332,7 +359,7 @@ class RecipeController extends BaseController
             'recipe_id' => $id,
             'chef_id' => $chef_id,
             'rating' => $params['rating'],
-            'comment' => preg_replace('/\s+/', ' ', $params['comment'])
+            'comment' => $params['comment']
         ));
     }
 
@@ -352,6 +379,20 @@ class RecipeController extends BaseController
             $ingredient->recipe_id = $recipe_id;
             $ingredient->save();
         }
+    }
+
+    /**
+     * @param $recipes
+     * @return array
+     */
+    public static function get_chefs_and_comments_for_recipes($recipes)
+    {
+        $chefs = self::find_chefs($recipes);
+        $comments_for_recipes = array();
+        foreach ($recipes as $recipe) {
+            $comments_for_recipes[$recipe->id][$recipe->id] = Comment::find_by_recipe_id($recipe->id);
+        }
+        return array($chefs, $comments_for_recipes);
     }
 
 

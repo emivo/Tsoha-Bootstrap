@@ -37,6 +37,9 @@
                 <li><a href="{{base_path}}">Etusivu</a></li>
             </ul>
             <ul class="nav navbar-nav">
+                <li><a href="{{base_path}}/recipes?page=1"/>Reseptit</a></li>
+            </ul>
+            <ul class="nav navbar-nav">
                 <li><a href="{{base_path}}/chefs/index"/>Käyttäjät</a></li>
             </ul>
             <ul class="nav navbar-nav">
@@ -61,16 +64,28 @@
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li role="presentation" class="dropdown">
-                        <a class=" dropdown-toggle" href="#" role="button"
-                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            {{user_logged_in.name}}
-                            <span class="caret"></span>
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-left">
-                            <li><button class="btn-link" form="dropdownButtons" formmethod="get" formaction="{{base_path}}/my_profile">Oma tili</button></li>
-                            <li><button class="btn-link" form="dropdownButtons" formmethod="get" formaction="{{base_path}}/my_profile/edit">Muokkaa tietoja</button></li>
-                            <li><button class="btn-link" form="dropdownButtons" formmethod="post" formaction="{{base_path}}/logout">Kirjaudu ulos</button></li>
-                        </ul>
+                    <a class=" dropdown-toggle" href="#" role="button"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        {{user_logged_in.name}}
+                        <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-left">
+                        <li>
+                            <button class="btn-link" form="dropdownButtons" formmethod="get"
+                                    formaction="{{base_path}}/my_profile">Oma tili
+                            </button>
+                        </li>
+                        <li>
+                            <button class="btn-link" form="dropdownButtons" formmethod="get"
+                                    formaction="{{base_path}}/my_profile/edit">Muokkaa tietoja
+                            </button>
+                        </li>
+                        <li>
+                            <button class="btn-link" form="dropdownButtons" formmethod="post"
+                                    formaction="{{base_path}}/logout">Kirjaudu ulos
+                            </button>
+                        </li>
+                    </ul>
                 </li>
                 <form id="dropdownButtons"></form>
             </ul>
@@ -83,12 +98,19 @@
                 <li><a href="{{base_path}}/login">Kirjaudu</a></li>
             </ul>
             {% endif %}
-            <form method="post" action="{{base_path}}/search" class="navbar-form navbar-left" role="search">
-                <div class="form-group">
-                    <input name="search" type="text" class="form-control" placeholder="Etsi...">
-                </div>
-                <button type="submit" class="btn btn-default">Hae</button>
-            </form>
+            <!--hakupalkki-->
+            <div class="input-group">
+                <form method="post" action="{{base_path}}/search" class="navbar-form navbar-left" role="search">
+                    <div class="form-group">
+                        <select name="option" class="form-control">
+                            <option>resepti</option>
+                            <option>käyttäjä</option>
+                        </select>
+                        <input name="search" type="text" class="form-control" placeholder="Etsi...">
+                    </div>
+                    <button type="submit" class="btn btn-default">Hae</button>
+                </form>
+            </div>
         </div>
     </div>
 </nav>

@@ -10,9 +10,20 @@ class Recipe extends BaseModel
         parent::__construct($attributes);
     }
 
-    public static function all()
+    public static function all($option = null)
     {
-        $query = DB::connection()->prepare('SELECT * FROM Recipe ORDER BY published DESC');
+
+        $query_string = 'SELECT * FROM Recipe ORDER BY published DESC';
+        if ($option && isset($option['limit'])) {
+            $query_string .= ' LIMIT ' . $option['limit'];
+        } else {
+            if ($option && isset($option['page']) && isset($option['page_size'])) {
+                $page_size = $option['page_size'];
+                $offset = $page_size * ($option['page'] - 1);
+                $query_string .= ' LIMIT '.$page_size.' OFFSET '.$offset ;
+            }
+        }
+        $query = DB::connection()->prepare($query_string);
         $query->execute();
         $rows = $query->fetchAll();
 
@@ -23,17 +34,12 @@ class Recipe extends BaseModel
         return $recipes;
     }
 
-    public static function ten_recent()
-    {
-        $query = DB::connection()->prepare('SELECT * FROM Recipe ORDER BY published DESC LIMIT 10');
+    public static function count() {
+        $query = DB::connection()->prepare('SELECT COUNT(*) FROM Recipe');
         $query->execute();
-        $rows = $query->fetchAll();
-
-        $recipes = array();
-        foreach ($rows as $row) {
-            $recipes[] = self::new_recipe_from_row($row);
-        }
-        return $recipes;
+        $row = $query->fetch();
+        if (is_null($row)) return 0;
+        return $row['count'];
     }
 
     public static function find($id)
@@ -49,8 +55,9 @@ class Recipe extends BaseModel
         return null;
     }
 
-    public static function find_by_chef_id($chef_id) {
-        $query  = DB::connection()
+    public static function find_by_chef_id($chef_id)
+    {
+        $query = DB::connection()
             ->prepare("SELECT * FROM Recipe WHERE chef_id = :chef_id");
         $query->execute(array('chef_id' => $chef_id));
         $rows = $query->fetchAll();
@@ -69,8 +76,7 @@ class Recipe extends BaseModel
                 . "LEFT JOIN RecipeKeyword ON Recipe.id = RecipeKeyword.recipe_id "
                 . "JOIN Keyword ON Keyword.id = RecipeKeyword.keyword_id "
                 . "JOIN RecipeIngredient ON Recipe.id = RecipeIngredient.recipe_id JOIN Ingredient ON Ingredient.id = RecipeIngredient.ingredient_id "
-                . "WHERE Recipe.name LIKE :search OR Keyword.keyword LIKE :search OR Ingredient.name LIKE :search");
-        // TODO VALIDATE STRING ehkä
+                . "WHERE Recipe.name LIKE :search OR Keyword.keyword LIKE :search OR Ingredient.name LIKE :search OR Recipe.directions LIKE :search");
         $string = "%" . $string . "%";
 //        $validator = new Valitron\Validator($string);
 //        $validator->addRule($string, $validator);

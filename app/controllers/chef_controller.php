@@ -8,10 +8,15 @@ class ChefController extends BaseController
         View::make('register.html');
     }
 
-    public static function index()
+    public static function index($find = null)
     {
-        $chefs = Chef::all();
-        View::make('chef/index.html', array('chefs' => $chefs));
+        if (is_null($find)) {
+            $chefs = Chef::all();
+
+        } else {
+            $chefs = Chef::all($find);
+        }
+            View::make('chef/index.html', array('chefs' => $chefs));
     }
 
     public static function show($id)
@@ -56,7 +61,6 @@ class ChefController extends BaseController
     {
         $params = $_POST;
         $validator = self::validate_params(new Valitron\Validator($params), true);
-//TODO VALIDOInti
         if ($validator->validate()) {
             $chef = self::get_user_logged_in();
             $chef->info = $params['info'];
@@ -107,12 +111,15 @@ class ChefController extends BaseController
     {
         $chef = Chef::find($id);
         if ($chef) {
-            // TODO admin nimeseltä ei voi poistaa
-            $chef->toggle_admin_status();
-            if ($chef->admin) {
-                Redirect::to('/chef/' . $id, array('message' => 'Käyttäjällä on nyt ylläpito-oikeudet'));
+            if ($chef->name == 'admin') {
+                Redirect::to('/', array('Tältä ylläpitäjältä ei voi poistaa ylläpito-oikeuksia'));
             } else {
-                Redirect::to('/chef/' . $id, array('message' => 'Käyttäjän oikeudet poistettu'));
+                $chef->toggle_admin_status();
+                if ($chef->admin) {
+                    Redirect::to('/chef/' . $id, array('message' => 'Käyttäjällä on nyt ylläpito-oikeudet'));
+                } else {
+                    Redirect::to('/chef/' . $id, array('message' => 'Käyttäjän oikeudet poistettu'));
+                }
             }
         } else {
             Redirect::to('/', array('error' => 'Käyttäjää ei ole'));
