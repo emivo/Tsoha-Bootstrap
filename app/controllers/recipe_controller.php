@@ -266,9 +266,9 @@ class RecipeController extends BaseController
         foreach ($ingredients as $key => $ingredient) {
             $validator->rule('required', array('name' . $key, 'quantity' . $key))->message('Ainesosille vaaditaan määrä ja ainesosan nimi');
             $validator->rule('lengthMin', 'name' . $key, 3)->message('Ainesosan nimen pituus tulee olla vähintään 3 merkkiä');
-            $validator->rule('lengthMax', 'name' . $key, 20)->message('Ainesosan nimi enintään 20 merkkiä');
+            $validator->rule('lengthMax', 'name' . $key, 30)->message('Ainesosan nimi enintään 30 merkkiä');
             $validator->rule('lengthMin', 'quantity' . $key, 1)->message("Määrän tulee vähintään olla yksi merkki");
-            $validator->rule('lengthMax', 'quantity' . $key, 10)->message("Määrä enintään 10 merkkiä");
+            $validator->rule('lengthMax', 'quantity' . $key, 15)->message("Määrä enintään 15 merkkiä");
         }
         if (count($ingredients) == 0) {
             $validator->error('name', 'Yhtään ainesosaa ei ole annettu');
