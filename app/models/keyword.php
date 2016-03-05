@@ -1,6 +1,5 @@
 <?php
 
-// TODO jos aikaa hieman refactor
 class Keyword extends BaseModel
 {
     public $id, $keyword;
@@ -28,7 +27,7 @@ class Keyword extends BaseModel
     }
 
     /**
-     * return reseptien id:t listana
+     * return reseptien id:t listana tai null jos ei reseptejä
      */
     public function find_recipes()
     {
@@ -77,19 +76,12 @@ class Keyword extends BaseModel
 
     public function save($recipe_id)
     {
-        $query = DB::connection()
-            ->prepare("SELECT * FROM Keyword WHERE keyword = :keyword LIMIT 1");
-        $query->execute(array('keyword' => $this->keyword));
-        $keyword = $query->fetch();
+        $keyword = $this->check_if_keyword_already_exist();
 
         $insert_query = DB::connection()
             ->prepare("INSERT INTO RecipeKeyword (recipe_id, keyword_id) VALUES (:recipe_id, :keyword_id)");
         if (!$keyword) {
-            $new_keyword = DB::connection()
-                ->prepare("INSERT INTO Keyword (keyword) VALUES (:keyword) RETURNING id");
-            $new_keyword
-                ->execute(array('keyword' => $this->keyword));
-            $keyword = $new_keyword->fetch();
+            $keyword = $this->create_new_keyword();
         }
 
         $this->id = $keyword['id'];
@@ -138,5 +130,30 @@ class Keyword extends BaseModel
         $query = DB::connection()
             ->prepare("DELETE FROM Keyword WHERE id = :id");
         $query->execute(array('id' => $this->id));
+    }
+
+    /**
+     * @return mixed
+     */
+    public function check_if_keyword_already_exist()
+    {
+        $query = DB::connection()
+            ->prepare("SELECT * FROM Keyword WHERE keyword = :keyword LIMIT 1");
+        $query->execute(array('keyword' => $this->keyword));
+        $keyword = $query->fetch();
+        return $keyword;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function create_new_keyword()
+    {
+        $new_keyword = DB::connection()
+            ->prepare("INSERT INTO Keyword (keyword) VALUES (:keyword) RETURNING id");
+        $new_keyword
+            ->execute(array('keyword' => $this->keyword));
+        $keyword = $new_keyword->fetch();
+        return $keyword;
     }
 }

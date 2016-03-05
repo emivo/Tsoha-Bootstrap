@@ -16,7 +16,7 @@ class RecipeController extends BaseController
         }
     }
 
-    public static function find_chefs($recipes)
+    public static function find_chefs_for_resipes($recipes)
     {
         $chefs = array();
         foreach ($recipes as $recipe) {
@@ -124,8 +124,6 @@ class RecipeController extends BaseController
         }
     }
 
-    // TODO jos ehtii pitää tehdä paremmin. jos kaksi saman nimistä ainesosaa reseptillä mikä sinänsä on jo vähän blah
-    // olis varmaan pitäny sinne validointiin laittaa ettei mee samoja :'(
     public static function delete_ingredient($id, $ingredient_name)
     {
         $ingredients_left = count(Ingredient::find_by_recipe_id($id));
@@ -351,7 +349,7 @@ class RecipeController extends BaseController
      */
     public static function get_chefs_and_comments_for_recipes($recipes)
     {
-        $chefs = self::find_chefs($recipes);
+        $chefs = self::find_chefs_for_resipes($recipes);
         $comments_for_recipes = array();
         foreach ($recipes as $recipe) {
             $comments_for_recipes[$recipe->id][$recipe->id] = Comment::find_by_recipe_id($recipe->id);

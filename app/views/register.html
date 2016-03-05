@@ -7,16 +7,19 @@
         <form method="post" action="{{base_path}}/register">
             <div class="form-group">
                 <label>Käyttäjätunnus</label>
+                <span class="help-block">Käytä vain a-z, A-Z, 0-9, -, _, merkkejä. Pituus 4 - 20 merkkiä</span>
                 <input class="form-control" name="username" type="text">
             </div>
 
             <div class="form-group">
-                <label>Tietoja käyttäjästä</label>
+                <label>Tietoja</label>
+                <span class="help-block">Kirjoita jotain lisätietoja itsestäsi. 4-200 merkkiä </span>
                 <textarea class="form-control" name="info" type="text"></textarea>
             </div>
 
             <div class="form-group">
                 <label>Salasana</label>
+                <span class="help-block">Vähintään 4 merkkiä</span>
                 <input class="form-control" name="password" type="password">
             </div>
             <div class="form-group">

@@ -32,12 +32,8 @@ class View
     private static function get_twig(){
       Twig_Autoloader::register();
 
-      // TODO MUISTA OTTAA DEBUGGERI POIS LOPUKSI
       $twig_loader = new Twig_Loader_Filesystem('app/views');
-      $twig = new Twig_Environment($twig_loader, array(
-          'debug' => true
-      ));
-      $twig->addExtension(new Twig_Extension_Debug());
+      $twig = new Twig_Environment($twig_loader);
 
       return $twig;
     }
