@@ -18,7 +18,9 @@ class Comment extends BaseModel
         return self::fetch_comments_from_query_result($query);
 
     }
-    public static function find_by_chef_id($chef_id) {
+
+    public static function find_by_chef_id($chef_id)
+    {
         $query = DB::connection()
             ->prepare("SELECT * FROM Comment WHERE chef_id = :chef_id");
         $query->execute(array('chef_id' => $chef_id));
@@ -26,21 +28,24 @@ class Comment extends BaseModel
         return self::fetch_comments_from_query_result($query);
     }
 
-    public static function delete_chefs_from_recipe($id, $chef_id) {
+    public static function delete_chefs_from_recipe($id, $chef_id)
+    {
         $comment = new Comment(array(
-           'recipe_id' => $id,
+            'recipe_id' => $id,
             'chef_id' => $chef_id
         ));
         $comment->delete();
     }
 
-    public static function delete_all_from_recipe($recipe_id) {
+    public static function delete_all_from_recipe($recipe_id)
+    {
         $query_delete_comments = DB::connection()
             ->prepare("DELETE FROM Comment WHERE recipe_id = :id");
         $query_delete_comments->execute(array('id' => $recipe_id));
     }
 
-    public function delete() {
+    public function delete()
+    {
         $query_delete_comments = DB::connection()
             ->prepare("DELETE FROM Comment WHERE recipe_id = :recipe_id AND chef_id = :chef_id");
         $query_delete_comments->execute(array('recipe_id' => $this->recipe_id, 'chef_id' => $this->chef_id));

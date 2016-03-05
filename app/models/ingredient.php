@@ -15,14 +15,10 @@ class Ingredient extends BaseModel
         $quantity_query = DB::connection()
             ->prepare("SELECT * FROM RecipeIngredient WHERE recipe_id = :id");
         $quantity_query->execute(array('id' => $id));
-
         $rows = $quantity_query->fetchAll();
-
         $ingredients = array();
-
         foreach ($rows as $row) {
             $ingredient = self::find_ingredient_by_id($row['ingredient_id']);
-
             $ingredients[] = self::new_ingredient_from_row($id, $row, $ingredient);
         }
 
@@ -33,13 +29,10 @@ class Ingredient extends BaseModel
     {
         $ingredient = self::find_ingredient_by_name($name);
 
-
         $query = DB::connection()
             ->prepare("SELECT * FROM RecipeIngredient WHERE recipe_id = :recipe_id AND ingredient_id = :id");
         $query->execute(array('recipe_id' => $recipe_id, 'id' => $ingredient['id']));
-
         $row = $query->fetch();
-
         if ($row) {
             $ingredient = new Ingredient(array(
                 'ingredient_id' => $row['ingredient_id'],
@@ -119,28 +112,6 @@ class Ingredient extends BaseModel
         $ingredient = $query->fetch();
         return $ingredient;
     }
-// Ainesosien päivitys ei ole niin mielekästä joten ratkaisua muutettu
-//    public function update()
-//    {
-//        // jos ainesosa vain yhdessä, niin vaihda nimi, muuten luo uusi
-//        $query = DB::connection()
-//            ->prepare("SELECT COUNT(*) FROM RecipeIngredient WHERE ingredient_id  = :id");
-//        $query->execute(array('id' => $this->ingredient_id));
-//        $count = $query->fetch();
-//
-//        if ($count['count'] == 1) {
-//            DB::connection()
-//                ->prepare("UPDATE Ingredient SET name = :name WHERE id = :id")
-//                ->execute(array('name' => $this->name, 'id' => $this->ingredient_id));
-//        } else {
-//            $ingredient = $this->new_ingredient_store();
-//            $this->ingredient_id = $ingredient['id'];
-//        }
-//
-//        DB::connection()
-//            ->prepare("UPDATE RecipeIngredient SET quantity = :quantity WHERE ingredient_id = :iid AND recipe_id = :rid")
-//            ->execute(array('quantity' => $this->quantity, 'iid' => $this->ingredient_id, 'rid' => $this->recipe_id));
-//    }
 
     public static function delete_unused()
     {
@@ -169,7 +140,6 @@ class Ingredient extends BaseModel
 
         $array_of_recipes = array();
         foreach ($rows as $row) {
-            // muuta tähän jotta lisää reseptit listaan
             $array_of_recipes[] = $row['recipe_id'];
         }
 
@@ -185,17 +155,19 @@ class Ingredient extends BaseModel
             ->prepare("DELETE FROM RecipeIngredient WHERE recipe_id = :id");
         $query_delete_quantities->execute(array('id' => $id));
     }
+
     public function delete()
     {
         $query_delete_quantities = DB::connection()
             ->prepare("DELETE FROM Ingredient WHERE id = :id");
         $query_delete_quantities->execute(array('id' => $this->ingredient_id));
     }
+
     public function delete_only_from_this_recipe()
     {
         $query_delete_quantities = DB::connection()
             ->prepare("DELETE FROM RecipeIngredient WHERE recipe_id = :rid AND ingredient_id = :iid");
-        $query_delete_quantities->execute(array('rid' => $this->recipe_id,'iid' => $this->ingredient_id));
+        $query_delete_quantities->execute(array('rid' => $this->recipe_id, 'iid' => $this->ingredient_id));
         self::delete_unused();
     }
 

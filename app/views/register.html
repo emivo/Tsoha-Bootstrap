@@ -2,32 +2,30 @@
 {% block content %}
 <h1>Rekisteröidy sivustolle</h1>
 
-<form method="post" action="{{base_path}}/register">
-    <div class="form-group">
-        <label>Käyttäjätunnus</label>
-        <input class="form-control" name="username" type="text">
-    </div>
+<div class="panel panel-default">
+    <div class="panel-body">
+        <form method="post" action="{{base_path}}/register">
+            <div class="form-group">
+                <label>Käyttäjätunnus</label>
+                <input class="form-control" name="username" type="text">
+            </div>
 
-    <!--     Email-kenttä ehkä
-        <div class="form-group">
-            <label>Sähköpostiosoite</label>
-            <input class="form-control" name="email" type="email">
-        </div>
-        -->
-    <div class="form-group">
-        <label>Tietoja käyttäjästä</label>
-        <textarea class="form-control" name="info" type="text"></textarea>
-    </div>
+            <div class="form-group">
+                <label>Tietoja käyttäjästä</label>
+                <textarea class="form-control" name="info" type="text"></textarea>
+            </div>
 
-    <div class="form-group">
-        <label>Salasana</label>
-        <input class="form-control" name="password" type="password">
-    </div>
-    <div class="form-group">
-        <label>Salasana uudelleen</label>
-        <input class="form-control" name="password_confirm" type="password">
-    </div>
+            <div class="form-group">
+                <label>Salasana</label>
+                <input class="form-control" name="password" type="password">
+            </div>
+            <div class="form-group">
+                <label>Salasana uudelleen</label>
+                <input class="form-control" name="password_confirm" type="password">
+            </div>
 
-    <button type="submit" class="btn btn-primary">Rekisteröidy</button>
-</form>
+            <button type="submit" class="form-group btn btn-primary">Rekisteröidy</button>
+        </form>
+    </div>
+</div>
 {% endblock %}  

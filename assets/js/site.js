@@ -2,7 +2,7 @@ $(document).ready(function () {
 
     $("button[name='destroy']").click(function (e) {
         e.preventDefault();
-        var formId = $( this ).attr('form');
+        var formId = $(this).attr('form');
         var confirm_message = $("form#" + formId).attr('data-confirm');
         bootbox.setLocale('fi');
         bootbox.confirm(confirm_message, function (result) {

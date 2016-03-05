@@ -188,7 +188,8 @@ class RecipeController extends BaseController
         return $recipe;
     }
 
-    protected static function trim_double_spaces_from_params($params) {
+    protected static function trim_double_spaces_from_params($params)
+    {
         $params['name'] = preg_replace('/\s+/', ' ', $params['name']);
         $params['cooking_time'] = preg_replace('/\s+/', ' ', $params['cooking_time']);
         $params['directions'] = preg_replace('/\s+/', ' ', $params['directions']);

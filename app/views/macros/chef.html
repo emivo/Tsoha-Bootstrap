@@ -1,11 +1,11 @@
 {% macro listrecipes(base_path, recipes) %}
 <h2>Reseptit</h2>
 <div class="row">
-            <ul class="list-group col-md-5" type="none">
-                {% for recipe in recipes %}
-                <li class="list-group-item"><a href="{{base_path}}/recipe/{{recipe.id}}">{{recipe.name}}</a></li>
-                {% endfor %}
-            </ul>
+    <ul class="list-group col-md-5" type="none">
+        {% for recipe in recipes %}
+        <li class="list-group-item"><a href="{{base_path}}/recipe/{{recipe.id}}">{{recipe.name}}</a></li>
+        {% endfor %}
+    </ul>
 </div>
 {% endmacro %}
 

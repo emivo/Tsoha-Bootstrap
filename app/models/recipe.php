@@ -123,14 +123,14 @@ class Recipe extends BaseModel
     protected static function search_query_string()
     {
         return "SELECT DISTINCT Recipe.* FROM Recipe "
-            . "LEFT JOIN RecipeKeyword ON Recipe.id = RecipeKeyword.recipe_id "
-            . "JOIN Keyword ON Keyword.id = RecipeKeyword.keyword_id "
-            . "JOIN RecipeIngredient ON Recipe.id = RecipeIngredient.recipe_id "
-            . "JOIN Ingredient ON Ingredient.id = RecipeIngredient.ingredient_id "
-            . "WHERE Recipe.name LIKE :search "
-            . "OR Keyword.keyword LIKE :search "
-            . "OR Ingredient.name LIKE :search "
-            . "OR Recipe.directions LIKE :search";
+        . "LEFT JOIN RecipeKeyword ON Recipe.id = RecipeKeyword.recipe_id "
+        . "JOIN Keyword ON Keyword.id = RecipeKeyword.keyword_id "
+        . "JOIN RecipeIngredient ON Recipe.id = RecipeIngredient.recipe_id "
+        . "JOIN Ingredient ON Ingredient.id = RecipeIngredient.ingredient_id "
+        . "WHERE Recipe.name LIKE :search "
+        . "OR Keyword.keyword LIKE :search "
+        . "OR Ingredient.name LIKE :search "
+        . "OR Recipe.directions LIKE :search";
     }
 
     /**

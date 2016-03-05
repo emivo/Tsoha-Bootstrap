@@ -1,5 +1,6 @@
 <?php
 
+// TODO jos aikaa hieman refactor
 class Keyword extends BaseModel
 {
     public $id, $keyword;
@@ -124,7 +125,8 @@ class Keyword extends BaseModel
         $query_delete_keywords->execute(array('id' => $recipe_id));
     }
 
-    public function delete_from_recipe($id) {
+    public function delete_from_recipe($id)
+    {
         $query_delete_keywords = DB::connection()
             ->prepare("DELETE FROM RecipeKeyword WHERE recipe_id = :id AND keyword_id = :key_id ");
         $query_delete_keywords->execute(array('id' => $id, 'key_id' => $this->id));

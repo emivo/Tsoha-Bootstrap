@@ -18,7 +18,7 @@ class Chef extends BaseModel
         }
         $query = DB::connection()->prepare($query_string);
         if (is_string($option)) {
-            $option = '%'.$option.'%';
+            $option = '%' . $option . '%';
             $query->bindParam(':name', $option, PDO::PARAM_STR);
         }
         $query->execute();

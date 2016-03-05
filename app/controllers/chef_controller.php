@@ -16,7 +16,7 @@ class ChefController extends BaseController
         } else {
             $chefs = Chef::all($find);
         }
-            View::make('chef/index.html', array('chefs' => $chefs));
+        View::make('chef/index.html', array('chefs' => $chefs));
     }
 
     public static function show($id)
