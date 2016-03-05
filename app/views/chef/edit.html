@@ -23,13 +23,13 @@
 
     <button formaction="{{base_path}}/my_profile" type="submit" class="btn btn-danger">Tallenna</button>
     {% if not chef.admin %}
-    <button form="destroy" formaction="{{base_path}}/my_profile/destroy" type="submit" class="btn btn-danger"><span
+    <button form="destroy" name="destroy" class="btn btn-danger"><span
             class="glyphicon glyphicon-remove"
             aria-hidden="true"></span> Poista käyttäjätunnus
     </button>
     {% endif %}
 </form>
-<form id="destroy" name="destroy" method="post"
+<form id="destroy" action="{{base_path}}/my_profile/destroy" method="post"
       data-confirm="Käyttäjän poistaminen poistaa kaikki käyttäjän reseptit sekä kommentit!"></form>
 {% endif %}
 {% endblock %}

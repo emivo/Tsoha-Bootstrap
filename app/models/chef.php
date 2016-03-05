@@ -115,12 +115,14 @@ class Chef extends BaseModel
         // Poista käyttäjän reseptit
         $chefs_recipes = Recipe::find_by_chef_id($this->id);
         foreach ($chefs_recipes as $recipe) {
+            /* @var $recipe Recipe */
             $recipe->destroy();
         }
         // Poista käyttäjän kommentit
         $chefs_comments = Comment::find_by_chef_id($this->id);
         foreach ($chefs_comments as $comment) {
-            $comment->destroy();
+            /* @var $comment Comment */
+            $comment->delete();
         }
 
         $query = DB::connection()

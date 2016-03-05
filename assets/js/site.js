@@ -1,13 +1,18 @@
 $(document).ready(function () {
-    //alert('Hello World!');
-    $("form[name='destroy']").on('submit', function (submit) {
-        var confirm_message = $(this).attr('data-confirm');
-        if (!confirm(confirm_message)) {
-            submit.preventDefault();
-        }
+
+    $("button[name='destroy']").click(function (e) {
+        e.preventDefault();
+        var formId = $( this ).attr('form');
+        var confirm_message = $("form#" + formId).attr('data-confirm');
+        bootbox.setLocale('fi');
+        bootbox.confirm(confirm_message, function (result) {
+            if (result) {
+                $("form#" + formId).trigger('submit');
+            }
+        });
     });
 
-    $('a#disabled').on('click', function (e) {
+    $('a.disabled').on('click', function (e) {
         e.preventDefault();
     });
 

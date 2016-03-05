@@ -30,9 +30,12 @@
                            type="text">
                 </td>
                 <td>
-                    <button formmethod="post"
-                            formaction="{{base_path}}/recipe/{{recipe.id}}/delete_ingredient/{{ingredient.name}}"
-                            class="btn btn-danger" data-confirm="Oletko varma?" name="destroy">
+                    <form id="deleteIngredient{{ingredient.ingredient_id}}"
+                          method="post"
+                          action="{{base_path}}/recipe/{{recipe.id}}/delete_ingredient/{{ingredient.name}}"
+                          data-confirm="Oletko varma?"></form>
+                    <button form="deleteIngredient{{ingredient.ingredient_id}}"
+                            class="btn btn-danger"  name="destroy">
                         <span class="glyphicon glyphicon-remove-sign"></span>
                         Poista ainesosa
                     </button>
@@ -60,9 +63,12 @@
             <input disabled class="form-control" name="keyword[{{keywordCount}}]" value="{{keyword.keyword}}"
                    type="text">
         <span class="input-group-btn">
-            <button formmethod="post"
-                    formaction="{{base_path}}/recipe/{{recipe.id}}/delete_keyword/{{keyword.keyword}}"
-                    class="btn btn-danger" data-confirm="Oletko varma?" name="destroy">
+            <form id="deleteKeyword{{keyword.id}}"
+                  method="post"
+                  action="{{base_path}}/recipe/{{recipe.id}}/delete_keyword/{{keyword.keyword}}"
+                  data-confirm="Oletko varma?"></form>
+            <button form="deleteKeyword{{keyword.id}}"
+                    class="btn btn-danger"  name="destroy">
                 <span class="glyphicon glyphicon-remove-sign"></span>
                 Poista Hakusana
             </button>

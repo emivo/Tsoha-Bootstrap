@@ -124,6 +124,8 @@ class RecipeController extends BaseController
         }
     }
 
+    // TODO jos ehtii pitää tehdä paremmin. jos kaksi saman nimistä ainesosaa reseptillä mikä sinänsä on jo vähän blah
+    // olis varmaan pitäny sinne validointiin laittaa ettei mee samoja :'(
     public static function delete_ingredient($id, $ingredient_name)
     {
         $ingredients_left = count(Ingredient::find_by_recipe_id($id));

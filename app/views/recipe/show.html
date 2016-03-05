@@ -61,34 +61,36 @@
 </div>
 
 <h2>Kommentit</h2>
-<form method="post" id="deleteComment" name="destroy" data-confirm="Haluatko varmasti poistaa kommentin?"></form>
 {% if comments|length > 0 %}
 <div class="row">
     <div class="panel panel-default col-md-5">
         <div class="panel-body">
             <table class="table table-hovered">
                 <tbody>
-                    {% set chef_commented_yet = 0 %}
-                    {% for comment in comments %}
+                {% set chef_commented_yet = 0 %}
+                {% for comment in comments %}
 
-                    <tr>
-                        <td id="{{comment.chef_id}}">&lt;<a href="{{base_path}}/chef/{{comment.chef_id}}">{{commentators[comment.chef_id].name}}</a>&gt;
-                            {{comment.rating}}/5 {{comment.comment}}
-                            {% if user_logged_in and user_logged_in.id == comment.chef_id or user_logged_in.admin %}
-                            {% if user_logged_in and user_logged_in.id == comment.chef_id %}
-                            {% set chef_commented_yet = 1 %}
-                            {% endif %}
-                        </td>
-                        <td>
-                            <button form="deleteComment" formmethod="post"
-                                    formaction="{{base_path}}/recipe/{{recipe.id}}/comment/{{comment.chef_id}}/delete"
-                                    class="btn btn-danger col-md-offset-4"><span class="glyphicon glyphicon-remove"
-                                                                         aria-hidden="true"></span>Poista
-                            </button>
-                        </td>
+                <form method="post" id="deleteComment{{comment.chef_id}}"
+                      action="{{base_path}}/recipe/{{recipe.id}}/comment/{{comment.chef_id}}/delete"
+                      data-confirm="Haluatko varmasti poistaa kommentin?"></form>
+                <tr>
+                    <td id="{{comment.chef_id}}">
+                        &lt;<a href="{{base_path}}/chef/{{comment.chef_id}}">{{commentators[comment.chef_id].name}}</a>&gt;
+                        {{comment.rating}}/5 {{comment.comment}}
+                        {% if user_logged_in and user_logged_in.id == comment.chef_id or user_logged_in.admin %}
+                        {% if user_logged_in and user_logged_in.id == comment.chef_id %}
+                        {% set chef_commented_yet = 1 %}
                         {% endif %}
-                    </tr>
-                    {% endfor %}
+                    </td>
+                    <td>
+                        <button form="deleteComment{{comment.chef_id}}" name="destroy"
+                                class="btn btn-danger col-md-offset-4"><span class="glyphicon glyphicon-remove"
+                                                                             aria-hidden="true"></span>Poista
+                        </button>
+                    </td>
+                    {% endif %}
+                </tr>
+                {% endfor %}
                 </tbody>
             </table>
         </div>

@@ -1,7 +1,7 @@
 {% macro destroy_button(base_path,id) %}
-<form id="destroy" name="destroy" method="post" action="{{base_path}}/recipe/{{id}}/destroy"
-      style="display: inline-block;" data-confirm="Oletko varma, että haluat poistaa reseptin?">
-    <button type="submit" class="btn btn-danger">
+<form id="deleteRecipe{{id}}" method="post" action="{{base_path}}/recipe/{{id}}/destroy"
+      style="display: inline-block;" data-confirm="Oletko varma, että haluat poistaa reseptin?" >
+    <button form="deleteRecipe{{id}}" name="destroy" class="btn btn-danger">
         <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
         Poista resepti
     </button>
@@ -41,9 +41,7 @@
             <span class="glyphicon glyphicon-asterisk" aria-disabled="true"></span>
         </span>
     </label>
-    <textarea name="directions" class="form-control">
-        {{recipe.directions}}
-    </textarea>
+    <textarea name="directions" class="form-control">{% if recipe %}{{recipe.directions}}{% endif %}</textarea>
 </div>
 {% endmacro %}
 
