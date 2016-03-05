@@ -1,6 +1,6 @@
 {% macro destroy_button(base_path,id) %}
 <form id="deleteRecipe{{id}}" method="post" action="{{base_path}}/recipe/{{id}}/destroy"
-      style="display: inline-block;" data-confirm="Oletko varma, että haluat poistaa reseptin?" >
+      style="display: inline-block;" data-confirm="Oletko varma, että haluat poistaa reseptin?">
     <button form="deleteRecipe{{id}}" name="destroy" class="btn btn-danger">
         <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
         Poista resepti
@@ -26,30 +26,56 @@
 {% endmacro %}
 
 {% macro name_input(recipe) %}
-<div class="form-group">
-    <label>Nimi<span class="badge"><span class="glyphicon glyphicon-asterisk"
-                                         aria-disabled="true"></span></span></label>
-    <input class="form-control" name="name" value="{{recipe.name}}" type="text">
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            <label>Nimi</label>
+            <span class="help-block">2 - 50 merkkiä</span>
+            <input class="form-control" name="name" value="{{recipe.name}}" type="text">
+        </div>
+    </div>
 </div>
 {% endmacro %}
 
 {% macro directions_textarea(recipe) %}
-<div class="form-group">
-    <label>
-        Valmistusohje
-        <span class="badge">
-            <span class="glyphicon glyphicon-asterisk" aria-disabled="true"></span>
-        </span>
-    </label>
-    <textarea name="directions" class="form-control">{% if recipe %}{{recipe.directions}}{% endif %}</textarea>
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            <label>
+                Valmistusohje
+            </label>
+            <span class="help-block">4 - 500 merkkiä</span>
+            <textarea name="directions" class="form-control">{% if recipe %}{{recipe.directions}}{% endif %}</textarea>
+        </div>
+    </div>
 </div>
 {% endmacro %}
 
 {% macro cooking_time_input(recipe) %}
-<div class="form-group">
-    <label>Valmistusaika <span class="badge"><span class="glyphicon glyphicon-asterisk" aria-disabled="true"></span></span></label>
-    <input name="cooking_time" class="form-control" value="{{recipe.cooking_time}}" type="text">
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            <label>Valmistusaika</label>
+            <span class="help-block">2 - 20 merkkiä</span>
+            <input name="cooking_time" class="form-control" value="{{recipe.cooking_time}}" type="text">
+        </div>
+    </div>
 </div>
+{% endmacro %}
+
+{% macro quantity_label() %}
+<label>Määrä</label>
+<span class="help-block">1 - 10 merkkiä</span>
+{% endmacro %}
+
+{% macro ingredient_label() %}
+<label>Ainesosa</label>
+<span class="help-block">3 - 20 merkkiä</span>
+{% endmacro %}
+
+{% macro keyword_label() %}
+<label>Hakusanat</label>
+<span class="help-block">2 - 30 merkkiä, väärän pituisia ei tallenneta</span>
 {% endmacro %}
 
 {% macro add_new_keyword(inputIndex) %}

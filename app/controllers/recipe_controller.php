@@ -243,9 +243,9 @@ class RecipeController extends BaseController
         ))->message('Täytä vaadittavat kentät');
 
         $validator->rule('lengthMin', 'name', 2)->message('Nimen tulee olla vähintään 2 merkkiä');
-        $validator->rule('lengthMax', 'name', 30)->message('Nimi enintään 30 merkkiä');
+        $validator->rule('lengthMax', 'name', 50)->message('Nimi enintään 50 merkkiä');
         $validator->rule('lengthMin', 'cooking_time', 2)->message('Valmistusaika tulee olla vähintään 2 merkkiä');
-        $validator->rule('lengthMax', 'cooking_time', 15)->message('Valmistusaika enintää 15 merkkiä');
+        $validator->rule('lengthMax', 'cooking_time', 20)->message('Valmistusaika enintää 20 merkkiä');
         $validator->rule('lengthMin', 'directions', 4)->message('Ohjeiden tulee olla vähintään 4 merkkiä');
         $validator->rule('lengthMax', 'directions', 500)->message('Ohjeiden maksimipituus 500 merkkiä');
 
@@ -265,7 +265,7 @@ class RecipeController extends BaseController
         foreach ($ingredients as $key => $ingredient) {
             $validator->rule('required', array('name' . $key, 'quantity' . $key))->message('Ainesosille vaaditaan määrä ja ainesosan nimi');
             $validator->rule('lengthMin', 'name' . $key, 3)->message('Ainesosan nimen pituus tulee olla vähintään 3 merkkiä');
-            $validator->rule('lengthMax', 'name' . $key, 15)->message('Ainesosan nimi enintään 15 merkkiä');
+            $validator->rule('lengthMax', 'name' . $key, 20)->message('Ainesosan nimi enintään 20 merkkiä');
             $validator->rule('lengthMin', 'quantity' . $key, 1)->message("Määrän tulee vähintään olla yksi merkki");
             $validator->rule('lengthMax', 'quantity' . $key, 10)->message("Määrä enintään 10 merkkiä");
         }
@@ -284,7 +284,7 @@ class RecipeController extends BaseController
         $validator = new Valitron\Validator($params);
         $validator->rule('required', array('rating', 'comment'))->message('Arvosana sekä kommentti vaaditaan');
         $validator->rule('lengthMin', 'comment', 2)->message('Kommentin tulee olla vähintään 2 merkkiä');
-        $validator->rule('lengthMax', 'comment', 100)->message('Kommentin maksimi pituus 100 merkkiä');
+        $validator->rule('lengthMax', 'comment', 120)->message('Kommentin maksimi pituus 120 merkkiä');
         return $validator;
     }
 
@@ -326,7 +326,7 @@ class RecipeController extends BaseController
     {
         $keyword = new Keyword(array(
             'keyword' => preg_replace('/\s+/', ' ', $word)));
-        if (strlen($keyword->keyword) > 1) {
+        if (strlen($keyword->keyword) > 1 && strlen($keyword->keyword) <= 30) {
             $keyword->save($recipe_id);
         }
     }

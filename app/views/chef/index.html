@@ -2,8 +2,13 @@
 {% block content %}
 {% import "macros/chef.html" as chef_macro %}
 <h1>Käyttäjät</h1>
-<a class="btn btn-success" href="{{base_path}}/register">Lisää uusi käyttäjä</a>
-
+<a class="btn btn-success" href="{{base_path}}/register">
+{% if  not user_logged_in %}
+    Rekisteröidy
+{% else %}
+    Uusi käyttäjä
+{% endif %}
+</a>
 <table class="table table-striped">
     <thead>
     <tr>

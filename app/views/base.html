@@ -34,9 +34,6 @@
 
         <div class="collapse navbar-collapse" id="navigation">
             <ul class="nav navbar-nav">
-                <li><a href="{{base_path}}">Etusivu</a></li>
-            </ul>
-            <ul class="nav navbar-nav">
                 <li><a href="{{base_path}}/recipes?page=1"/>Reseptit</a></li>
             </ul>
             <ul class="nav navbar-nav">
@@ -103,8 +100,8 @@
                 <form method="post" action="{{base_path}}/search" class="navbar-form navbar-left" role="search">
                     <div class="form-group">
                         <select name="option" class="form-control">
-                            <option>resepti</option>
-                            <option>käyttäjä</option>
+                            <option>reseptit</option>
+                            <option>käyttäjät</option>
                         </select>
                         <input name="search" type="text" class="form-control" placeholder="Etsi...">
                     </div>

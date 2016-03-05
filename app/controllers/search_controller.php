@@ -16,9 +16,9 @@ class SearchController extends BaseController
     {
         $params = $_GET;
         $search_word = $params['search'];
-        if ($params['option'] == 'resepti') {
+        if ($params['option'] == 'reseptit') {
             $recipes = Recipe::search_default($search_word);
-            $path = 'results?search=' . $search_word . '&option=resepti&';
+            $path = 'results?search=' . $search_word . '&option=reseptit&';
             self::make_paged_view($recipes, $path, 'results.html');
         } else {
             ChefController::index($search_word);

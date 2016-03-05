@@ -10,36 +10,35 @@
     <span class="label label-danger">Ylläpitäjä</span>
     {% endif %}
 </p>
-{% if chef == user_logged_in %}
-<a href="{{base_path}}/my_profile/edit" class="btn btn-default">Muokkaa tietoja</a>
-{% endif %}
 <form id="froze">
 </form>
 <form id="admin">
 </form>
 <div class="row">
-
-        {% if user_logged_in.admin and not chef.admin %}
-        <button form="froze" formmethod="post" formaction="{{base_path}}/admin/change_account_activity/{{chef.id}}"
-                class="btn btn-danger">
-            {% if chef.active %}
-            Estä käyttäjä
-            {% else %}
-            Poista käyttäjän esto
-            {% endif %}
-        </button>
+    {% if chef == user_logged_in %}
+    <a href="{{base_path}}/my_profile/edit" class="btn btn-default">Muokkaa tietoja</a>
+    {% endif %}
+    {% if user_logged_in.admin and not chef.admin %}
+    <button form="froze" formmethod="post" formaction="{{base_path}}/admin/change_account_activity/{{chef.id}}"
+            class="btn btn-danger">
+        {% if chef.active %}
+        Estä käyttäjä
+        {% else %}
+        Poista käyttäjän esto
         {% endif %}
-        {% if user_logged_in.admin and chef.active and chef.name != 'admin' %}
-        <button form="admin" formmethod="post"
-                formaction="{{base_path}}/admin/change_account_admin_status/{{chef.id}}"
-                class="btn btn-primary">
-            {% if chef.admin %}
-            Poisto ylläpito oikeudet
-            {% else %}
-            Aseta ylläpitäjäksi
-            {% endif %}
-        </button>
+    </button>
+    {% endif %}
+    {% if user_logged_in.admin and chef.active and chef.name != 'admin' %}
+    <button form="admin" formmethod="post"
+            formaction="{{base_path}}/admin/change_account_admin_status/{{chef.id}}"
+            class="btn btn-primary">
+        {% if chef.admin %}
+        Poisto ylläpito oikeudet
+        {% else %}
+        Aseta ylläpitäjäksi
         {% endif %}
+    </button>
+    {% endif %}
 </div>
 
 <h2>Tietoja käyttäjästä</h2>

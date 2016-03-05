@@ -8,12 +8,10 @@
         <table>
             <tr>
                 <td>
-                    <label>Määrä<span class="badge"><span class="glyphicon glyphicon-asterisk"
-                                                          aria-disabled="true"></span></span></label>
+                    {{ forms.quantity_label() }}
                 </td>
                 <td>
-                    <label>Ainesosa<span class="badge"><span class="glyphicon glyphicon-asterisk"
-                                                             aria-disabled="true"></span></span></label>
+                    {{ forms.ingredient_label() }}
                 </td>
             </tr>
             {% set ingredientCount = 0 %}
@@ -35,7 +33,7 @@
                           action="{{base_path}}/recipe/{{recipe.id}}/delete_ingredient/{{ingredient.name}}"
                           data-confirm="Oletko varma?"></form>
                     <button form="deleteIngredient{{ingredient.ingredient_id}}"
-                            class="btn btn-danger"  name="destroy">
+                            class="btn btn-danger" name="destroy">
                         <span class="glyphicon glyphicon-remove-sign"></span>
                         Poista ainesosa
                     </button>
@@ -55,29 +53,37 @@
 
     {{ forms.cooking_time_input(recipe) }}
 
-
-    {% set keywordCount = 0 %}
-    {% for keyword in keywords %}
-    <div class="form-group">
-        <div class="input-group">
-            <input disabled class="form-control" name="keyword[{{keywordCount}}]" value="{{keyword.keyword}}"
-                   type="text">
+    {{ forms.keyword_label() }}
+    <div class="row">
+        <div class="col-md-6">
+            {% set keywordCount = 0 %}
+            {% for keyword in keywords %}
+            <div class="form-group">
+                <div class="input-group">
+                    <input disabled class="form-control" name="keyword[{{keywordCount}}]" value="{{keyword.keyword}}"
+                           type="text">
         <span class="input-group-btn">
             <form id="deleteKeyword{{keyword.id}}"
                   method="post"
                   action="{{base_path}}/recipe/{{recipe.id}}/delete_keyword/{{keyword.keyword}}"
                   data-confirm="Oletko varma?"></form>
             <button form="deleteKeyword{{keyword.id}}"
-                    class="btn btn-danger"  name="destroy">
+                    class="btn btn-danger" name="destroy">
                 <span class="glyphicon glyphicon-remove-sign"></span>
                 Poista Hakusana
             </button>
         </span>
+                </div>
+            </div>
+            {% set keywordCount = keywordCount + 1 %}
+            {% endfor %}
         </div>
     </div>
-    {% set keywordCount = keywordCount + 1 %}
-    {% endfor %}
-    <span id="newKeyword"></span>
+    <div class="row">
+        <div class="col-md-6">
+            <span id="newKeyword"></span>
+        </div>
+    </div>
     <script>var indexCountForKeyword = 0;</script>
     <div class="form-group">
         {{ forms.add_new_keyword(0)}}
