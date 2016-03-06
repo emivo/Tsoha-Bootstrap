@@ -75,7 +75,7 @@
     {% if keyword|length > 1%}
     <div class="row">
         <div class="col-md-6">
-            {% for i in 1..keyword|length %}
+            {% for i in 1..(keyword|length - 1) %}
                 <div class="form-group">
                     <input name="keyword[{{i}}]" class="form-control" type="text" value="{{attribute(keyword, i)}}" >
                 </div>
