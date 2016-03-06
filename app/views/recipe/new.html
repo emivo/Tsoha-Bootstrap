@@ -5,7 +5,7 @@
 
 <form method="post" action="{{base_path}}/recipe">
 
-    {{ forms.name_input() }}
+    {{ forms.name_input(name) }}
 
 
     <div class="form-group">
@@ -34,9 +34,9 @@
         {{ forms.add_new_ingredient(1)}}
     </div>
 
-    {{ forms.directions_textarea() }}
+    {{ forms.directions_textarea(directions) }}
 
-    {{ forms.cooking_time_input() }}
+    {{ forms.cooking_time_input(cooking_time) }}
 
     <div class="row">
         <div class="col-md-6">

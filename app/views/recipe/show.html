@@ -99,7 +99,7 @@
 {% endif %}
 {% if user_logged_in and chef_commented_yet == 0 %}
 <!-- kommentin lisäyskenttä jos ei ole vielä kommentoinut -->
-{{forms.new_comment(base_path, recipe.id)}}
+{{forms.new_comment(base_path, recipe.id, comment, rating)}}
 {% endif %}
 
 <h3>Hakusanat</h3>

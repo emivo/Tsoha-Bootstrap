@@ -25,19 +25,19 @@
 </button>
 {% endmacro %}
 
-{% macro name_input(recipe) %}
+{% macro name_input(recipe_name) %}
 <div class="row">
     <div class="col-md-6">
         <div class="form-group">
             <label>Nimi</label>
             <span class="help-block">2 - 50 merkkiä</span>
-            <input class="form-control" name="name" value="{{recipe.name}}" type="text">
+            <input class="form-control" name="name" value="{{recipe_name}}" type="text">
         </div>
     </div>
 </div>
 {% endmacro %}
 
-{% macro directions_textarea(recipe) %}
+{% macro directions_textarea(recipe_directions) %}
 <div class="row">
     <div class="col-md-6">
         <div class="form-group">
@@ -45,19 +45,19 @@
                 Valmistusohje
             </label>
             <span class="help-block">4 - 500 merkkiä</span>
-            <textarea name="directions" class="form-control">{% if recipe %}{{recipe.directions}}{% endif %}</textarea>
+            <textarea name="directions" class="form-control">{{recipe_directions}}</textarea>
         </div>
     </div>
 </div>
 {% endmacro %}
 
-{% macro cooking_time_input(recipe) %}
+{% macro cooking_time_input(recipe_cooking_time) %}
 <div class="row">
     <div class="col-md-6">
         <div class="form-group">
             <label>Valmistusaika</label>
             <span class="help-block">2 - 20 merkkiä</span>
-            <input name="cooking_time" class="form-control" value="{{recipe.cooking_time}}" type="text">
+            <input name="cooking_time" class="form-control" value="{{recipe_cooking_time}}" type="text">
         </div>
     </div>
 </div>
@@ -86,7 +86,7 @@
 {% endmacro %}
 
 
-{% macro new_comment(base_path, recipe_id)%}
+{% macro new_comment(base_path, recipe_id, comment, rating)%}
 <form method="post" action="{{base_path}}/recipe/{{recipe_id}}/newcomment">
     <div class="form-group">
         <div class="row">
@@ -94,14 +94,14 @@
                 <label>Arvosana</label>
                 <select name="rating" class="form-control">
                     <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
+                    <option {% if rating == 2 %}selected{% endif %}>2</option>
+                    <option {% if rating == 3 %}selected{% endif %}>3</option>
+                    <option {% if rating == 4 %}selected{% endif %}>4</option>
+                    <option {% if rating == 5 %}selected{% endif %}>5</option>
                 </select></div>
             <div class="col-xs-3">
                 <label>Kommentti</label>
-                <textarea class="form-control" name="comment" type="text"></textarea>
+                <textarea class="form-control" name="comment" type="text">{{comment}}</textarea>
             </div>
         </div>
     </div>

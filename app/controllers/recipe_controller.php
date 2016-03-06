@@ -27,13 +27,23 @@ class RecipeController extends BaseController
 
     public static function show($id)
     {
+        $params = $_GET;
         $content = self::collect_content_for_show_recipe($id);
+        if (isset($params['comment'])) {
+            $content['comment'] = $params['comment'];
+            $content['rating'] = $params['rating'];
+        }
         View::make('recipe/show.html', $content);
     }
 
     public static function create()
     {
-        View::make('recipe/new.html');
+        $params = $_GET;
+        $content = array();
+        foreach ($params as $key => $param) {
+            $content[$key] = $param;
+        }
+        View::make('recipe/new.html', $content);
     }
 
     public static function store()
@@ -50,7 +60,7 @@ class RecipeController extends BaseController
             self::save_and_redirect($params, $chef_id, $ingredients);
         } else {
             $error = self::combine_errors_to_single_string($validator, $v);
-            Redirect::to('/recipe/new', array('error' => $error, 'params' => $params));
+            Redirect::to('/recipe/new', array('error' => $error), $params);
         }
     }
 
@@ -91,7 +101,7 @@ class RecipeController extends BaseController
             Redirect::to('/recipe/' . $id, array('message' => 'Resepti on päivitetty'));
         } else {
             $error = self::combine_errors_to_single_string($validator, $v);
-            Redirect::to('/recipe/' . $id . '/edit', array('error' => $error, 'params' => $params));
+            Redirect::to('/recipe/' . $id . '/edit', array('error' => $error));
         }
     }
 
@@ -157,7 +167,7 @@ class RecipeController extends BaseController
             Redirect::to('/recipe/' . $id);
         } else {
             $error = self::combine_errors_to_single_string($validator);
-            Redirect::to('/recipe/' . $id, array('error' => $error));
+            Redirect::to('/recipe/' . $id, array('error' => $error), $params);
         }
     }
 

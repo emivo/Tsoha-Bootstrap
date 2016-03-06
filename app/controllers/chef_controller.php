@@ -5,7 +5,13 @@ class ChefController extends BaseController
 
     public static function register()
     {
-        View::make('register.html');
+        $params = $_GET;
+        $content = array();
+        if (isset($params['username'])) {
+            $content['username'] = $params['username'];
+            $content['info'] = $params['info'];
+        }
+        View::make('register.html', $content);
     }
 
     public static function index($find = null)
@@ -47,7 +53,7 @@ class ChefController extends BaseController
             Redirect::to('/', array('message' => 'Uusi käyttäjä luotu'));
         } else {
             $error = self::combine_errors_to_single_string($validator);
-            Redirect::to('/register', array('error' => $error, 'username' => $params['username']));
+            Redirect::to('/register', array('error' => $error), array('username' => $params['username'], 'info' => $params['info']));
         }
     }
 

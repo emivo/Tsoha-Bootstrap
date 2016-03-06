@@ -3,7 +3,7 @@
 {% import "macros/_forms.html" as forms %}
 <h1>Muokkaa reseptiä</h1>
 <form method="post" action="{{base_path}}/recipe/{{recipe.id}}/edit">
-    {{ forms.name_input(recipe) }}
+    {{ forms.name_input(recipe.name) }}
     <div class="form-group">
         <table>
             <tr>
@@ -49,9 +49,9 @@
         {{ forms.add_new_ingredient(0)}}
     </div>
 
-    {{ forms.directions_textarea(recipe) }}
+    {{ forms.directions_textarea(recipe.directions) }}
 
-    {{ forms.cooking_time_input(recipe) }}
+    {{ forms.cooking_time_input(recipe.cooking_time) }}
 
     {{ forms.keyword_label() }}
     <div class="row">
