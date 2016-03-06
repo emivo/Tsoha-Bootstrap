@@ -5,13 +5,7 @@ class ChefController extends BaseController
 
     public static function register()
     {
-        $params = $_GET;
-        $content = array();
-        if (isset($params['username'])) {
-            $content['username'] = $params['username'];
-            $content['info'] = $params['info'];
-        }
-        View::make('register.html', $content);
+        View::make('register.html');
     }
 
     public static function index($find = null)

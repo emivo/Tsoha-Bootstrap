@@ -3,7 +3,7 @@
 class Redirect
 {
 
-    public static function to($path, $message = null, $content = array())
+    public static function to($path, $message = null, $content = null)
     {
 
         // Katsotaan onko $message parametri asetettu
@@ -11,12 +11,14 @@ class Redirect
             // Jos on, lisätään se sessioksi JSON-muodossa
             $_SESSION['flash_message'] = json_encode($message);
         }
-        $params = '?';
-        foreach ($content as $key => $item) {
-            $params .= $key . '=' . $item . '&';
-        }
+        
+        if ($content) {
+			$_SESSION['form_data'] = json_encode($content);
+		}
+        
+        
         // Ohjataan käyttäjä annettuun polkuun
-        header('Location: ' . BASE_PATH . $path . $params);
+        header('Location: ' . BASE_PATH . $path);
         exit();
     }
 }

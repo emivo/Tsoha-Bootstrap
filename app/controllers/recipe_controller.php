@@ -27,12 +27,7 @@ class RecipeController extends BaseController
 
     public static function show($id)
     {
-        $params = $_GET;
         $content = self::collect_content_for_show_recipe($id);
-        if (isset($params['comment'])) {
-            $content['comment'] = $params['comment'];
-            $content['rating'] = $params['rating'];
-        }
         View::make('recipe/show.html', $content);
     }
 

@@ -15,20 +15,37 @@
                     {{ forms.quantity_label() }}
                 </td>
                 <td>
-                    {{ form.ingredient_label() }}
+                    {{ forms.ingredient_label() }}
                 </td>
             </tr>
             <tr>
-                <td>
-                    <input name="quantity[0]" class="form-control" type="text">
-                </td>
-                <td>
-                    <input name="ingredient[0]" class="form-control" type="text">
-                </td>
+				<td>
+					<input name="quantity[0]" class="form-control" type="text" value="{{attribute(quantity, 0)}}" >
+				</td>
+				<td>
+					<input name="ingredient[0]" class="form-control" type="text" value="{{attribute(quantity, 0)}}" >
+				</td>
             </tr>
-        </table>
+            </table>
+				{% set indexCount = 1 %}
+				{% for ingredi in ingredient %}
+				{% if loop.index != 1 %}
+				<table>
+			<tr>
+                <td>
+                    <input name="quantity[{{indexCount}}]" class="form-control" type="text" value="{{attribute(quantity, indexCount)}}" >
+                </td>
+                <td>
+                    <input name="ingredient[{{indexCount}}]" class="form-control" type="text" value="{{ingredi}}" >
+                </td>
+           </tr>
+           </table>
+           {% endif %}
+                {% set indexCount = loop.index %}
+                {% endfor %}
+            
     </div>
-    <script>var indexCountForIngredient = 1;</script>
+    <script>var indexCountForIngredient = {{ indexCount }};</script>
     <span id="newIngredient"></span>
     <div class="form-group">
         {{ forms.add_new_ingredient(1)}}
@@ -44,15 +61,29 @@
                 {{ forms.keyword_label() }}
                 <select name="keyword[0]" class="form-control">
                     <option>Alkuruoka</option>
-                    <option>Pääruoka</option>
-                    <option>Jälkiruoka</option>
-                    <option>Välipala</option>
-                    <option>Muu</option>
+                    <option {% if attribute(keyword, 0) == 'Pääruoka' %} selected {% endif %}>Pääruoka</option>
+                    <option {% if attribute(keyword, 0) == 'Jälkiruoka' %} selected {% endif %}>Jälkiruoka</option>
+                    <option {% if attribute(keyword, 0) == 'Välipala' %} selected {% endif %}>Välipala</option>
+                    <option {% if attribute(keyword, 0) == 'Muu' %} selected {% endif %}>Muu</option>
                 </select>
             </div>
         </div>
     </div>
-    <script>var indexCountForKeyword = 1;</script>
+    
+    {% set indexCountForKeyword = 1 %}
+    {% if keyword|length > 1%}
+        <div class="row">
+        <div class="col-md-6">
+				{% for i in 1..keyword|length %}
+<div class="form-group">
+	<input name="keyword[{{i}}]" class="form-control" type="text" value="{{attribute(keyword, i)}}" >
+	</div>
+				{% set indexCountForKeyword = i + 1%}
+				{% endfor %}
+				</div>
+				</div>
+				{% endif %}
+    <script>var indexCountForKeyword = {{ indexCountForKeyword}};</script>
     <div class="row">
         <div class="col-md-6">
             <span id="newKeyword"></span>
