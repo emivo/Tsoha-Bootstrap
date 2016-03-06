@@ -30,13 +30,14 @@ class View
         exit();
     }
 
-    private static function get_twig(){
-      Twig_Autoloader::register();
+    private static function get_twig()
+    {
+        Twig_Autoloader::register();
 
-      $twig_loader = new Twig_Loader_Filesystem('app/views');
-      $twig = new Twig_Environment($twig_loader);
+        $twig_loader = new Twig_Loader_Filesystem('app/views');
+        $twig = new Twig_Environment($twig_loader);
 
-      return $twig;
+        return $twig;
     }
 
     private static function set_flash_message(&$content)
@@ -52,26 +53,26 @@ class View
             unset($_SESSION['flash_message']);
         }
     }
-    
+
     private static function set_form_data(&$content)
     {
-		if (isset($_SESSION['form_data'])) {
-			$data = json_decode($_SESSION['form_data']);
-			
-			foreach ($data as $key => $value) {
-				$content[$key] = $value;
-				//~ if (is_array($value)) {
-					//~ $conten[$key
-					//~ // foreach ($value as $i => $item) {
-						//~ // $arr = array();
-						//~ // $arr[$i] = $item;
-						//~ // $content[$key] = $arr;
-					//~ // }
-				//~ } else {
-					//~ $conten[$key] = $value;
-				}
-				unset($_SESSION['form_data']);
-			}
-		}
+        if (isset($_SESSION['form_data'])) {
+            $data = json_decode($_SESSION['form_data']);
+
+            foreach ($data as $key => $value) {
+                $content[$key] = $value;
+                //~ if (is_array($value)) {
+                //~ $conten[$key
+                //~ // foreach ($value as $i => $item) {
+                //~ // $arr = array();
+                //~ // $arr[$i] = $item;
+                //~ // $content[$key] = $arr;
+                //~ // }
+                //~ } else {
+                //~ $conten[$key] = $value;
+            }
+            unset($_SESSION['form_data']);
+        }
+    }
 
 }

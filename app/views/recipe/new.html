@@ -19,33 +19,34 @@
                 </td>
             </tr>
             <tr>
-				<td>
-					<input name="quantity[0]" class="form-control" type="text" value="{{attribute(quantity, 0)}}" >
-				</td>
-				<td>
-					<input name="ingredient[0]" class="form-control" type="text" value="{{attribute(quantity, 0)}}" >
-				</td>
+                <td>
+                    <input name="quantity[0]" class="form-control" type="text" value="{{attribute(quantity, 0)}}">
+                </td>
+                <td>
+                    <input name="ingredient[0]" class="form-control" type="text" value="{{attribute(ingredient, 0)}}">
+                </td>
             </tr>
-            </table>
-				{% set indexCount = 1 %}
-				{% for ingredi in ingredient %}
-				{% if loop.index != 1 %}
-				<table>
-			<tr>
+        </table>
+        {% set indexCount = 1 %}
+        {% for i in ingredient %}
+        {% if loop.index != 1 %}
+        <table>
+            <tr>
                 <td>
-                    <input name="quantity[{{indexCount}}]" class="form-control" type="text" value="{{attribute(quantity, indexCount)}}" >
+                    <input name="quantity[{{indexCount}}]" class="form-control" type="text"
+                           value="{{attribute(quantity, indexCount)}}">
                 </td>
                 <td>
-                    <input name="ingredient[{{indexCount}}]" class="form-control" type="text" value="{{ingredi}}" >
+                    <input name="ingredient[{{indexCount}}]" class="form-control" type="text" value="{{i}}">
                 </td>
-           </tr>
-           </table>
-           {% endif %}
-                {% set indexCount = loop.index %}
-                {% endfor %}
-            
+            </tr>
+        </table>
+        {% endif %}
+        {% set indexCount = loop.index %}
+        {% endfor %}
+
     </div>
-    <script>var indexCountForIngredient = {{ indexCount }};</script>
+    <script>var indexCountForIngredient = {{indexCount}};</script>
     <span id="newIngredient"></span>
     <div class="form-group">
         {{ forms.add_new_ingredient(1)}}
@@ -69,28 +70,28 @@
             </div>
         </div>
     </div>
-    
+
     {% set indexCountForKeyword = 1 %}
     {% if keyword|length > 1%}
-        <div class="row">
+    <div class="row">
         <div class="col-md-6">
-				{% for i in 1..keyword|length %}
-<div class="form-group">
-	<input name="keyword[{{i}}]" class="form-control" type="text" value="{{attribute(keyword, i)}}" >
-	</div>
-				{% set indexCountForKeyword = i + 1%}
-				{% endfor %}
-				</div>
-				</div>
-				{% endif %}
-    <script>var indexCountForKeyword = {{ indexCountForKeyword}};</script>
+            {% for i in 1..keyword|length %}
+                <div class="form-group">
+                    <input name="keyword[{{i}}]" class="form-control" type="text" value="{{attribute(keyword, i)}}" >
+                </div>
+				{% set indexCountForKeyword = i + 1 %}
+            {% endfor %}
+            </div>
+    </div>
+    {% endif %}
+    <script>var indexCountForKeyword = {{ indexCountForKeyword }};</script>
     <div class="row">
         <div class="col-md-6">
             <span id="newKeyword"></span>
         </div>
     </div>
     <div class="form-group">
-        {{ forms.add_new_keyword(1)}}
+        {{ forms.add_new_keyword(1) }}
     </div>
 
     <div class="form-group">

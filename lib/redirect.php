@@ -11,12 +11,12 @@ class Redirect
             // Jos on, lisätään se sessioksi JSON-muodossa
             $_SESSION['flash_message'] = json_encode($message);
         }
-        
+
         if ($content) {
-			$_SESSION['form_data'] = json_encode($content);
-		}
-        
-        
+            $_SESSION['form_data'] = json_encode($content);
+        }
+
+
         // Ohjataan käyttäjä annettuun polkuun
         header('Location: ' . BASE_PATH . $path);
         exit();
